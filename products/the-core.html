@@ -1,0 +1,448 @@
+<!--The Core page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Product page for The Core — Mayan Steampunk setting. Part of the Heptaverse system.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Core — Ribhian Games LLC</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Metamorphous&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+
+    :root {
+      --deep:       #0a1008;
+      --stone:      #0f1a0c;
+      --stone-mid:  #162010;
+      --black:      #060c04;
+      --text-body:  #e8dfc0;
+      --text-dim:   #7aaa50;
+    }
+
+    .product-hero {
+      position: relative;
+      min-height: 55vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 2rem 3rem 3rem;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, #080e08 0%, #0e180a 55%, #162010 100%);
+    }
+
+    .product-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(80,160,40,0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 80% 40% at 50% 90%, rgba(200,160,60,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Steam/heat shimmer at top */
+    .product-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(90deg, rgba(180,200,80,0.012) 0px, rgba(180,200,80,0.012) 1px, transparent 1px, transparent 40px);
+      pointer-events: none;
+    }
+
+    /* Hero background image */
+    .tc-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .product-hero-content { position: relative; z-index: 2; width: 100%; text-align: center; }
+
+    .product-logo-wrap {
+      width: 280px;
+      height: 280px;
+      margin: 0 auto 2rem;
+    }
+
+    .logo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(180,200,80,0.22);
+      border-radius: 50%;
+      background: rgba(8,14,8,0.65);
+    }
+
+    .logo-placeholder .cs-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow:
+        0 0 14px rgba(160,220,80,0.95),
+        0 0 35px rgba(160,220,80,0.50),
+        0 2px 5px rgba(0,0,0,0.95);
+      display: block;
+    }
+
+    .logo-placeholder .cs-sub {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow:
+        0 0 10px rgba(160,220,80,0.90),
+        0 0 26px rgba(160,220,80,0.45),
+        0 1px 3px rgba(0,0,0,0.95);
+      display: block;
+      margin-top: 0.4rem;
+    }
+
+    .product-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: #7aaa50;
+      text-shadow: 0 0 8px rgba(122,170,80,0.9), 0 0 22px rgba(122,170,80,0.5), 0 0 45px rgba(122,170,80,0.25);
+      background: rgba(8,14,8,0.90);
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .product-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.8rem, 5vw, 3.8rem);
+      font-weight: 900;
+      color: #d8e8b8;
+      text-shadow: 0 0 60px rgba(160,220,80,0.18), 0 2px 4px rgba(0,0,0,0.9);
+      line-height: 1.1;
+      margin-bottom: 0.4rem;
+    }
+
+    .product-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      color: #8ab870;
+      text-shadow: 0 0 8px rgba(138,184,112,0.8), 0 0 20px rgba(138,184,112,0.4);
+      background: rgba(8,14,8,0.90);
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 2rem;
+    }
+
+    .product-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1rem;
+      border: 1px solid rgba(122,170,80,0.45);
+      background: rgba(8,14,8,0.90);
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #8ab870;
+      text-shadow: 0 0 8px rgba(138,184,112,0.8), 0 0 20px rgba(138,184,112,0.4);
+    }
+
+    .tc-setting-title {
+      font-family: 'Metamorphous', cursive;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 400;
+      color: #d8e8b8;
+      text-shadow:
+        0 0 6px rgba(80,200,120,1.0),
+        0 0 18px rgba(60,180,100,0.95),
+        0 0 40px rgba(40,160,80,0.75),
+        0 0 80px rgba(20,140,60,0.50),
+        0 0 130px rgba(10,120,50,0.28),
+        0 2px 4px rgba(0,0,0,0.98);
+      text-align: center;
+      margin-bottom: 2rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* Description */
+    .desc-section {
+      padding: 5rem 3rem;
+      background: var(--deep);
+      border-top: 1px solid rgba(120,170,50,0.14);
+    }
+
+    .desc-inner {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .desc-inner p {
+      font-size: 1.12rem;
+      color: #e8dfc0;
+      line-height: 1.9;
+    }
+
+    .desc-inner p + p { margin-top: 1.2rem; }
+    .desc-inner p strong { color: #c8dca0; }
+
+    .desc-section .divider-gem {
+      background: #7aaa40;
+      box-shadow: 0 0 10px #7aaa40;
+    }
+    .desc-section .divider-line {
+      background: linear-gradient(90deg, transparent, #7aaa40, transparent);
+    }
+
+    /* Geography subsections */
+    .geo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5px;
+      margin: 2rem 0;
+      border: 1px solid rgba(120,170,50,0.15);
+    }
+
+    .geo-card {
+      background: var(--stone);
+      padding: 1.8rem 1.6rem;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .geo-card:hover { background: var(--stone-mid); }
+
+    .geo-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #7aaa40, transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .geo-card:hover::before { opacity: 1; }
+
+    .geo-card-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #7aaa50;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .geo-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #c8dca0;
+      margin-bottom: 0.7rem;
+    }
+
+    .geo-card p {
+      font-size: 0.95rem;
+      color: #e8dfc0;
+      line-height: 1.75;
+    }
+
+    .breadcrumb {
+      padding: 0.8rem 3rem;
+      background: var(--black);
+      border-bottom: 1px solid rgba(120,170,50,0.10);
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .breadcrumb a { color: var(--text-dim); }
+    .breadcrumb a:hover { color: #8ab870; }
+    .breadcrumb span { color: #7aaa50; margin: 0 0.5rem; }
+
+    footer.site-footer {
+      padding: 2rem 3rem;
+      background: var(--black);
+      border-top: 1px solid rgba(120,170,50,0.12);
+      text-align: center;
+    }
+
+    .footer-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #7aaa50;
+      line-height: 1.9;
+    }
+
+    .footer-text strong { color: #c8dca0; }
+
+    @media (max-width: 768px) {
+      .geo-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .product-hero { padding: 3.5rem 1.4rem 3rem; min-height: auto; }
+      .product-logo-wrap { width: 200px; height: 200px; }
+      .desc-section { padding: 3rem 1.4rem; }
+      .breadcrumb { padding: 0.8rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="topbar-mount"></div>
+
+  <div class="site-wrapper">
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar-mount"></div>
+
+    <main class="main-content">
+
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>›</span>
+        <a href="heptaverse.html">The Heptaverse</a>
+        <span>›</span>
+        The Core
+      </div>
+
+      <!-- HERO -->
+      <section class="product-hero">
+
+        <!-- Mayan steampunk scene: stepped pyramid with brass gear elements, jungle canopy -->
+        <img class="tc-hero-bg" src="../images/the-core-bg.png" alt="" />
+
+
+        <div class="product-hero-content">
+          <p class="product-eyebrow">A Heptaverse Setting</p>
+          <p class="product-subtitle">A Ribhian Games 2d10 Heptaverse Setting</p>
+          <div class="product-meta">
+            <div class="meta-pill">⚙ Mayan Steampunk</div>
+            <div class="meta-pill">🌿 Heptaverse Setting</div>
+            <div class="meta-pill">🎲 2d10 Game System</div>
+            <div class="meta-pill">⚗ Harmonic Patterns</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DESCRIPTION -->
+      <section class="desc-section">
+        <div class="desc-inner">
+          <h2 class="tc-setting-title">The Core</h2>
+
+          <div class="divider" style="margin-top:0;">
+            <div class="divider-line"></div>
+            <div class="divider-gem"></div>
+            <div class="divider-line"></div>
+          </div>
+
+          <p>
+            The Core is the <strong>source realm of the Heptaverse</strong> — the maintenance
+            point for all of reality. Nexus Prime is a vast, verdant planet near the galactic
+            centre, its shape vaguely heptagonal, its skies lit by three stars and haunted by
+            the slowly rotating black hole <strong>Ek' Chuah</strong>, visible at all hours
+            except the deepest dark of night. Its native geography mirrors the lowlands,
+            highlands, mountain ranges, rivers, jungles, and swamps of a Mayan civilisation
+            writ cosmic — dense with life, treacherous with beauty.
+          </p>
+          <p>
+            What appears to be <strong>brass-and-steam engineering</strong> is in truth something
+            far older. The great gears turn. The copper pipes carry pressure. The instruments
+            measure and calibrate with precision. But the technology of The Core is ritual
+            disguised as machinery — ancient cosmic maintenance performed by engineers who
+            believe they are technicians, and shamans who know exactly what they are doing.
+            Both are right. Both are necessary.
+          </p>
+
+          <!-- Geography: three poles -->
+          <div class="geo-grid">
+            <div class="geo-card">
+              <span class="geo-card-label">Northern Apex</span>
+              <div class="geo-card-title">The Spire — Tzolk'in City</div>
+              <p>A sprawling brass-and-steam metropolis built around the <strong>Great Server</strong> — a seven-sided Mayan ziggurat humming with gears, steam pipes, and clicking mechanisms that maintain reality across all seven Heptaverse settings. Its engineers are custodians who believe they perform technical maintenance. They are performing ritual. The city draws indigenous peoples, travellers from other realms, and the custodial orders that keep the Great Server running.</p>
+            </div>
+            <div class="geo-card">
+              <span class="geo-card-label">Equatorial Region</span>
+              <div class="geo-card-title">The Seven Manifolds</div>
+              <p>Bubble realms extending from The Spire to the equator — each a contained microcosm of one of the seven Heptaverse settings, separated by cosmic force barriers only certain entities and custodians can open. They serve as both <strong>analytical laboratories</strong> observing travellers from the other realms and as sources of influence, ideas, and creatures that flow outward into the wider Heptaverse. The Core Manifold is where training and experiments are performed on travellers and natives alike.</p>
+            </div>
+            <div class="geo-card">
+              <span class="geo-card-label">Southern Pole</span>
+              <div class="geo-card-title">The Fountain</div>
+              <p>A primordial jungle oasis at the southern nexus of Nexus Prime, home to a <strong>giant crystalline construct</strong> — The Fountain, the wellspring of creation from which all realities flow. Its custodians are shamans and witchdoctors of a more native and ancient character than the engineers of The Spire, tending the source of all creative energy through ceremony and ritual that has never been mistaken for anything else. The Outlands surrounding it are home to the indigenous peoples of Nexus Prime: village communities built around jungle temples, periodically raided by parties from The Spire.</p>
+            </div>
+          </div>
+
+          <p>
+            The two traditions of The Core — <strong>Metropolitan Engineers</strong> working
+            the Great Server through technical protocols, and <strong>Outland Keepers</strong>
+            tending The Fountain through ancient ritual — access the same underlying cosmic
+            mathematics through entirely different cultural frameworks. The
+            <strong>Harmonic Pattern System</strong> is The Core's unique mechanic: seven
+            fundamental pattern families governing reality maintenance, each expressed through
+            brass calibration instruments in the city and through stone, water, and ceremony
+            in the Outlands. Neither tradition knows the full truth. Master practitioners of
+            both eventually begin to suspect it.
+          </p>
+          <p>
+            Player characters may walk either path — the <strong>Staticist, Harmonist, or
+            Dynamist Engineers</strong> of the metropolitan tradition, each aligned differently
+            to the Flux/Anchor balance that underlies all pattern work; or the
+            <strong>Stone Keepers, Balance Walkers, or Water Shapers</strong> of the Outland
+            tradition, who perform the same cosmic work through ritual, dance, and the reading
+            of sacred materials. The most powerful characters in The Core are those who
+            eventually discover that the brass gear and the flowing water serve the same
+            purpose — and learn to speak both languages at once.
+          </p>
+
+          <div class="divider">
+            <div class="divider-line"></div>
+            <div class="divider-gem"></div>
+            <div class="divider-line"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <p class="footer-text">
+          &copy; 2025 <strong>Ribhian Games LLC</strong> &nbsp;·&nbsp;
+          <strong>The Core</strong> is a Heptaverse Setting &nbsp;·&nbsp;
+          Powered by the <strong>Ribhian Games LLC 2d10 Game System</strong>
+        </p>
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="../js/site.js"></script>
+</body>
+</html>

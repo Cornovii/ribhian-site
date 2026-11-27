@@ -1,0 +1,78 @@
+<!--Unmatched Tournament Registration page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Public registration is CLOSED. Players for the Monodaemon January Unmatched Tournament are drafted off-site and entered by the tournament director through admin.html. This page only shows a notice so old links don't break. It does not read from or write to Supabase.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Unmatched Tournament | Ribhian Games</title>
+  <link rel="icon" href="../images/knotted Hex_V3.png" type="image/png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a; --deep: #111111; --surface: #1a1a1a;
+      --border: rgba(201,151,58,0.18); --gold: #c9973a; --gold-light: #e0b85a;
+      --text: #e8e0d0; --text-dim: rgba(232,224,208,0.55); --radius: 6px;
+    }
+    body { background:var(--black); color:var(--text); font-family:'Georgia',serif; min-height:100vh; display:flex; flex-direction:column; }
+    .page-header {
+      background:var(--deep); border-bottom:1px solid var(--border);
+      padding:1.5rem 2rem; display:flex; align-items:center; gap:1.2rem; flex-wrap:wrap;
+    }
+    .page-header img { height:48px; width:auto; }
+    .page-header-text h1 { font-size:1.4rem; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase; }
+    .page-header-text p { font-size:0.85rem; color:var(--text-dim); margin-top:0.2rem; }
+    .back-link { margin-left:auto; color:var(--gold); text-decoration:none; font-size:0.9rem; opacity:0.8; }
+    .back-link:hover { opacity:1; }
+    .page-main { flex:1; display:flex; align-items:center; justify-content:center; padding:3rem 1.5rem; }
+    .notice {
+      background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--gold);
+      border-radius:var(--radius); padding:2.5rem 2rem; max-width:560px; width:100%; text-align:center;
+    }
+    .notice .icon { font-size:3rem; margin-bottom:1rem; }
+    .notice h2 { color:var(--gold); font-size:1.3rem; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.8rem; }
+    .notice p { color:var(--text-dim); font-size:0.95rem; line-height:1.7; }
+    .notice p + p { margin-top:0.8rem; }
+    .notice a { color:var(--gold); }
+    .btn {
+      display:inline-block; margin-top:1.6rem; padding:0.7rem 1.6rem;
+      background:linear-gradient(135deg,var(--gold),var(--gold-light));
+      color:var(--black); font-size:0.88rem; font-weight:bold; letter-spacing:0.1em;
+      text-transform:uppercase; text-decoration:none; border-radius:var(--radius);
+    }
+    .page-footer {
+      text-align:center; padding:1.5rem; border-top:1px solid var(--border);
+      font-size:0.78rem; color:var(--text-dim); letter-spacing:0.08em;
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <img src="../images/ribhian-games-logo.png" alt="Ribhian Games" />
+  <div class="page-header-text">
+    <h1>Unmatched Tournament</h1>
+    <p>Ribhian Games Organized Play</p>
+  </div>
+  <a href="../events/events.html" class="back-link">← Back to Events</a>
+</header>
+
+<main class="page-main">
+  <div class="notice">
+    <div class="icon">⚔️</div>
+    <h2>Online Registration Closed</h2>
+    <p>Players for the <strong style="color:var(--text);">Monodaemon January Unmatched Tournament</strong> are selected through a hero draft and entered by the tournament director.</p>
+    <p>Questions? Contact <a href="mailto:ribhiangames@gmail.com">ribhiangames@gmail.com</a>.</p>
+    <a href="../events/events.html" class="btn">See Upcoming Events</a>
+  </div>
+</main>
+
+<footer class="page-footer">
+  Ribhian Games LLC &nbsp;·&nbsp; Unmatched Tournament
+</footer>
+
+</body>
+</html>

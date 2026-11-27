@@ -1,0 +1,1501 @@
+<!--Velvet & Iron page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Product page for Velvet & Iron standalone setting.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Velvet &amp; Iron — Ribhian Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=IM+Fell+English+SC&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* RENAISSANCE PALETTE
+       Ground:    walnut panel
+       Lapis:     ultramarine from ground lapis lazuli
+       Vermillion: mercury sulfide red
+       Verdigris: copper acetate green
+       Leaf:      gold leaf / shell gold
+       Parchment: calf vellum                          */
+    :root {
+      --ground:     #1c1409;
+      --ground-mid: #261b0d;
+      --ground-lt:  #332314;
+      --umber:      #4a2e14;
+      --umber-lt:   #6b4520;
+      --lapis:      #1b3565;
+      --lapis-lt:   #254b8f;
+      --lapis-pale: #3a6ab5;
+      --verm:       #9e2a0a;
+      --verm-lt:    #c43a12;
+      --verd:       #255040;
+      --verd-lt:    #2e6a52;
+      --leaf:       #b8831c;
+      --leaf-bright:#d4a030;
+      --leaf-shine: #ecc84a;
+      --leaf-pale:  #f0d898;
+      --parchment:  #e8d8b0;
+      --parch-mid:  #c8b888;
+      --parch-dim:  #c0a870;
+      --parch-deep: #b09060;
+      --chalk:      #f4eed8;
+      --text-body:  #c8b070;
+      --text-dim:   #a88848;
+      --text-muted: #9a7848;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--ground);
+      color: var(--text-body);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0; opacity: 0.035;
+      background-image: repeating-linear-gradient(91deg, transparent, transparent 2px, rgba(180,120,40,0.4) 2px, rgba(180,120,40,0.4) 3px);
+    }
+    #sidebar {}
+    .page-wrap { position: relative; z-index: 1; }
+    .content-wrap { max-width: 1160px; margin: 0 auto; padding: 0 3rem; }
+    @media (max-width: 700px) { .content-wrap { padding: 0 1.5rem; } }
+
+    /* ── SECTION HEADERS ── */
+    .section-header { text-align: center; margin-bottom: 3rem; }
+    .section-eyebrow {
+      font-family: 'Cinzel', serif; font-size: 0.58rem;
+      letter-spacing: 0.45em; text-transform: uppercase;
+      color: #c43a12; display: block; margin-bottom: 0.8rem;
+      text-shadow:
+        0 0 6px rgba(196,58,18,1.0),
+        0 0 18px rgba(180,40,10,0.85),
+        0 0 40px rgba(158,42,10,0.55);
+    }
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.3rem, 2.8vw, 2rem);
+      color: var(--chalk); font-weight: 700; line-height: 1.2;
+    }
+    .section-rule {
+      display: flex; justify-content: center; align-items: center;
+      gap: 0.8rem; margin: 1.2rem 0 0;
+    }
+    .section-rule::before, .section-rule::after {
+      content: ''; width: 60px; height: 1px;
+    }
+    .section-rule::before { background: linear-gradient(to right, transparent, var(--leaf)); }
+    .section-rule::after  { background: linear-gradient(to left, transparent, var(--leaf)); }
+    .section-rule span { color: var(--leaf); font-size: 0.75rem; }
+    .section-intro {
+      margin-top: 1.5rem; font-size: 1.05rem; color: var(--parch-dim);
+      max-width: 680px; margin-left: auto; margin-right: auto;
+      font-style: italic; line-height: 1.8;
+    }
+
+    /* ── HERO ALTARPIECE ── */
+    .vi-hero-bg {
+      position: absolute;
+      inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: center center;
+      pointer-events: none; z-index: 0;
+    }
+    .hero {
+      position: relative; width: 100%; min-height: 640px;
+      background: var(--ground); overflow: hidden;
+      border-bottom: 4px solid var(--leaf);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-bottom: 0.8rem;
+    }
+    .hero-frame {
+      position: absolute; inset: 12px;
+      border: 2px solid var(--leaf);
+      box-shadow: inset 0 0 0 1px var(--umber), 0 0 0 1px var(--umber);
+      pointer-events: none; z-index: 10;
+    }
+    .hero-frame::before {
+      content: 'VELVET  ·  ET  ·  FERRUM';
+      position: absolute; bottom: 0.7rem; left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Cinzel', serif; font-size: 0.5rem;
+      letter-spacing: 0.5rem; color: var(--leaf); opacity: 0.5;
+      white-space: nowrap;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom, rgba(28,20,9,0.08) 0%, rgba(28,20,9,0.22) 40%, rgba(28,20,9,0.82) 72%, rgba(28,20,9,0.97) 100%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 5;
+      width: 100%; padding: 0 4rem 30px; text-align: center;
+    }
+    .hero-logo { margin: 0 auto 1.8rem; display: block; }
+    .hero-diamond-row {
+      display: flex; justify-content: center; align-items: center;
+      gap: 1.2rem; margin-bottom: 1rem;
+    }
+    .hd-pip { width: 5px; height: 5px; background: var(--leaf); transform: rotate(45deg); opacity: 0.5; }
+    .hd-main { width: 11px; height: 11px; background: var(--leaf); transform: rotate(45deg); opacity: 0.85; }
+    .hero-title {
+      font-family: 'IM Fell English SC', serif;
+      font-size: clamp(3.2rem, 6vw, 5.8rem);
+      font-weight: 400; color: #c43a12; letter-spacing: 0.04em; line-height: 1.0;
+      text-shadow:
+        0 0 4px rgba(255,200,160,0.6),
+        0 0 12px rgba(196,58,18,0.75),
+        0 0 28px rgba(158,42,10,0.40),
+        0 2px 3px rgba(0,0,0,0.99);
+    }
+    .hero-rule {
+      width: 200px; height: 2px; margin: 1.2rem auto;
+      background: linear-gradient(to right, transparent, var(--leaf), var(--leaf-shine), var(--leaf), transparent);
+    }
+    .hero-subtitle {
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.4em; text-transform: uppercase; color: var(--parch-mid);
+    }
+
+    /* ── SYSTEM BADGE ── */
+    .system-badge {
+      display: flex; justify-content: center; flex-wrap: wrap;
+      background: var(--lapis); border-bottom: 3px solid var(--leaf);
+    }
+    .badge-item {
+      padding: 0.9rem 2rem; font-family: 'Cinzel', serif;
+      font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--leaf-pale); border-right: 1px solid rgba(184,131,28,0.2);
+      display: flex; align-items: center;
+    }
+    .badge-item:last-child { border-right: none; }
+    .badge-item strong { color: var(--leaf-shine); }
+
+    /* ── DIPTYCH (principle) ── */
+    .principle-section { padding: 5rem 0 4rem; }
+    .diptych {
+      display: grid; grid-template-columns: 1fr 4px 1fr;
+      border: 2px solid var(--leaf);
+      box-shadow: inset 0 0 0 1px var(--umber), 0 4px 24px rgba(0,0,0,0.4);
+    }
+    .diptych-wing { background: var(--ground-lt); }
+    .diptych-wing-head {
+      height: 88px; display: flex; align-items: center; justify-content: center;
+      position: relative; border-bottom: 2px solid var(--leaf);
+    }
+    .diptych-wing.velvet .diptych-wing-head { background: var(--lapis); }
+    .diptych-wing.iron   .diptych-wing-head { background: var(--umber); }
+    .diptych-wing-head h3 {
+      font-family: 'Cinzel Decorative', serif; font-size: 1.1rem;
+      color: var(--chalk); text-shadow: 0 1px 5px rgba(0,0,0,0.6);
+      padding-top: 1rem; position: relative; z-index: 2;
+    }
+    .diptych-wing-head::before {
+      content: attr(data-label);
+      position: absolute; top: 0.5rem; left: 50%; transform: translateX(-50%);
+      font-family: 'Cinzel', serif; font-size: 0.52rem; letter-spacing: 0.4em;
+      text-transform: uppercase; color: var(--leaf-pale); opacity: 0.7;
+      white-space: nowrap;
+    }
+    /* pointed arch cutout */
+    .diptych-wing-head::after {
+      content: ''; position: absolute; bottom: -14px; left: 50%;
+      transform: translateX(-50%);
+      width: 28px; height: 14px; background: var(--ground-lt);
+      clip-path: polygon(0 100%, 50% 0%, 100% 100%); z-index: 2;
+    }
+    .diptych-body { padding: 2.5rem 2.5rem 2.5rem; }
+    .diptych-body p { font-size: 0.95rem; color: var(--parch-dim); line-height: 1.8; }
+    .diptych-body p + p { margin-top: 0.9rem; }
+    .diptych-spine {
+      background: linear-gradient(to bottom, var(--leaf-shine) 0%, var(--leaf) 30%, var(--umber) 60%, var(--leaf) 100%);
+    }
+    .principle-footer {
+      margin-top: 2rem; background: var(--lapis);
+      border: 1px solid var(--leaf); border-top: 3px solid var(--leaf);
+      padding: 1.8rem 2.5rem; text-align: center;
+      font-size: 1rem; font-style: italic;
+      color: var(--leaf-pale); line-height: 1.8;
+    }
+    .principle-footer strong { color: var(--chalk); font-style: normal; }
+    @media (max-width: 700px) {
+      .diptych { grid-template-columns: 1fr; }
+      .diptych-spine { height: 4px; }
+    }
+
+    /* ── DRAMATIC QUESTION ── */
+    .question-section { padding: 4rem 0; }
+    .question-feature {
+      background: var(--ground-lt); border: 2px solid var(--leaf);
+      box-shadow: inset 0 0 0 1px var(--umber);
+      padding: 3rem 3.5rem; position: relative;
+    }
+    .question-feature::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(to right, var(--verm), var(--lapis), var(--verd), var(--lapis), var(--verm));
+    }
+    .question-text {
+      font-size: clamp(1.2rem, 2.5vw, 1.7rem); font-weight: 500;
+      color: var(--chalk); line-height: 1.5; font-style: italic;
+      margin-bottom: 2rem; text-align: center;
+    }
+    .question-answers { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 0.8rem; }
+    .q-faction {
+      background: var(--ground); border: 1px solid var(--umber-lt);
+      border-top: 2px solid var(--leaf); padding: 1rem 1.1rem;
+    }
+    .q-faction-name {
+      font-family: 'Cinzel', serif; font-size: 0.62rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--leaf); margin-bottom: 0.4rem;
+    }
+    .q-faction-answer { font-size: 0.85rem; color: var(--parch-deep); line-height: 1.5; font-style: italic; }
+
+    /* ── TIMELINE ── */
+    .timeline-section { padding: 4rem 0 5rem; }
+    .timeline-strip { position: relative; padding: 2rem 0; margin-top: 2rem; }
+    .timeline-strip::before {
+      content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--leaf) 10%, var(--leaf) 90%, transparent);
+      transform: translateX(-50%);
+    }
+    .timeline-event {
+      display: grid; grid-template-columns: 1fr 70px 1fr;
+      margin-bottom: 1.5rem; align-items: start;
+    }
+    .tl-left { text-align: right; padding-right: 2rem; padding-top: 0.3rem; }
+    .tl-right { padding-left: 2rem; padding-top: 0.3rem; }
+    .tl-year { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+    .tl-year-num {
+      font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.12em;
+      color: var(--chalk); background: var(--lapis);
+      padding: 0.2rem 0.5rem; border: 1px solid var(--leaf); white-space: nowrap;
+    }
+    .tl-dot { width: 10px; height: 10px; background: var(--leaf); transform: rotate(45deg); }
+    .tl-content { font-size: 0.88rem; color: var(--parch-deep); line-height: 1.55; }
+    .tl-content strong {
+      display: block; font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.12em; color: var(--parch-mid); margin-bottom: 0.25rem;
+      font-weight: 600; text-transform: uppercase;
+    }
+    @media (max-width: 700px) {
+      .timeline-strip::before { left: 18px; }
+      .timeline-event { grid-template-columns: 50px 1fr; }
+      .tl-left { display: none; }
+      .tl-right { padding-left: 1rem; }
+    }
+
+    /* ── ITALY SECTION (triptych) ── */
+    .italy-section {
+      padding: 5rem 0;
+      background: linear-gradient(to bottom, var(--ground-lt) 0%, var(--ground) 100%);
+      border-top: 3px solid var(--leaf); border-bottom: 3px solid var(--leaf);
+    }
+    .italy-triptych {
+      display: grid; grid-template-columns: 5fr 5px 6fr;
+      border: 2px solid var(--leaf);
+      box-shadow: inset 0 0 0 1px rgba(184,131,28,0.3), 0 6px 32px rgba(0,0,0,0.5);
+    }
+    .italy-panel { background: var(--ground-lt); overflow: hidden; }
+    .italy-panel-head {
+      padding: 1.8rem 2.2rem 1.5rem; position: relative;
+      border-bottom: 2px solid var(--leaf);
+    }
+    .italy-panel.florence .italy-panel-head { background: var(--lapis); }
+    .italy-panel.rome     .italy-panel-head { background: var(--verm); }
+    .italy-panel-head::after {
+      content: ''; position: absolute; bottom: -14px; left: 50%;
+      transform: translateX(-50%); width: 28px; height: 14px;
+      background: var(--ground-lt); clip-path: polygon(0 100%, 50% 0%, 100% 100%); z-index: 2;
+    }
+    .italy-panel-city {
+      font-family: 'Cinzel Decorative', serif; font-size: 1.6rem;
+      font-weight: 700; color: var(--chalk); text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .italy-panel-tag {
+      font-family: 'Cinzel', serif; font-size: 0.55rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--leaf-pale); margin-top: 0.3rem; opacity: 0.85;
+    }
+    .italy-panel-body { padding: 2.5rem 2.2rem 2.2rem; }
+    .italy-panel-body p { font-size: 0.93rem; color: var(--parch-dim); line-height: 1.8; margin-bottom: 1rem; }
+    .italy-panel-body p:last-child { margin-bottom: 0; }
+    .italy-panel-body em { color: var(--parch-mid); }
+    .italy-spine {
+      background: linear-gradient(to bottom, var(--leaf-shine) 0%, var(--leaf) 20%, var(--umber) 50%, var(--leaf) 80%, var(--leaf-shine) 100%);
+    }
+    .italy-predella {
+      grid-column: 1 / -1; border-top: 2px solid var(--leaf);
+      background: var(--verd); padding: 1.5rem 2.5rem; text-align: center;
+    }
+    .predella-text { font-size: 1rem; font-style: italic; color: var(--leaf-pale); line-height: 1.7; }
+    .predella-text strong { color: var(--chalk); font-style: normal; }
+    @media (max-width: 800px) {
+      .italy-triptych { grid-template-columns: 1fr; }
+      .italy-spine { height: 5px; }
+    }
+
+    /* ── PAPACY ── */
+    .papacy-section { padding: 5rem 0; }
+    .papacy-intro {
+      font-size: 1.05rem; font-style: italic; color: var(--parch-dim);
+      text-align: center; max-width: 680px; margin: 0 auto 3rem; line-height: 1.8;
+    }
+    .pope-list {
+      display: flex; flex-direction: column;
+      border: 2px solid var(--leaf); box-shadow: inset 0 0 0 1px var(--umber);
+    }
+    .pope-entry {
+      display: grid; grid-template-columns: 230px 1fr;
+      border-bottom: 1px solid rgba(184,131,28,0.18); position: relative;
+    }
+    .pope-entry:last-child { border-bottom: none; }
+    .pope-entry::before {
+      content: ''; position: absolute;
+      top: 0; bottom: 0; left: 0; width: 3px;
+    }
+    .pope-entry.venal::before    { background: var(--umber-lt); }
+    .pope-entry.corrupt::before  { background: var(--umber); }
+    .pope-entry.reform::before   { background: var(--verd-lt); }
+    .pope-entry.inquisit::before { background: var(--verm); }
+    .pope-entry.saint::before    { background: var(--lapis-pale); }
+    .pope-entry.bureau::before   { background: var(--parch-dim); }
+    .pope-meta {
+      padding: 1.8rem 1.5rem 1.8rem 2rem;
+      background: var(--ground); border-right: 1px solid rgba(184,131,28,0.18);
+    }
+    .pope-name { font-family: 'Cinzel', serif; font-size: 0.88rem; font-weight: 700; color: var(--chalk); margin-bottom: 0.2rem; }
+    .pope-years { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.18em; color: var(--leaf); margin-bottom: 0.7rem; }
+    .pope-epithet { font-size: 0.8rem; font-style: italic; color: var(--parch-mid); line-height: 1.5; }
+    .pope-body { padding: 1.8rem 2.2rem; background: var(--ground-lt); }
+    .pope-body p { font-size: 0.9rem; color: var(--parch-deep); line-height: 1.8; }
+    .pope-body p + p { margin-top: 0.7rem; }
+    .pope-verdict {
+      margin-top: 0.9rem; padding: 0.7rem 1rem;
+      border-left: 2px solid var(--leaf);
+      font-size: 0.8rem; font-style: italic; color: var(--parch-dim);
+      background: rgba(184,131,28,0.04);
+    }
+    @media (max-width: 750px) {
+      .pope-entry { grid-template-columns: 1fr; }
+      .pope-meta { border-right: none; border-bottom: 1px solid rgba(184,131,28,0.18); }
+    }
+
+    /* ── CORRUPTION TRIPTYCH ── */
+    .corruption-section { padding: 4rem 0 5rem; }
+    .corruption-triptych {
+      display: grid; grid-template-columns: 1fr 2px 1fr 2px 1fr;
+      border: 2px solid var(--leaf); box-shadow: inset 0 0 0 1px var(--umber);
+      margin-top: 2.5rem;
+    }
+    .corr-panel { background: var(--ground-lt); padding: 2.2rem 2rem; }
+    .corr-divider { background: var(--leaf); }
+    .corr-diamond {
+      width: 34px; height: 34px; margin-bottom: 1.2rem;
+      border: 1px solid var(--leaf); transform: rotate(45deg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .corr-diamond span { transform: rotate(-45deg); font-size: 1rem; color: var(--leaf); }
+    .corr-panel h3 {
+      font-family: 'Cinzel', serif; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--leaf); margin-bottom: 0.8rem;
+    }
+    .corr-panel p { font-size: 0.88rem; color: var(--parch-deep); line-height: 1.7; }
+    @media (max-width: 700px) {
+      .corruption-triptych { grid-template-columns: 1fr; }
+      .corr-divider { height: 2px; }
+    }
+
+    /* ── CASTEL ── */
+    .castello-feature {
+      background: var(--ground-lt); border: 2px solid var(--leaf);
+      box-shadow: inset 0 0 0 1px var(--umber);
+      padding: 3rem 4rem; display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: center;
+      border-top: 5px solid var(--verm);
+    }
+    .castello-svg-wrap { display: flex; justify-content: center; }
+    .castello-eyebrow {
+      font-family: 'Cinzel', serif; font-size: 0.58rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: #c43a12; display: block; margin-bottom: 0.6rem;
+      text-shadow:
+        0 0 6px rgba(196,58,18,1.0),
+        0 0 18px rgba(180,40,10,0.85),
+        0 0 40px rgba(158,42,10,0.55);
+    }
+    .castello-text h3 { font-family: 'Cinzel Decorative', serif; font-size: 1.4rem; color: var(--chalk); margin-bottom: 1rem; }
+    .castello-text p { font-size: 0.92rem; color: var(--parch-deep); line-height: 1.8; margin-top: 0.8rem; }
+    .castello-detail {
+      margin-top: 1.2rem; padding: 1rem 1.2rem;
+      background: var(--ground); border-left: 2px solid var(--verm-lt);
+      font-size: 0.82rem; font-style: italic; color: var(--parch-dim); line-height: 1.6;
+    }
+    @media (max-width: 750px) {
+      .castello-feature { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
+      .castello-svg-wrap { display: none; }
+    }
+
+    /* ── ZONES ── */
+    .zones-section {
+      padding: 5rem 0; background: var(--lapis);
+      border-top: 3px solid var(--leaf); border-bottom: 3px solid var(--leaf);
+    }
+    .zones-section .section-title { color: var(--leaf-pale); }
+    .zones-section .section-intro { color: rgba(240,216,152,0.7); }
+    .zones-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 2px; background: var(--leaf);
+      border: 2px solid var(--leaf); margin-top: 2.5rem;
+    }
+    .zone-card { background: var(--lapis); padding: 1.6rem 1.5rem; transition: background 0.2s; }
+    .zone-card:hover { background: var(--lapis-lt); }
+    .zone-card.featured { background: var(--ground); border-top: 3px solid var(--verm-lt); }
+    .zone-number { font-family: 'Cinzel', serif; font-size: 0.52rem; letter-spacing: 0.2em; color: var(--leaf); margin-bottom: 0.4rem; text-transform: uppercase; }
+    .zone-name { font-family: 'Cinzel', serif; font-size: 0.82rem; font-weight: 700; color: var(--chalk); margin-bottom: 0.25rem; line-height: 1.2; }
+    .zone-card.featured .zone-name { color: var(--leaf-pale); }
+    .zone-geo { font-size: 0.72rem; color: var(--parch-dim); font-style: italic; margin-bottom: 0.7rem; }
+    .zone-tone { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--leaf); margin-bottom: 0.6rem; opacity: 0.8; }
+    .zone-card.featured .zone-tone { color: var(--verm-lt); opacity: 1; }
+    .zone-desc { font-size: 0.8rem; color: rgba(224,216,180,0.75); line-height: 1.6; }
+    .zone-card.featured .zone-desc { color: var(--parch-deep); }
+    .peripheral-strip {
+      background: var(--ground); border: 2px solid var(--leaf); border-top: none;
+      padding: 1.2rem 2rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center;
+    }
+    .peripheral-label { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--leaf); white-space: nowrap; }
+    .peripheral-items { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .peripheral-item { font-size: 0.8rem; color: var(--parch-deep); font-style: italic; }
+    @media (max-width: 900px) { .zones-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .zones-grid { grid-template-columns: 1fr; } }
+
+    /* ── HERESY TRACK ── */
+    .heresy-section { padding: 5rem 0; }
+    .heresy-feature {
+      background: var(--ground-lt); border: 2px solid var(--leaf);
+      box-shadow: inset 0 0 0 1px var(--umber);
+      padding: 3rem; display: flex; flex-direction: column;
+      gap: 2rem; margin-top: 2rem;
+    }
+    .heresy-text h3 { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--verm-lt); margin-bottom: 1rem; }
+    .heresy-text p { font-size: 0.9rem; color: var(--parch-deep); line-height: 1.8; margin-bottom: 1rem; }
+    .heresy-tracks { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.7rem; }
+    .track-item { background: var(--ground); border: 1px solid rgba(184,131,28,0.15); border-left: 3px solid var(--leaf); padding: 0.9rem 1.1rem; }
+    .track-name { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--parch-mid); margin-bottom: 0.3rem; }
+    .track-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+    .track-bar { height: 3px; background: rgba(184,131,28,0.1); border-radius: 1px; margin-top: 0.5rem; overflow: hidden; }
+    .track-fill { height: 100%; background: linear-gradient(to right, var(--leaf), var(--leaf-bright)); }
+    .threshold-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 1.5rem; }
+    .threshold { background: var(--ground); border: 1px solid rgba(184,131,28,0.15); border-top: 2px solid var(--leaf); padding: 0.8rem; text-align: center; }
+    .threshold-num { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.12em; color: var(--leaf); margin-bottom: 0.35rem; }
+    .threshold-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--chalk); margin-bottom: 0.3rem; text-transform: uppercase; }
+    .threshold-desc { font-size: 0.7rem; color: var(--text-muted); line-height: 1.4; }
+    @media (max-width: 750px) {
+      .threshold-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── FACTIONS ── */
+    .factions-section { padding: 4rem 0 5rem; }
+    .factions-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; background: var(--leaf);
+      border: 2px solid var(--leaf); margin-top: 2.5rem;
+    }
+    .faction-card { background: var(--ground-lt); padding: 1.5rem 1.6rem; }
+    .faction-name { font-family: 'Cinzel', serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--leaf); margin-bottom: 0.5rem; }
+    .faction-desc { font-size: 0.85rem; color: var(--parch-deep); line-height: 1.65; }
+    .faction-card.shadow { background: var(--ground); }
+    .faction-card.shadow .faction-name { color: var(--parch-dim); }
+    .factions-divider {
+      grid-column: 1 / -1; background: var(--ground);
+      border-top: 1px solid var(--leaf); border-bottom: 1px solid var(--leaf);
+      padding: 0.6rem; display: flex; align-items: center; justify-content: center; gap: 1rem;
+    }
+    .factions-divider span { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.3em; color: var(--parch-dim); text-transform: uppercase; }
+    .factions-divider::before, .factions-divider::after { content: '✦  ✦  ✦'; color: rgba(184,131,28,0.3); font-size: 0.7rem; letter-spacing: 0.3rem; }
+    @media (max-width: 700px) {
+      .factions-grid { grid-template-columns: 1fr; }
+      .factions-divider { grid-column: 1; }
+    }
+
+    /* ── MAGIC ── */
+    .magic-section {
+      padding: 5rem 0; background: var(--ground-lt);
+      border-top: 3px solid var(--leaf); border-bottom: 3px solid var(--leaf);
+    }
+    .magic-tiers {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border: 2px solid var(--leaf); box-shadow: inset 0 0 0 1px var(--umber);
+      margin-top: 2.5rem;
+    }
+    .magic-tier {
+      padding: 2.2rem 1.6rem; border-right: 2px solid var(--leaf);
+      background: var(--ground); position: relative;
+    }
+    .magic-tier:last-child { border-right: none; }
+    .magic-tier::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; }
+    .magic-tier:nth-child(1)::before { background: var(--verd); }
+    .magic-tier:nth-child(2)::before { background: var(--lapis); }
+    .magic-tier:nth-child(3)::before { background: var(--verm); }
+    .magic-tier:nth-child(4)::before { background: var(--umber); }
+    .tier-danger {
+      font-family: 'Cinzel', serif; font-size: 0.52rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem;
+    }
+    .tier-danger::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .tier-danger.low      { color: var(--verd-lt); }
+    .tier-danger.low::before { background: var(--verd-lt); }
+    .tier-danger.moderate { color: var(--lapis-pale); }
+    .tier-danger.moderate::before { background: var(--lapis-pale); }
+    .tier-danger.extreme  { color: var(--verm-lt); }
+    .tier-danger.extreme::before  { background: var(--verm-lt); }
+    .tier-danger.forbidden { color: var(--parch-dim); }
+    .tier-danger.forbidden::before { background: var(--umber-lt); }
+    .tier-name { font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: var(--chalk); margin-bottom: 0.4rem; }
+    .tier-model { font-size: 0.72rem; font-style: italic; color: var(--text-dim); margin-bottom: 0.9rem; }
+    .tier-desc { font-size: 0.82rem; color: var(--parch-deep); line-height: 1.65; }
+    @media (max-width: 750px) { .magic-tiers { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .magic-tiers { grid-template-columns: 1fr; } }
+
+    /* ── FOOTER ── */
+    /* ── PATHS ── */
+    .paths-section { padding: 5rem 0; }
+    .pillar-label {
+      font-family: 'Cinzel', serif; font-size: 0.55rem;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--leaf-shine);
+      text-shadow: 0 0 8px rgba(236,200,74,0.8), 0 0 20px rgba(212,160,48,0.4);
+      display: block; margin: 2.5rem 0 1rem;
+      border-bottom: 1px solid rgba(212,160,48,0.20);
+      padding-bottom: 0.5rem;
+    }
+    .paths-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.2rem; margin-top: 1rem;
+    }
+    .path-card {
+      border: 1px solid rgba(184,131,28,0.18);
+      background: rgba(26,20,9,0.90);
+      padding: 1.4rem; position: relative;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+    }
+    .path-card:hover {
+      border-color: rgba(236,200,74,0.35);
+      background: rgba(38,27,13,0.95);
+      transform: translateY(-2px);
+    }
+    .path-card::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(184,131,28,0.25), transparent);
+    }
+    .path-header { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 0.4rem; }
+    .path-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .path-name {
+      font-family: 'Cinzel Decorative', serif; font-size: 1rem;
+      color: var(--leaf-shine); line-height: 1.1; font-weight: 700;
+    }
+    .path-tagline { font-style: italic; font-size: 0.88rem; color: var(--parch-dim); margin-bottom: 0.6rem; line-height: 1.4; }
+    .path-desc { font-size: 0.88rem; color: var(--text-body); line-height: 1.65; margin-bottom: 0.8rem; }
+    .path-specs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.6rem; }
+    .path-spec {
+      font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--verm-lt);
+      border: 1px solid rgba(158,42,10,0.30); padding: 0.18rem 0.5rem;
+      background: rgba(40,10,4,0.40);
+    }
+    .path-mechanic {
+      margin-top: 0.6rem; padding-top: 0.6rem;
+      border-top: 1px solid rgba(184,131,28,0.12);
+      font-size: 0.82rem; color: var(--leaf-pale); font-style: italic;
+    }
+    .path-mechanic strong {
+      font-style: normal; font-family: 'Cinzel', serif;
+      font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--parch-dim); display: block; margin-bottom: 0.3rem;
+    }
+    @media (max-width: 640px) { .paths-grid { grid-template-columns: 1fr; } }
+
+    /* ── HERITAGES ── */
+    .heritages-section { padding: 5rem 0; background: var(--ground-mid); border-top: 1px solid rgba(184,131,28,0.10); }
+    .heritages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.2rem; margin-top: 2rem;
+    }
+    .heritage-vi-card {
+      border: 1px solid rgba(184,131,28,0.15);
+      background: rgba(20,14,6,0.90); padding: 1.5rem;
+      border-top: 2px solid rgba(158,42,10,0.6);
+      position: relative;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .heritage-vi-card:hover { border-top-color: var(--leaf-shine); background: rgba(30,22,10,0.95); }
+    .heritage-vi-icon { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; }
+    .heritage-vi-name {
+      font-family: 'Cinzel Decorative', serif; font-size: 1rem;
+      color: var(--verm-lt); margin-bottom: 0.2rem; font-weight: 700;
+    }
+    .heritage-vi-origin { font-family: 'Cinzel', serif; font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--parch-deep); margin-bottom: 0.6rem; }
+    .heritage-vi-desc { font-size: 0.88rem; color: var(--text-body); line-height: 1.65; margin-bottom: 0.8rem; }
+    .heritage-vi-abilities {
+      margin-top: 0.7rem; padding-top: 0.7rem;
+      border-top: 1px solid rgba(184,131,28,0.10);
+      font-size: 0.82rem; color: var(--leaf-pale); font-style: italic;
+    }
+    .heritage-vi-abilities strong {
+      font-style: normal; font-family: 'Cinzel', serif;
+      font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--parch-dim); display: block; margin-bottom: 0.3rem;
+    }
+    .heritage-vi-cost {
+      margin-top: 0.6rem; font-size: 0.82rem; color: var(--verm-lt); font-style: italic;
+    }
+    .heritage-vi-cost strong {
+      font-style: normal; font-family: 'Cinzel', serif;
+      font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--parch-dim); display: block; margin-bottom: 0.3rem;
+    }
+    .heritage-vi-variant {
+      font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--leaf); margin-bottom: 0.2rem;
+    }
+    @media (max-width: 640px) { .heritages-grid { grid-template-columns: 1fr; } }
+
+    .page-footer {
+      background: var(--lapis); border-top: 4px solid var(--leaf);
+      padding: 2.5rem 3rem; text-align: center;
+    }
+    .page-footer::before {
+      content: '✦  ·  ✦  ·  ✦'; display: block;
+      font-size: 0.7rem; color: var(--leaf); letter-spacing: 0.5rem;
+      margin-bottom: 0.8rem; opacity: 0.6;
+    }
+    .page-footer p { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--leaf-pale); opacity: 0.7; }
+    .page-footer strong { color: var(--leaf-shine); opacity: 1; font-weight: 400; }
+  </style>
+</head>
+<body>
+<div id="topbar-mount"></div>
+<div class="site-wrapper">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <div id="sidebar-mount"></div>
+  <main class="main-content">
+
+<!-- HERO -->
+<header class="hero">
+<img class="vi-hero-bg" src="../images/velvet-and-iron-bg.jpg" alt="" />
+<div class="hero-frame"></div>
+<div class="hero-overlay"></div>
+<div class="hero-content">
+  <p class="hero-subtitle">A Ribhian Games 2d10 Historical Occult Thriller &ensp;&middot;&ensp; Europe 1540&ndash;1580</p>
+  <div style="display:flex; align-items:center; justify-content:center; gap:0.8rem; flex-wrap:wrap; margin-top:1.5rem;">
+    <div style="padding:0.45rem 1.1rem; border:1px solid rgba(184,131,28,0.55); background:rgba(28,20,9,0.72); font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--leaf-shine); text-shadow:0 0 8px rgba(236,200,74,0.7);">&#9876; Historical Occult</div>
+    <div style="padding:0.45rem 1.1rem; border:1px solid rgba(184,131,28,0.55); background:rgba(28,20,9,0.72); font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--leaf-shine); text-shadow:0 0 8px rgba(236,200,74,0.7);">&#9998; Europe 1540&ndash;1580</div>
+    <div style="padding:0.45rem 1.1rem; border:1px solid rgba(184,131,28,0.55); background:rgba(28,20,9,0.72); font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--leaf-shine); text-shadow:0 0 8px rgba(236,200,74,0.7);">&#10016; Standalone Setting</div>
+    <div style="padding:0.45rem 1.1rem; border:1px solid rgba(184,131,28,0.55); background:rgba(28,20,9,0.72); font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--leaf-shine); text-shadow:0 0 8px rgba(236,200,74,0.7);">&#9670; 2d10 System</div>
+  </div>
+</div>
+</header>
+
+<!-- BADGE -->
+<div class="system-badge">
+  <div class="badge-item"><strong>2d10</strong>&nbsp;System</div>
+  <div class="badge-item"><strong>Ribhian Games LLC</strong></div>
+  <div class="badge-item"><strong>Historical</strong>&nbsp;Occult Thriller</div>
+  <div class="badge-item"><strong>Europe</strong>&nbsp;1540&ndash;1580</div>
+  <div class="badge-item"><strong>Standalone</strong>&nbsp;Setting</div>
+</div>
+
+<div class="content-wrap">
+
+<!-- SETTING TITLE -->
+<section style="padding: 4rem 0 1.5rem; text-align:center;">
+  <h1 class="hero-title" style="margin-bottom:0.6rem;">Velvet &amp; Iron</h1>
+  <div class="hero-rule"></div>
+</section>
+
+<!-- PRINCIPLE -->
+<section class="principle-section">
+  <div class="section-header">
+    <span class="section-eyebrow">The Central Principle</span>
+    <h2 class="section-title">Luxury and Brutality Are the Same Institution</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+  </div>
+  <div class="diptych">
+    <div class="diptych-wing velvet">
+      <div class="diptych-wing-head" data-label="The Velvet">
+        <h3>The Beautiful World</h3>
+      </div>
+      <div class="diptych-body">
+        <p>A cardinal&rsquo;s banquet illuminated by a thousand candles. A ceiling painted by the greatest master alive. A duchess&rsquo;s jewels worth more than a city. Philosophical salons where the finest minds of Europe debate Plato over wine from Cyprus. Art as political statement. Beauty as power. The Renaissance in its final, anxious, magnificent flowering.</p>
+        <p>In Rome, beauty equals power most literally. A patron&rsquo;s collection, a cardinal&rsquo;s table, the commission of a new basilica &mdash; these are not personal taste. They are statements of factional alignment, declarations of wealth, and instruments of authority dressed in marble and gold.</p>
+      </div>
+    </div>
+    <div class="diptych-spine"></div>
+    <div class="diptych-wing iron">
+      <div class="diptych-wing-head" data-label="The Iron">
+        <h3>What Lies Beneath</h3>
+      </div>
+      <div class="diptych-body">
+        <p>The interrogation chamber directly below the painted ceiling. The arrest warrant signed that morning by the hand that poured the wine. The Inquisitor&rsquo;s file growing thicker with each conversation. The Bravi waiting in the alley outside the salon. Violence not as the opposite of beauty but as its constant companion &mdash; the same institution, seen from a different angle.</p>
+        <p>Every relationship has a price. Every piece of knowledge has a consequence. The world is not a clean Renaissance painting. It is fog-choked docks, candlelit conspiracies, and the smell of ink and blood in the same room.</p>
+      </div>
+    </div>
+  </div>
+  <div class="principle-footer">
+    The tone is <strong>Taboo</strong> meeting <strong>The Name of the Rose</strong> &mdash; grimy, visceral, transactional, dangerous. When describing any location in this setting, describe <strong>both layers</strong>. This is a design principle, not flavour. The velvet is always in direct contact with the iron.
+  </div>
+</section>
+
+<!-- QUESTION -->
+<section class="question-section">
+  <div class="section-header">
+    <span class="section-eyebrow">The Central Dramatic Question</span>
+    <h2 class="section-title">Who Controls What Humanity Knows About Itself?</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+  </div>
+  <div class="question-feature">
+    <p class="question-text">&ldquo;The most dangerous objects in this world are never weapons. They are always documents.&rdquo;</p>
+    <div class="question-answers">
+      <div class="q-faction"><div class="q-faction-name">Rome</div><div class="q-faction-answer">The papacy. Doctrine fixed at Trent. No further negotiation.</div></div>
+      <div class="q-faction"><div class="q-faction-name">The Habsburgs</div><div class="q-faction-answer">Christian orthodoxy enforced by the most professional military in Europe.</div></div>
+      <div class="q-faction"><div class="q-faction-name">The Protestants</div><div class="q-faction-answer">Scripture alone. The Church is corruption wearing a papal crown.</div></div>
+      <div class="q-faction"><div class="q-faction-name">The Ottomans</div><div class="q-faction-answer">The Sultan&rsquo;s pragmatic tolerance. Knowledge serves the empire.</div></div>
+      <div class="q-faction"><div class="q-faction-name">The Underground</div><div class="q-faction-answer">No one. Knowledge belongs to everyone. Mathematics does not lie.</div></div>
+      <div class="q-faction"><div class="q-faction-name">The Nizari</div><div class="q-faction-answer">The living spiritual authority &mdash; the order that never died.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="section-header">
+    <span class="section-eyebrow">1540&ndash;1580</span>
+    <h2 class="section-title">Everything In Motion. No Outcome Settled.</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+    <p class="section-intro">This window was chosen deliberately. Every faction believes it can still win. Every institution is in the middle of becoming something different from what it was. The characters arrive at the precise moment when the outcome is still unwritten.</p>
+  </div>
+  <div class="timeline-strip">
+    <div class="timeline-event">
+      <div class="tl-left"><div class="tl-content"><strong>Jesuits Founded</strong>A new weapon just being loaded. Ignatian obedience meets the finest intellectual formation in Europe.</div></div>
+      <div class="tl-year"><div class="tl-year-num">1540</div><div class="tl-dot"></div></div>
+      <div class="tl-right"></div>
+    </div>
+    <div class="timeline-event">
+      <div class="tl-left"></div>
+      <div class="tl-year"><div class="tl-year-num">1545</div><div class="tl-dot"></div></div>
+      <div class="tl-right"><div class="tl-content"><strong>Council of Trent Opens</strong>The Church decides to fight rather than reform. Doctrine begins hardening into a framework that will define Catholicism for four centuries.</div></div>
+    </div>
+    <div class="timeline-event">
+      <div class="tl-left"><div class="tl-content"><strong>Habsburg Split</strong>Charles V abdicates. Spain and Austria divide. The most powerful dynasty in Europe fractures into two branches with increasingly diverging interests.</div></div>
+      <div class="tl-year"><div class="tl-year-num">1556</div><div class="tl-dot"></div></div>
+      <div class="tl-right"></div>
+    </div>
+    <div class="timeline-event">
+      <div class="tl-left"></div>
+      <div class="tl-year"><div class="tl-year-num">1562</div><div class="tl-dot"></div></div>
+      <div class="tl-right"><div class="tl-content"><strong>French Wars of Religion</strong>France begins tearing itself apart. The zone where elegant social danger bleeds into sudden lethal violence from all directions.</div></div>
+    </div>
+    <div class="timeline-event">
+      <div class="tl-left"><div class="tl-content"><strong>Council of Trent Closes</strong>Doctrine hardened. No more negotiation. The theological ambiguity that allowed some manoeuvre is permanently over.</div></div>
+      <div class="tl-year"><div class="tl-year-num">1563</div><div class="tl-dot"></div></div>
+      <div class="tl-right"></div>
+    </div>
+    <div class="timeline-event">
+      <div class="tl-left"></div>
+      <div class="tl-year"><div class="tl-year-num">1570</div><div class="tl-dot"></div></div>
+      <div class="tl-right"><div class="tl-content"><strong>Elizabeth Excommunicated</strong>Every English Catholic forced to choose between queen and pope. The Elizabethan spy network enters its most dangerous phase.</div></div>
+    </div>
+    <div class="timeline-event">
+      <div class="tl-left"><div class="tl-content"><strong>St. Bartholomew&rsquo;s Day</strong>Between 5,000 and 30,000 Huguenots killed. The Pope celebrates with a Te Deum. It does not end the wars. It poisons European politics for a generation.</div></div>
+      <div class="tl-year"><div class="tl-year-num">1572</div><div class="tl-dot"></div></div>
+      <div class="tl-right"></div>
+    </div>
+    <div class="timeline-event">
+      <div class="tl-left"></div>
+      <div class="tl-year"><div class="tl-year-num">1577</div><div class="tl-dot"></div></div>
+      <div class="tl-right"><div class="tl-content"><strong>Istanbul Observatory</strong>Built and destroyed in three years. The same impulse that drives the Inquisition plays out in the Ottoman court in real time.</div></div>
+    </div>
+  </div>
+</section>
+</div><!-- /content-wrap -->
+
+<!-- ITALY — full width -->
+<section class="italy-section">
+<div class="content-wrap">
+  <div class="section-header">
+    <span class="section-eyebrow">Zone 4 &mdash; The Heart of the World</span>
+    <h2 class="section-title">Italy: Beautiful, Poisonous, Losing Its Centrality</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+    <p class="section-intro">Italy is not a country. It is a collection of competing states, most dominated by the Habsburgs or the papacy, unable to act without calculating which great power will react and how. The great Italian Renaissance is ending. Its confident humanism has curdled into Mannerist anxiety &mdash; the aesthetic of a culture that no longer believes its own optimism.</p>
+  </div>
+  <div class="italy-triptych">
+    <div class="italy-panel florence">
+      <div class="italy-panel-head">
+        <div class="italy-panel-city">Florence</div>
+        <div class="italy-panel-tag">Where You Can Still Think Dangerous Thoughts</div>
+      </div>
+      <div class="italy-panel-body">
+        <p>Florence under Medici control is the setting&rsquo;s most important intellectual environment and the natural starting point for a full campaign. The Medici are simultaneously bankers with correspondent relationships in every European city, art patrons with agents evaluating across the continent, political operators with family members in the French court, and the intellectual sponsors of the Hermetic tradition through the Platonic Academy.</p>
+        <p>Florence is not Rome, which is crucial. Rome is where the Inquisition lives. Florence is where you can think dangerous thoughts with slightly more protection. The Medici have historically shielded their scholars to a degree Rome would not tolerate &mdash; so when Rome finally enters the picture, it lands with full weight.</p>
+        <p><em>The intellectual salon culture of Florence is the Euclidean Underground&rsquo;s most comfortable Italian habitat. The line between a Medici-sponsored discussion of Platonic philosophy and a cell of Hermetic practitioners is thinner than either party would officially acknowledge.</em></p>
+      </div>
+    </div>
+    <div class="italy-spine"></div>
+    <div class="italy-panel rome">
+      <div class="italy-panel-head">
+        <div class="italy-panel-city">Rome</div>
+        <div class="italy-panel-tag">Where the Machine Lives</div>
+      </div>
+      <div class="italy-panel-body">
+        <p>The Vatican as physical space contains the setting&rsquo;s great architectural symbol of the Velvet and Iron principle. The Sistine Chapel ceiling above. The Castel Sant&rsquo;Angelo dungeons below. Everything beautiful about Counter-Reformation Christianity on the surface. Everything brutal directly beneath it. The Sack of Rome in 1527 &mdash; in living memory for every Italian adult &mdash; hangs over everything.</p>
+        <p>Every other faction has agents in Rome because this is where the Pope lives. The most surveilled city in the setting. A character who attracts Roman attention cannot simply flee to the next city and disappear. The apparatus is comprehensive, patient, and does not close files without resolution.</p>
+        <p><em>The papacy is not a monolithic institution. It is a collection of wildly different men occupying the same office in rapid succession, each bringing their own corruption, paranoia, genuine piety, or outright villainy. The contrast between individual popes makes the institution itself the dramatic engine of the entire setting.</em></p>
+      </div>
+    </div>
+    <div class="italy-predella">
+      <p class="predella-text">The natural campaign arc moves through <strong>Florence and Rome in Act One</strong> &mdash; Florence for intellectual access and breathing space, Rome as the destination where everything crystallises into pressure. Then expands outward through Venice, and from there in multiple directions. <strong>Act Three requires the full map.</strong></p>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="content-wrap">
+
+<!-- PAPACY -->
+<section class="papacy-section">
+  <div class="section-header">
+    <span class="section-eyebrow">The Dramatic Engine</span>
+    <h2 class="section-title">The Succession of Popes</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+  </div>
+  <p class="papacy-intro">Each pope transforms the institution they inherit. Understanding which version of the Inquisition you are dealing with is not academic &mdash; it determines whether you are fighting personal fanaticism, cynical politics, or slow bureaucratic inevitability. These distinctions change what is possible.</p>
+  <div class="pope-list">
+    <div class="pope-entry venal">
+      <div class="pope-meta">
+        <div class="pope-name">Paul III</div>
+        <div class="pope-years">Alessandro Farnese &middot; to 1549</div>
+        <div class="pope-epithet">The Architect of Chaos &mdash; acknowledged illegitimate children, made teenage grandsons cardinals, carved a duchy from Papal States for his violent son &mdash; while simultaneously launching the Council of Trent, authorizing the Jesuits, and commissioning Michelangelo&rsquo;s Last Judgment</div>
+      </div>
+      <div class="pope-body">
+        <p>He knew exactly what was wrong and kept doing the wrong things while building the machinery that would eventually force reform. The contradiction is not hypocrisy &mdash; it is the human condition applied to the most powerful religious office in the world.</p>
+        <div class="pope-verdict">Died at eighty-one, officially of grief after his son&rsquo;s assassination. Had made enough enemies that the question remains interesting.</div>
+      </div>
+    </div>
+    <div class="pope-entry corrupt">
+      <div class="pope-meta">
+        <div class="pope-name">Julius III</div>
+        <div class="pope-years">1550&ndash;1555</div>
+        <div class="pope-epithet">The Scandal That Stopped Reform &mdash; made a teenage street youth his Cardinal-Nephew; the highest-ranking churchmen in Europe wrote home in disgust; the Council of Trent stalled; governance essentially stopped</div>
+      </div>
+      <div class="pope-body">
+        <p>The Roman Inquisition ran on inertia rather than direction under Julius III &mdash; its procedures could be navigated more easily than under ideologically engaged popes. A window of relative safety that smart operators exploit.</p>
+        <div class="pope-verdict">Died of gout. Unambiguously of gout. Which was almost disappointing.</div>
+      </div>
+    </div>
+    <div class="pope-entry reform">
+      <div class="pope-meta">
+        <div class="pope-name">Marcellus II</div>
+        <div class="pope-years">1555 &middot; Twenty-Two Days</div>
+        <div class="pope-epithet">The Hope Extinguished &mdash; a genuine reformer who refused to allow his family to come to Rome after his election; dead of a stroke before anything changed</div>
+      </div>
+      <div class="pope-body">
+        <p>The setting&rsquo;s great symbol of reform&rsquo;s impossibility. Palestrina composed the <em>Missa Papae Marcelli</em> in his honour &mdash; possibly the most beautiful music of the century, as if art was doing what governance could not.</p>
+        <div class="pope-verdict">Twenty-two days. Then Paul IV arrived.</div>
+      </div>
+    </div>
+    <div class="pope-entry inquisit">
+      <div class="pope-meta">
+        <div class="pope-name">Paul IV</div>
+        <div class="pope-years">Gian Pietro Carafa &middot; 1555&ndash;1559</div>
+        <div class="pope-epithet">The Grand Inquisitor on the Throne &mdash; not corrupt in the conventional sense; genuinely, fanatically, ideologically pure; which made him far more dangerous than Julius III&rsquo;s cheerful venality</div>
+      </div>
+      <div class="pope-body">
+        <p>Created the Index Librorum Prohibitorum. Imprisoned Cardinal Morone in the Castel Sant&rsquo;Angelo. Established the Roman Ghetto. Elevated his nephew Carlo Carafa &mdash; a violent criminal eventually executed by the next pope, the only cardinal executed in the 16th century. There is no gap between what he believed and what he did. This makes him impossible to manipulate through the hypocrisy that works on other powerful figures.</p>
+        <div class="pope-verdict">When he died, the Roman mob destroyed his statue, burned the Inquisition&rsquo;s headquarters, and freed its prisoners. It took days to restore order.</div>
+      </div>
+    </div>
+    <div class="pope-entry saint">
+      <div class="pope-meta">
+        <div class="pope-name">Pius V</div>
+        <div class="pope-years">Antonio Ghislieri &middot; 1566&ndash;1572</div>
+        <div class="pope-epithet">The Saint Who Made Everything Worse &mdash; genuinely holy, genuinely austere, canonized in 1712; and by every secular political standard a catastrophe</div>
+      </div>
+      <div class="pope-body">
+        <p>Excommunicated Elizabeth I in 1570. Organized the Holy League that won the Battle of Lepanto. Under Paul IV the Inquisition was factional politics wearing theological clothing. Under Pius V it became genuine belief applied systematically. There is no cynicism to exploit, no personal interest to engage. Characters opposing the Inquisition under Pius V are not fighting a corrupt institution. They are fighting a sincere one.</p>
+        <div class="pope-verdict">This is harder.</div>
+      </div>
+    </div>
+    <div class="pope-entry bureau">
+      <div class="pope-meta">
+        <div class="pope-name">Gregory XIII</div>
+        <div class="pope-years">Ugo Boncompagni &middot; 1572 onward</div>
+        <div class="pope-epithet">The Administrator &mdash; takes everything his predecessors built and makes it run efficiently; no corruption to exploit, no fanaticism to predict; in some ways the most dangerous of all</div>
+      </div>
+      <div class="pope-body">
+        <p>The Gregorian Calendar reform deletes ten days from the year. Massively expands the Jesuit network. Celebrates the St. Bartholomew&rsquo;s Day Massacre with a Te Deum &mdash; a bureaucratic assessment that the elimination of French Protestant leadership is a favourable outcome. The Inquisition under Gregory XIII opens files and they do not close.</p>
+        <div class="pope-verdict">Characters in his crosshairs can operate for months before the apparatus reaches them &mdash; but it is moving continuously and does not forget.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CORRUPTION -->
+<section class="corruption-section">
+  <div class="section-header">
+    <span class="section-eyebrow">Rome&rsquo;s Social Architecture</span>
+    <h2 class="section-title">The Machinery of Compromise</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+    <p class="section-intro">The illegitimate children, mistresses, and sexual conduct of the papal court are not merely scandal. They create a specific social architecture of leverage, intelligence, and blackmail that is the Medici Web&rsquo;s most productive operating environment.</p>
+  </div>
+  <div class="corruption-triptych">
+    <div class="corr-panel">
+      <div class="corr-diamond"><span>&#10022;</span></div>
+      <h3>The Papal Bastards</h3>
+      <p>Direct access to the most powerful men in Rome through blood relationship. No official standing. They know everything &mdash; the conversations at the family table, the visitors who come at night, the letters that arrive sealed. They have grievance and nothing to lose. The most dangerous informants in the zone.</p>
+    </div>
+    <div class="corr-divider"></div>
+    <div class="corr-panel">
+      <div class="corr-diamond"><span>&#10022;</span></div>
+      <h3>The Mistress Networks</h3>
+      <p>Senior churchmen maintaining mistresses maintained entire households that operated as parallel intelligence networks &mdash; knowing who visited, what was discussed, what the cardinal needed and could not officially request. A woman who has maintained a senior churchman&rsquo;s household for a decade knows more about Vatican politics than most cardinals.</p>
+    </div>
+    <div class="corr-divider"></div>
+    <div class="corr-panel">
+      <div class="corr-diamond"><span>&#10022;</span></div>
+      <h3>The Blackmail Economy</h3>
+      <p>Documentation of a cardinal&rsquo;s household arrangements is the Medici Web&rsquo;s natural territory. Pius V&rsquo;s attempt to clean up Rome&rsquo;s moral life was partly a counter-intelligence operation. The Index prohibits books. The Inquisition investigates doctrine. Neither addresses the real currency of Roman power.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CASTEL -->
+<section style="padding-bottom:5rem;">
+  <div class="castello-feature">
+    <div class="castello-svg-wrap">
+      <svg width="240" height="310" viewBox="0 0 240 310" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="cWall" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1e1535"/><stop offset="100%" stop-color="#110d22"/>
+          </linearGradient>
+          <radialGradient id="cFire" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#d4a030" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#b05010" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="120" cy="272" rx="90" ry="14" fill="#0c0818"/>
+        <rect x="32" y="175" width="176" height="97" fill="url(#cWall)"/>
+        <ellipse cx="120" cy="175" rx="88" ry="14" fill="#231640"/>
+        <ellipse cx="120" cy="272" rx="88" ry="12" fill="#0d0a1c"/>
+        <rect x="62" y="108" width="116" height="70" fill="#1c1432"/>
+        <ellipse cx="120" cy="108" rx="58" ry="10" fill="#281a3e"/>
+        <rect x="64" y="92" width="16" height="20" fill="#1c1432"/>
+        <rect x="87" y="92" width="16" height="20" fill="#1c1432"/>
+        <rect x="110" y="92" width="16" height="20" fill="#1c1432"/>
+        <rect x="133" y="92" width="16" height="20" fill="#1c1432"/>
+        <rect x="156" y="92" width="16" height="20" fill="#1c1432"/>
+        <rect x="115" y="58" width="10" height="38" fill="#c9973a" opacity="0.6"/>
+        <ellipse cx="120" cy="55" rx="9" ry="9" fill="#c9973a" opacity="0.6"/>
+        <path d="M120,65 Q98,56 93,70" fill="none" stroke="#c9973a" stroke-width="2" opacity="0.5"/>
+        <path d="M120,65 Q142,56 147,70" fill="none" stroke="#c9973a" stroke-width="2" opacity="0.5"/>
+        <rect x="118" y="40" width="4" height="18" fill="#c9973a" opacity="0.5"/>
+        <rect x="113" y="46" width="14" height="3" fill="#c9973a" opacity="0.5"/>
+        <rect x="60" y="198" width="18" height="12" rx="2" fill="#080618"/>
+        <rect x="111" y="198" width="18" height="12" rx="2" fill="#080618"/>
+        <rect x="162" y="198" width="18" height="12" rx="2" fill="#080618"/>
+        <rect x="111" y="198" width="18" height="12" rx="2" fill="#c9973a" opacity="0.1"/>
+        <rect x="82" y="122" width="15" height="22" rx="2" fill="#c9973a" opacity="0.1"/>
+        <rect x="143" y="122" width="15" height="22" rx="2" fill="#c9973a" opacity="0.1"/>
+        <ellipse cx="48" cy="190" rx="14" ry="14" fill="url(#cFire)"/>
+        <line x1="48" y1="184" x2="48" y2="165" stroke="#b05010" stroke-width="2"/>
+        <ellipse cx="48" cy="163" rx="5" ry="7" fill="#e8c840" opacity="0.85"/>
+        <ellipse cx="192" cy="190" rx="14" ry="14" fill="url(#cFire)"/>
+        <line x1="192" y1="184" x2="192" y2="165" stroke="#b05010" stroke-width="2"/>
+        <ellipse cx="192" cy="163" rx="5" ry="7" fill="#e8c840" opacity="0.85"/>
+        <path d="M208,225 L240,223" fill="none" stroke="#160e28" stroke-width="7"/>
+        <path d="M208,225 L240,223" fill="none" stroke="#1c1235" stroke-width="3"/>
+        <text x="120" y="150" text-anchor="middle" font-family="'Cinzel', serif" font-size="7" fill="#9a7868" letter-spacing="4">THE PALACE</text>
+        <text x="120" y="238" text-anchor="middle" font-family="'Cinzel', serif" font-size="7" fill="#9e2a0a" letter-spacing="4">THE CELLS</text>
+        <rect x="2" y="2" width="236" height="306" rx="2" fill="none" stroke="#c9973a" stroke-width="1" stroke-dasharray="6 4" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="castello-text">
+      <span class="castello-eyebrow">The Symbol of the Setting</span>
+      <h3>Castel Sant&rsquo;Angelo</h3>
+      <p>Originally Hadrian&rsquo;s mausoleum. Converted to a papal fortress. Connected to the Vatican by the Passetto di Borgo &mdash; a secret elevated corridor used by popes to flee during emergencies, including the Sack of 1527. High-status political prison cells fill its lower levels.</p>
+      <p>Imprisoning a cardinal here is a sophisticated political tool. Heresy charges disqualify him from participating in a conclave &mdash; effectively allowing an Inquisitor-Pope to choose his own successor by removing a candidate from the field.</p>
+      <div class="castello-detail">Former inmates &mdash; including Benvenuto Cellini &mdash; described the cells as crawling with spiders, damp enough to rot a mattress, and lit by a single high window through which the sounds of the city are perfectly audible. The most beautiful city in the world, heard but unreachable.</div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /content-wrap -->
+
+<!-- ZONES -->
+<section class="zones-section">
+<div class="content-wrap">
+  <div class="section-header">
+    <span class="section-eyebrow">The Geographic Scope</span>
+    <h2 class="section-title">Eight Zones. One Loop. No Safe Territory.</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+    <p class="section-intro">The setting traces a great loop from northwest to east to south and back &mdash; the inside being the ancient Mediterranean, the outside the Atlantic edge where New World money flows in and destabilizes every political calculation. Each zone has enough material for a complete campaign with its own tone and primary dangers.</p>
+  </div>
+  <div class="zones-grid">
+    <div class="zone-card">
+      <div class="zone-number">Zone 1</div>
+      <div class="zone-name">The Isles &mdash; Britannia</div>
+      <div class="zone-geo">England &middot; Scotland &middot; Ireland &middot; Wales</div>
+      <div class="zone-tone">Cold War Espionage</div>
+      <div class="zone-desc">England cycles through four religious settlements in four decades. The danger is betrayal and exposure. Walsingham&rsquo;s network. Jesuit circuits in priest holes. After 1570, every English Catholic is automatically suspect.</div>
+    </div>
+    <div class="zone-card">
+      <div class="zone-number">Zone 2</div>
+      <div class="zone-name">The Fractured Kingdom</div>
+      <div class="zone-geo">France &middot; The Low Countries</div>
+      <div class="zone-tone">Civil War &middot; Massacre</div>
+      <div class="zone-desc">France tears itself apart. The St. Bartholomew&rsquo;s Day Massacre is either campaign climax or starting point. Alba&rsquo;s Council of Blood. The zone where social danger becomes sudden lethal violence. Catherine de Medici at its centre.</div>
+    </div>
+    <div class="zone-card">
+      <div class="zone-number">Zone 3</div>
+      <div class="zone-name">The Imperial Heartland</div>
+      <div class="zone-geo">Germany &middot; Austria &middot; Bohemia</div>
+      <div class="zone-tone">Institutional Weight</div>
+      <div class="zone-desc">Hundreds of territories, each with a different religious settlement. The Fugger banking family as a power unto themselves. Vienna as frontier city. The Peace of Augsburg as an armed truce that everyone disputes.</div>
+    </div>
+    <div class="zone-card featured">
+      <div class="zone-number">Zone 4 &mdash; Primary Campaign Zone</div>
+      <div class="zone-name">The Heart of the World &mdash; Italy</div>
+      <div class="zone-geo">Rome &middot; Florence &middot; Venice &middot; Naples &middot; Milan</div>
+      <div class="zone-tone">Poison &middot; Politics &middot; The Inquisition</div>
+      <div class="zone-desc">The natural starting point. Florence for breathing space. Rome as the destination where everything crystallises. Venice for its own surveillance regime. Naples for the Spanish jurisdictional collision. Every faction has agents here.</div>
+    </div>
+    <div class="zone-card">
+      <div class="zone-number">Zone 5</div>
+      <div class="zone-name">The Iberian Hammer</div>
+      <div class="zone-geo">Spain &middot; Portugal &middot; Atlantic Empires</div>
+      <div class="zone-tone">Imperial Wealth &middot; Obsessive Purity</div>
+      <div class="zone-desc">Philip II governs the most powerful empire through paperwork and patience. The Spanish Inquisition answers to the king, not the Pope. Limpieza de sangre means a converso ancestry discovered generations later is catastrophe.</div>
+    </div>
+    <div class="zone-card">
+      <div class="zone-number">Zone 6</div>
+      <div class="zone-name">The Bleeding Edge</div>
+      <div class="zone-geo">Balkans &middot; Hungary &middot; Transylvania</div>
+      <div class="zone-tone">Folk Horror &middot; Contested Sovereignty</div>
+      <div class="zone-desc">Transylvania&rsquo;s Edict of Torda: four religions recognized simultaneously &mdash; the setting&rsquo;s only genuine religious pluralism. Ottoman Hungary. The B&aacute;thory family at their peak. The vampire tradition is not metaphor here.</div>
+    </div>
+    <div class="zone-card">
+      <div class="zone-number">Zone 7</div>
+      <div class="zone-name">The Dark Mirror &mdash; Istanbul</div>
+      <div class="zone-geo">Constantinople &middot; The Bosphorus</div>
+      <div class="zone-tone">The World&rsquo;s Great Exception</div>
+      <div class="zone-desc">More tolerant than Rome, more scientifically curious than Vienna. The city where a Jesuit, an Orthodox Greek, a Sephardic physician, and a Venetian spy can share a coffeehouse. The Istanbul Observatory: 1577&ndash;1580, then demolished.</div>
+    </div>
+    <div class="zone-card">
+      <div class="zone-number">Zone 8</div>
+      <div class="zone-name">The Iron Throne &mdash; Russia</div>
+      <div class="zone-geo">Muscovy &middot; Moscow &middot; Novgorod</div>
+      <div class="zone-tone">Survival Horror &middot; Absolute Unpredictability</div>
+      <div class="zone-desc">Ivan the Terrible at peak paranoia. The Oprichnina. The rules change with the Tsar&rsquo;s mood. The Third Rome ideology. Ivan&rsquo;s legendary library of Byzantine manuscripts hidden beneath the Kremlin.</div>
+    </div>
+  </div>
+  <div class="peripheral-strip">
+    <div class="peripheral-label">Peripheral Territories</div>
+    <div class="peripheral-items">
+      <div class="peripheral-item">Nordic Lands &mdash; Tycho Brahe&rsquo;s Uraniborg Observatory, 1576</div>
+      <div class="peripheral-item">Jerusalem &amp; the Levant &mdash; Pilgrimage as operational cover</div>
+      <div class="peripheral-item">North Africa &mdash; The corsair economy, ransom and captivity</div>
+      <div class="peripheral-item">Alexandria &mdash; The Hermetic homeland, the source texts</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="content-wrap">
+
+<!-- HERESY TRACK -->
+<section class="heresy-section">
+  <div class="section-header">
+    <span class="section-eyebrow">The Signature Mechanic</span>
+    <h2 class="section-title">The Heresy Track</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+  </div>
+  <div class="heresy-feature">
+    <div class="heresy-text">
+      <h3>Multiple Parallel Institutional Heat</h3>
+      <p>Every character maintains separate suspicion scores with each major authority. The Spanish Inquisition does not automatically know what Rome knows. Characters cannot rely on this isolation permanently &mdash; but they can exploit it strategically.</p>
+      <p>Scores do not reduce over time. They reduce through formal resolution, recantation, high-value service to the institution, or institutional change when a new pope resets priorities. A file that opens does not close without resolution.</p>
+      <div class="threshold-row">
+        <div class="threshold"><div class="threshold-num">1&ndash;5</div><div class="threshold-label">Noted</div><div class="threshold-desc">A file exists. Passive surveillance. No direct consequences yet.</div></div>
+        <div class="threshold"><div class="threshold-num">6&ndash;10</div><div class="threshold-label">Investigated</div><div class="threshold-desc">Active investigation. Contacts questioned. Evidence assembling.</div></div>
+        <div class="threshold"><div class="threshold-num">11&ndash;15</div><div class="threshold-label">Prosecuted</div><div class="threshold-desc">An arrest warrant exists. Cannot move openly in institutional territory.</div></div>
+        <div class="threshold"><div class="threshold-num">16&ndash;20</div><div class="threshold-label">Actively Pursued</div><div class="threshold-desc">Priority target. Associates face pressure as leverage.</div></div>
+      </div>
+    </div>
+    <div class="heresy-tracks">
+      <div class="track-item"><div class="track-name">Roman Inquisition Heat</div><div class="track-desc">Hermetic philosophy, Protestant contact, Euclidean Underground association, indexed texts, suspicious proximity to church deaths.</div><div class="track-bar"><div class="track-fill" style="width:75%"></div></div></div>
+      <div class="track-item"><div class="track-name">Spanish Inquisition Heat</div><div class="track-desc">Converso ancestry, blood purity investigation, Protestant contact in Spanish territories. A separate institution from Rome entirely.</div><div class="track-bar"><div class="track-fill" style="width:65%"></div></div></div>
+      <div class="track-item"><div class="track-name">Elizabethan Watch Suspicion</div><div class="track-desc">Catholic association, foreign contact, suspicious correspondence. Treats Catholic practice as political disloyalty, not theological error.</div><div class="track-bar"><div class="track-fill" style="width:50%; background: linear-gradient(to right, #1b3565, #3a6ab5)"></div></div></div>
+      <div class="track-item"><div class="track-name">Ottoman Suspicion</div><div class="track-desc">Christian missionary activity, Habsburg espionage, interference with commerce. At high levels: arrest, examination, no jurisdictional argument available.</div><div class="track-bar"><div class="track-fill" style="width:55%; background: linear-gradient(to right, #255040, #2e6a52)"></div></div></div>
+      <div class="track-item"><div class="track-name">Ivan&rsquo;s Suspicion</div><div class="track-desc">Not procedural. Reflects the Tsar&rsquo;s personal assessment. Can rise or fall based on a single conversation. Only direct access to Ivan can influence it.</div><div class="track-bar"><div class="track-fill" style="width:40%; background: linear-gradient(to right, #4a2e14, #6b4520)"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FACTIONS -->
+<section class="factions-section">
+  <div class="section-header">
+    <span class="section-eyebrow">The Powers At Play</span>
+    <h2 class="section-title">Factions</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+  </div>
+  <div class="factions-grid">
+    <div class="faction-card"><div class="faction-name">The Holy Office</div><div class="faction-desc">The Roman Inquisition. Changes character with each pope &mdash; from political tool to sincere terror to bureaucratic machine. Most dangerous not when corrupt but when sincere.</div></div>
+    <div class="faction-card"><div class="faction-name">The Spanish Inquisition</div><div class="faction-desc">Royal institution under Philip II. Focused on blood purity and converso communities. The Pope&rsquo;s complaints answered politely and disregarded.</div></div>
+    <div class="faction-card"><div class="faction-name">The Habsburg Hegemony</div><div class="faction-desc">Military and dynastic orthodoxy. Spain and Austria after 1556. Philip II governs from a monk&rsquo;s cell in the Escorial. One head looking east, one west.</div></div>
+    <div class="faction-card"><div class="faction-name">The Medici-Valois Web</div><div class="faction-desc">France and Italian banking networks. Information brokerage, poison as last resort, art as cover. Catherine de Medici &mdash; the Black Queen &mdash; making impossible choices for twenty years.</div></div>
+    <div class="faction-card"><div class="faction-name">The Elizabethan Watch</div><div class="faction-desc">Protestant England. Walsingham&rsquo;s network from 1573. Ciphers, naval ambition, cold war against Catholic assassination plots. Funding cost partly from Walsingham&rsquo;s personal fortune.</div></div>
+    <div class="faction-card"><div class="faction-name">The Euclidean Underground</div><div class="faction-desc">The cross-factional network of scientists, Hermeticists, forbidden thinkers, manuscript hunters. The closest thing to a resistance cutting across all other factions.</div></div>
+    <div class="faction-card"><div class="faction-name">The Ottoman Court</div><div class="faction-desc">The Dark Mirror of Rome. More tolerant, more scientifically curious, and far more dangerous if you misread its rules. The Istanbul Observatory &mdash; built and destroyed within the window.</div></div>
+    <div class="faction-card"><div class="faction-name">The Ecumenical Patriarchate</div><div class="faction-desc">Istanbul-based, Ottoman-protected. Neither Rome nor Protestant. Ancient authority and political vulnerability in equal measure. Vast geographic intelligence through pastoral correspondence.</div></div>
+    <div class="faction-card"><div class="faction-name">The Sephardic Network</div><div class="faction-desc">The Gracia Mendes Nasi family as a one-woman faction with banking power and genuine moral commitment &mdash; protecting her people because she believes it is right.</div></div>
+    <div class="factions-divider"><span>Shadow Factions &mdash; Officially Nonexistent</span></div>
+    <div class="faction-card shadow"><div class="faction-name">The Nizari Ismailis</div><div class="faction-desc">Believed destroyed in 1256. Actually alive and operational from Anjudan in Persia. The order that never died. Discovering they survive is one of the full campaign&rsquo;s defining revelations.</div></div>
+    <div class="faction-card shadow"><div class="faction-name">The Knights Hospitaller</div><div class="faction-desc">Fully operational in Malta after the Great Siege of 1565. Ancient medical and intelligence knowledge. Their own agenda regarding the same texts everyone else is chasing.</div></div>
+    <div class="faction-card shadow"><div class="faction-name">The Templar Remnant</div><div class="faction-desc">Officially dissolved 1312. Surviving as rumour, Masonic tradition, and possibly something more. The ghost that the Nizaris reveal is not entirely a ghost.</div></div>
+  </div>
+</section>
+
+</div><!-- /content-wrap -->
+
+<!-- MAGIC -->
+<section class="magic-section">
+<div class="content-wrap">
+  <div class="section-header">
+    <span class="section-eyebrow">The Forbidden Knowledge System</span>
+    <h2 class="section-title">Mathematical Occultism</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+    <p class="section-intro">Magic in Velvet &amp; Iron is not fantasy magic. It is the Goetia as precision occult science. To bind a spirit or invoke a Hermetic force, a character does not cast a spell. They calculate. The tiers escalate in danger as they escalate in power &mdash; and the Heresy Track accumulates accordingly.</p>
+  </div>
+  <div class="magic-tiers">
+    <div class="magic-tier">
+      <div class="tier-danger low">Low Heat</div>
+      <div class="tier-name">Alchemy</div>
+      <div class="tier-model">The Paracelsus Model</div>
+      <div class="tier-desc">Chemical healing, poisons, volatile compounds. Risky but deniable. Systematic practice with a laboratory becomes harder to explain. The most accessible tier &mdash; a physician using mercury compounds is suspicious, not immediately heretical.</div>
+    </div>
+    <div class="magic-tier">
+      <div class="tier-danger moderate">Moderate Danger</div>
+      <div class="tier-name">Hermeticism</div>
+      <div class="tier-model">The John Dee Model</div>
+      <div class="tier-desc">Geometry, astrological calculation, early ciphers, navigation beyond conventional methods. Dee practiced it openly in England under royal patronage &mdash; demonstrating that institutional protection makes the practice sustainable. Elsewhere it does not.</div>
+    </div>
+    <div class="magic-tier">
+      <div class="tier-danger extreme">Extreme Danger</div>
+      <div class="tier-name">Goetic Mathematics</div>
+      <div class="tier-model">Cardano &amp; Napier Model</div>
+      <div class="tier-desc">Seals, sigils, binding of intelligences through precise mathematical calculation. Maximum Heresy Heat accumulation. This is precisely what the Inquisition burns people for. Cardano was arrested in 1570 for casting a horoscope of Jesus Christ.</div>
+    </div>
+    <div class="magic-tier">
+      <div class="tier-danger forbidden">GM-Controlled Path</div>
+      <div class="tier-name">Blood Philosophy</div>
+      <div class="tier-model">The B&aacute;thory Model</div>
+      <div class="tier-desc">The darkest tier. Body horror, extended life at terrible cost. Not available at character creation. A character who reaches this tier has changed in ways that cannot be reversed. Elizabeth B&aacute;thory is fifteen years old when the window opens.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PATHS -->
+<section class="paths-section">
+<div class="content-wrap">
+  <div class="section-header">
+    <span class="section-eyebrow">Who You Become</span>
+    <h2 class="section-title">The Paths</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+    <p class="section-intro">Velvet &amp; Iron uses the Core 2d10 Paths with period-appropriate names and flavour. The three Pillars remain — Martial, Mentalist, and Karmic — but every Path is expressed through the world of 1540–1580 Europe. A Templar serves a Pope, not a dungeon. A Troubadour navigates a cardinal's salon, not a tavern. A Bloodletter becomes a Bravo or a Condottiere.</p>
+  </div>
+
+  <span class="pillar-label">&#9876; The Martial Pillar — Bodies trained for violence in a world of elegant danger</span>
+  <div class="paths-grid">
+
+    <div class="path-card">
+      <div class="path-header">
+        <span class="path-icon">⚔</span>
+        <div class="path-name">Bravo / Condottiere</div>
+      </div>
+      <div class="path-tagline">Bloodletter and Warrior expressed through the duelling culture of Italian and Spanish cities.</div>
+      <div class="path-desc">The Bravo is the professional individual duelist — hired to intimidate, escort, challenge, and kill in situations where armies are inappropriate. Their clothing is itself a weapon. The Condottiere commands forces — mercenary captains for whom military violence is a commercial transaction. Both require two Physical Currents at 12+ and Cunning 10+ for the tactical judgement that keeps them alive.</div>
+      <div class="path-specs">
+        <span class="path-spec">Sinew 12+</span><span class="path-spec">Grace 12+</span>
+        <span class="path-spec">Cunning 10+</span><span class="path-spec">Vitality d10</span>
+      </div>
+      <div class="path-mechanic">
+        <strong>Setting Adaptation</strong>
+        Reputation in Steel replaces Fame/Infamy — a sub-track of fighting reputation that affects NPC response before any blade is drawn. High reputation means fewer fights are necessary. It also means challengers seeking to make their own.
+      </div>
+    </div>
+
+    <div class="path-card">
+      <div class="path-header">
+        <span class="path-icon">🛡</span>
+        <div class="path-name">Templar</div>
+      </div>
+      <div class="path-tagline">Divine warrior sworn to a specific religious institution — Jesuit militant, Hospitaller knight, Teutonic remnant.</div>
+      <div class="path-desc">In 1540–1580 the Templar Path means serving an institution that is itself in conflict. A Jesuit militant answers to the General of the Society. A Hospitaller knight answers to the Grand Master in Malta. Both operate in a world where their patron institution has enemies within Christendom as dangerous as any Ottoman. Might and Karma 12+ required — physical capability paired with genuine doctrinal commitment.</div>
+      <div class="path-specs">
+        <span class="path-spec">Sinew 12+</span><span class="path-spec">Fortitude 12+</span>
+        <span class="path-spec">Providence 12+</span><span class="path-spec">Vitality d10</span>
+      </div>
+      <div class="path-mechanic">
+        <strong>Setting Adaptation</strong>
+        Institutional Standing (shared with the Ordained) — reflecting position within the specific religious order. Actions conflicting with institutional doctrine reduce it. At low Standing the character becomes a liability their own institution may move to silence.
+      </div>
+    </div>
+
+    <div class="path-card">
+      <div class="path-header">
+        <span class="path-icon">🏹</span>
+        <div class="path-name">Warden</div>
+      </div>
+      <div class="path-tagline">Wilderness specialist — the Grenzer on the Hungarian frontier, the privateers of Elizabeth's navy, the coastal scout.</div>
+      <div class="path-desc">In the Velvet &amp; Iron setting the Warden operates in the zones between — the frontier between Habsburg and Ottoman Hungary, the fog-choked Atlantic coast, the mountain passes of the Balkans where no institutional authority reaches. Agility and Survival rather than tracking game; this is the human animal learning to read contested terrain.</div>
+      <div class="path-specs">
+        <span class="path-spec">Grace 12+</span><span class="path-spec">Fortitude 12+</span>
+        <span class="path-spec">Cunning 10+</span><span class="path-spec">Vitality d10</span>
+      </div>
+      <div class="path-mechanic">
+        <strong>Setting Adaptation</strong>
+        Wilderness techniques carry their mechanical function but are expressed through period-appropriate terrain — Ottoman cavalry country, the Irish coastline, the Adriatic between Venetian ports and Ottoman-held land.
+      </div>
+    </div>
+
+  </div>
+
+  <span class="pillar-label">&#9999; The Mentalist Pillar — Minds navigating the most dangerous intellectual environment in history</span>
+  <div class="paths-grid">
+
+    <div class="path-card">
+      <div class="path-header">
+        <span class="path-icon">🎭</span>
+        <div class="path-name">Troubadour</div>
+      </div>
+      <div class="path-tagline">The performer and social navigator — essential in a world where a cardinal's salon is the most dangerous room in Europe.</div>
+      <div class="path-desc">In a court where patronage is survival, the Troubadour is the character who understands that performance is politics. Catherine de Medici's Flying Squadron operated through exactly these skills — beautiful, charming, and gathering intelligence at every dinner table. Magnetism 15+ and Agility 13+ for multiclassing reflects how physically demanding sustained performance across hostile social environments actually is.</div>
+      <div class="path-specs">
+        <span class="path-spec">Bearing 12+</span><span class="path-spec">Cunning 12+</span>
+        <span class="path-spec">Grace 10+</span><span class="path-spec">Vitality d8</span>
+      </div>
+      <div class="path-mechanic">
+        <strong>Setting Adaptation</strong>
+        Social mechanics operate through court culture, patronage relationships, and faction alignment rather than tavern audiences. A well-placed compliment in the right salon has consequences that a battlefield victory does not.
+      </div>
+    </div>
+
+    <div class="path-card">
+      <div class="path-header">
+        <span class="path-icon">📜</span>
+        <div class="path-name">Ecclesiastic</div>
+      </div>
+      <div class="path-tagline">Conduit of religious authority — priest, minister, monk, or scholar operating within or across the period's fractured Christianity.</div>
+      <div class="path-desc">The setting's most institutionally embedded Path. An Ecclesiastic in 1540–1580 must choose their institution — Roman, Protestant, Orthodox, Ottoman-protected — because each choice sets the Heresy Track differently and opens different doors. A Jesuit confessor knows the secrets of the most powerful men in Europe. A Calvinist minister in Geneva carries doctrinal authority that challenges Rome's entire framework.</div>
+      <div class="path-specs">
+        <span class="path-spec">Erudition 12+</span><span class="path-spec">Bearing 12+</span>
+        <span class="path-spec">Providence 12+</span><span class="path-spec">Vitality d8</span>
+      </div>
+      <div class="path-mechanic">
+        <strong>Setting Adaptation</strong>
+        Divine Paths (Warrior/Shepherd/Seeker) remain but are expressed through the three active reformations simultaneously in motion — Counter-Reformation Catholic, Protestant, and Orthodox — each with its own Heresy Track implications.
+      </div>
+    </div>
+
+    <div class="path-card">
+      <div class="path-header">
+        <span class="path-icon">🔮</span>
+        <div class="path-name">Magus / Hermeticist</div>
+      </div>
+      <div class="path-tagline">Scholar of forbidden science — Goetic Mathematics, Hermetic philosophy, the knowledge the Inquisition has indexed and burned.</div>
+      <div class="path-desc">The Magus Path becomes the Hermeticist in this setting — the same fundamental mechanic of studied and perfected arcane knowledge, expressed through John Dee's angel communications, Cardano's imaginary numbers, Napier's logarithms. Intellect 13+ reflects that this is genuinely the hardest intellectual tradition in the setting to master without attracting attention.</div>
+      <div class="path-specs">
+        <span class="path-spec">Erudition 13+</span><span class="path-spec">Cunning 12+</span>
+        <span class="path-spec">Providence 10+</span><span class="path-spec">Vitality d6</span>
+      </div>
+      <div class="path-mechanic">
+        <strong>Setting Adaptation</strong>
+        Goetic Mathematics replaces standard Manifestation — preparation through calculation produces a Calculated Result before execution. The practice is inherently covert. Public performance is institutional suicide regardless of outcome.
+      </div>
+    </div>
+
+    <div class="path-card">
+      <div class="path-header">
+        <span class="path-icon">🗡</span>
+        <div class="path-name">Scoundrel / Intelligencer</div>
+      </div>
+      <div class="path-tagline">Master of subtlety — the cipher specialist, the double agent, the information broker Walsingham's network depends on.</div>
+      <div class="path-desc">The Scoundrel Path maps directly onto the Intelligencer — the setting's most mechanically complex Path, operating through social and informational systems. In a world where a single intercepted letter can bring down a network, the Intelligencer's skills are not supplementary. They are survival. Shadow techniques become the professional vocabulary of statecraft.</div>
+      <div class="path-specs">
+        <span class="path-spec">Cunning 12+</span><span class="path-spec">Bearing 12+</span>
+        <span class="path-spec">Erudition 10+</span><span class="path-spec">Vitality d8</span>
+      </div>
+      <div class="path-mechanic">
+        <strong>Setting Adaptation</strong>
+        The Network system — Reach (zones covered), Depth (contact quality), Security (concealment). Each activation costs Depth. A damaged Network can be rebuilt; its former shape is now documented by whoever caused the damage.
+      </div>
+    </div>
+
+  </div>
+
+  <span class="pillar-label">✦ The Karmic Pillar — Souls connected to something the Inquisition cannot fully name</span>
+  <div class="paths-grid">
+
+    <div class="path-card">
+      <div class="path-header">
+        <span class="path-icon">🌿</span>
+        <div class="path-name">Druid / Poisoner</div>
+      </div>
+      <div class="path-tagline">Keeper of primal and chemical knowledge — the Paracelsian physician, the alchemical practitioner, the herbalist.</div>
+      <div class="path-desc">The Druid Path in this setting channels through the Paracelsian revolution — the burning of Galen's books, the embrace of chemistry as the true medicine, the discovery that the natural world contains compounds the Church would prefer remained unknown. Wild Shape becomes the Alchemical Laboratory: a portable resource that determines what can be prepared and how quickly.</div>
+      <div class="path-specs">
+        <span class="path-spec">Erudition 12+</span><span class="path-spec">Providence 12+</span>
+        <span class="path-spec">Fortitude 10+</span><span class="path-spec">Vitality d8</span>
+      </div>
+      <div class="path-mechanic">
+        <strong>Setting Adaptation</strong>
+        Alchemy tier (low Heresy Heat, deniable) → Hermeticism tier (moderate danger) → Goetic Mathematics tier (maximum heat) → Blood Philosophy (GM-controlled corruption only — not available at character creation).
+      </div>
+    </div>
+
+    <div class="path-card">
+      <div class="path-header">
+        <span class="path-icon">🥋</span>
+        <div class="path-name">Ascetic</div>
+      </div>
+      <div class="path-tagline">Master of inner discipline — the Janissary Defector, the Bektashi warrior-monk, the self-forged fighting mind.</div>
+      <div class="path-desc">In the Velvet &amp; Iron setting the Ascetic finds its most vivid expression in the Janissary tradition — Bektashi mysticism integrated with extraordinary physical training, operating under a theological framework the Roman Inquisition cannot categorise. A Janissary Defector carries this Path's full mechanical weight while being permanently hunted by the empire that made them.</div>
+      <div class="path-specs">
+        <span class="path-spec">Grace 12+</span><span class="path-spec">Providence 12+</span>
+        <span class="path-spec">Cunning 10+</span><span class="path-spec">Vitality d8</span>
+      </div>
+      <div class="path-mechanic">
+        <strong>Setting Adaptation</strong>
+        Bektashi Talisman — a pool of mystical resistance from Janissary spiritual training, spent to resist mental influence, supernatural fear, or Heresy Track accumulation through concealment of identity.
+      </div>
+    </div>
+
+    <div class="path-card">
+      <div class="path-header">
+        <span class="path-icon">🐺</span>
+        <div class="path-name">Shaman / Strigoi Hunter</div>
+      </div>
+      <div class="path-tagline">Speaker between worlds — the Bogomil elder, the village practitioner, the community's response to things the Church cannot explain.</div>
+      <div class="path-desc">The Shaman Path expresses through the folk tradition of the Balkans and Eastern Europe — the accumulated practical wisdom of communities that have survived things institutional religion cannot name. A Strigoi Hunter is not a witch hunter working for the Inquisition. They are the community's own response. Operating in a cardinal's Rome or a Florentine salon means working without the framework that made their knowledge coherent.</div>
+      <div class="path-specs">
+        <span class="path-spec">Providence 12+</span><span class="path-spec">Fortitude 12+</span>
+        <span class="path-spec">Cunning 10+</span><span class="path-spec">Vitality d8</span>
+      </div>
+      <div class="path-mechanic">
+        <strong>Setting Adaptation</strong>
+        Blood Sense — trained perceptual awareness of corruption and supernatural presence. Not Hermetic calculation. Pattern recognition across a tradition that predates every institution currently trying to suppress it.
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- HERITAGES -->
+<section class="heritages-section">
+<div class="content-wrap">
+  <div class="section-header">
+    <span class="section-eyebrow">Who You Are</span>
+    <h2 class="section-title">Heritages</h2>
+    <div class="section-rule"><span>&#10022;</span></div>
+    <p class="section-intro">Velvet &amp; Iron is primarily a human world. The overwhelming majority of characters are people navigating the most dangerous forty years in European history through wit, violence, faith, and calculation. Three marked heritages exist at the edges — each grounded in the period's actual folk belief, medical reality, and the Inquisition's very specific interest in what they might represent.</p>
+  </div>
+
+  <div class="heritages-grid">
+
+    <div class="heritage-vi-card">
+      <span class="heritage-vi-icon">👤</span>
+      <div class="heritage-vi-name">Human</div>
+      <div class="heritage-vi-origin">The Default &middot; Europe-Wide &middot; 1540&ndash;1580</div>
+      <div class="heritage-vi-desc">The baseline and the overwhelming majority. Humans in this setting carry the full weight of being human in the 16th century — shaped by birth, class, faith, and the accident of which side of a border they happened to appear on. The current bonuses that matter are the ones history gave you: a converso ancestry, a noble name, a heretic grandfather. These are not mechanical features. They are the Heresy Track, already running before the campaign begins.</div>
+      <div class="heritage-vi-abilities">
+        <strong>Heritage Benefit</strong>
+        +1 to any three Currents of your choice at character creation. Full access to all Paths. No Heresy Track pre-loading from heritage alone — though what you choose to do with your Path will begin accumulating immediately.
+      </div>
+    </div>
+
+    <div class="heritage-vi-card">
+      <span class="heritage-vi-icon">🩸</span>
+      <div class="heritage-vi-name">Vampyr</div>
+      <div class="heritage-vi-origin">The Undead &middot; Balkans &middot; Eastern European Folk Tradition</div>
+      <div class="heritage-vi-desc">In the 1540–1580 period, the Vampyr is not the romantic aristocrat of later fiction. The Bulgarian archaeological record contains over a hundred vampire burials — skeletons pinned to the earth with iron rods through the heart. The first documented case in Western sources dates to within this window. The folk tradition is real. What it describes is a genuine community horror — bodies that do not decompose, family members dying in clusters, the terror of what happens after death in communities without reliable medical knowledge.</div>
+      <div class="heritage-vi-abilities">
+        <strong>Abilities</strong>
+        Supernatural physical capability beyond human maximum &middot; Heightened perception, particularly at night &middot; Resistance to ordinary physical damage &middot; The ability to pass as human in social environments with sufficient discipline &middot; Connection to the Blood Philosophy tier of Mathematical Occultism that no other heritage naturally possesses
+      </div>
+      <div class="heritage-vi-cost">
+        <strong>Costs &amp; The Inquisition Problem</strong>
+        Sunlight vulnerability (genuine physiological constraint, not instant combustion) &middot; Dietary requirement that is socially catastrophic if exposed &middot; Iron weapons deal enhanced damage the heritage cannot reduce &middot; On exposure, Inquisition response is immediate and maximum severity — the heritage satisfies the diabolical compact threshold without further evidence. No procedural argument is available.
+      </div>
+    </div>
+
+    <div class="heritage-vi-card">
+      <span class="heritage-vi-icon">🐺</span>
+      <div class="heritage-vi-name">Vlkolak</div>
+      <div class="heritage-vi-origin">The Wolf-Touched &middot; Balkans &middot; Romanian Principalities</div>
+      <div class="heritage-vi-desc">A person whose soul has partially merged with the spirit of the wolf — through birth under the wrong moon, surviving a wolf attack that should have been fatal, or descent from a bloodline carrying the mark. The Bogomil communities have the most sophisticated understanding: they distinguish the Vlkolak who has accepted their nature from the one who fights it constantly, and regard the fighter as more dangerous. A Vlkolak who leaves the folk community for Florence or Rome is operating without the support structure that made their condition manageable.</div>
+      <div class="heritage-vi-abilities">
+        <strong>Abilities</strong>
+        Wolf Senses (scent-led perception beyond human baseline at all times) &middot; The Blood Sense (instinctive supernatural early warning, distinct from the Strigoi Hunter's trained version) &middot; Physical Augmentation during heightened emotion or deliberate partial invocation &middot; The Partial Shift (claws, musculature, the wolf's eyes — brief and concealable) &middot; The Full Shift (powerful, requires developed control, not reliably reversible without it)
+      </div>
+      <div class="heritage-vi-cost">
+        <strong>Costs &amp; Vulnerabilities</strong>
+        The Cycle (full moon as amplifier of intensity, not automatic transformation trigger) &middot; Emotional Amplification (fear and rage bring the wolf forward with its full physical response) &middot; Silver weapons deal enhanced damage the heritage cannot reduce &middot; The Scent (other Vlkolak, Vampyrs, and trained Strigoi Hunters can identify them before they identify themselves) &middot; Inquisition response on exposure: immediate maximum severity, no procedural argument available
+      </div>
+    </div>
+
+    <div class="heritage-vi-card">
+      <span class="heritage-vi-icon">👑</span>
+      <div class="heritage-vi-name">The Blood Refined</div>
+      <div class="heritage-vi-origin">The Aristocratic Inheritance &middot; Europe-Wide &middot; Habsburg and Valois Lines</div>
+      <div class="heritage-vi-desc">The noble families of 16th century Europe practiced strategic marriage with such consistency that by 1540 the major dynasties had reduced their effective genetic diversity to a degree that produced visible and documented consequences. This heritage represents a character whose aristocratic lineage is genuine, whose social advantages are real, and whose body is paying the price for what it took to produce them. Available in three variants — each mechanically distinct.</div>
+      <div class="heritage-vi-abilities">
+        <strong>The Three Variants</strong>
+        <div class="heritage-vi-variant" style="margin-top:0.5rem;">The Porphyric Noble</div>
+        Lucid Intervals of extraordinary cognitive clarity · Uncanny social presence · Genuine court access at the innermost level — and sunlight sensitivity, acute episodes triggered by stress and alcohol, the physician problem (a hostile physician can describe symptoms in theologically loaded terms to devastating effect)
+        <div class="heritage-vi-variant" style="margin-top:0.5rem;">The Hemophiliac Noble</div>
+        Dynasty access at the dynastic core · The Protected Status (the family deploys resources toward survival) · Deep classical education from childhood — and the combat problem (wounds that others shake off become life-threatening), constant medical dependency, the succession question
+        <div class="heritage-vi-variant" style="margin-top:0.5rem;">The Habsburg Mark</div>
+        Dynastic legitimacy visible in the face — no documentation needed · The political network across every Catholic structure in Europe — and visible markers that defeat disguise in hostile territory, immune vulnerability, intermittent cognitive episodes in more severe expressions
+      </div>
+      <div class="heritage-vi-cost">
+        <strong>The Inquisition Position</strong>
+        No direct Heresy Track accumulation from the heritage itself. The danger is the condition being described in theologically loaded terms by a hostile or pressured physician. The Porphyric Noble variant connects to the Vampyr heritage deliberately — the folk tradition may have been observing porphyria in aristocratic families and interpreting it through available supernatural frameworks. The Inquisition cannot tell the difference. The setting does not resolve this ambiguity.
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <p>Ribhian Games LLC &nbsp;&middot;&nbsp; <strong>Velvet &amp; Iron</strong> &nbsp;&middot;&nbsp; Powered by the Ribhian Games LLC 2d10 Game System &nbsp;&middot;&nbsp; Standalone Setting &middot; Not Part of the Heptaverse</p>
+</footer>
+
+  </main>
+</div><!-- /site-wrapper -->
+<script src="../js/site.js"></script>
+</body>
+</html>

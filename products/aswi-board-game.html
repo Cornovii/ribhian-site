@@ -1,0 +1,1078 @@
+<!--ASWI Board Game page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Product page for the All Star Wrestlers Investigate board game edition.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Squared Circle Showdown — Ribhian Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Russo+One&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:       #060810;
+      --deep:        #0a0d16;
+      --stone:       #13172a;
+      --stone-mid:   #1c2138;
+      --stone-light: #272e4a;
+      --gold:        #c9973a;
+      --gold-bright: #e8b84b;
+      --gold-pale:   #f2d78a;
+      --crimson:     #8c1f1f;
+      --crimson-mid: #a62828;
+      --champ:       #d4af37;
+      --champ-lt:    #f0ce5a;
+      --ash:         #c8bfb0;
+      --text-body:   #b0bccf;
+      --text-dim:    #5a6480;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--text-body);
+      font-family: 'Quicksand', sans-serif;
+      font-size: 18px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .page-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 4rem 2.5rem 6rem;
+    }
+
+    /* ── HERO ── */
+
+    .hero {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 2000 / 1116;
+      min-height: 300px;
+      background: #060810;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 0.8rem;
+    }
+    .scs-hero-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: contain; object-position: center center;
+      pointer-events: none; z-index: 0;
+    }
+    .scs-setting-title {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: #f5d060;
+      text-shadow:
+        0 0 18px rgba(245,208,96,0.95),
+        0 0 40px rgba(196,59,26,0.75),
+        3px 3px 0px rgba(196,59,26,0.8),
+        0 2px 4px rgba(0,0,0,0.98);
+      text-align: center;
+      margin-bottom: 2rem;
+      line-height: 1.05;
+    }
+
+    .hero-logo {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .logo-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-placeholder-label {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* ── SYSTEM BADGE ── */
+    .system-badge {
+      background: linear-gradient(135deg, var(--stone) 0%, var(--stone-mid) 100%);
+      border-top: 1px solid rgba(212,175,55,0.25);
+      border-bottom: 1px solid rgba(212,175,55,0.25);
+      padding: 1.4rem 2rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .system-badge-text {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .system-badge-text strong {
+      color: var(--champ);
+      display: block;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      margin-top: 0.2rem;
+    }
+
+    .system-divider {
+      width: 1px;
+      height: 36px;
+      background: rgba(212,175,55,0.3);
+    }
+
+    /* ── MAIN CONTENT ── */
+
+    .section-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-eyebrow {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #f0ce5a;
+      text-shadow:
+        0 0 6px rgba(240,206,90,1.0),
+        0 0 16px rgba(212,175,55,0.90),
+        0 0 35px rgba(180,140,30,0.55);
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--gold-pale);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-rule {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--champ), transparent);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-intro {
+      font-size: 1.05rem;
+      color: var(--text-body);
+      max-width: 680px;
+      line-height: 1.8;
+    }
+
+    /* ── OVERVIEW PANELS ── */
+    .overview-section { margin-bottom: 5rem; }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .overview-panel {
+      background: linear-gradient(135deg, var(--stone) 0%, var(--stone-mid) 100%);
+      border: 1px solid rgba(212,175,55,0.12);
+      border-left: 3px solid var(--champ);
+      padding: 1.8rem;
+      border-radius: 2px;
+    }
+
+    .overview-panel h3 {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--champ);
+      margin-bottom: 0.8rem;
+    }
+
+    .overview-panel p {
+      font-size: 0.95rem;
+      color: #9aacbf;
+      line-height: 1.75;
+    }
+
+    @media (max-width: 700px) {
+      .overview-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── GIMMICK CARDS (CORE SET) ── */
+    .gimmicks-section { margin-bottom: 5rem; }
+
+    .gimmick-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .gimmick-card {
+      background: linear-gradient(170deg, var(--stone) 0%, var(--stone-mid) 100%);
+      border: 1px solid rgba(212,175,55,0.15);
+      border-top: 3px solid var(--champ);
+      padding: 1.6rem 1.4rem;
+      border-radius: 2px;
+      position: relative;
+      transition: border-color 0.25s, transform 0.2s;
+    }
+
+    .gimmick-card:hover {
+      border-color: rgba(212,175,55,0.4);
+      transform: translateY(-3px);
+    }
+
+    .gimmick-card-name {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--champ-lt);
+      margin-bottom: 0.3rem;
+    }
+
+    .gimmick-card-role {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .gimmick-work-die {
+      display: inline-block;
+      background: var(--champ);
+      color: #080a10;
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .gimmick-primary-label {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .gimmick-primary-list {
+      list-style: none;
+    }
+
+    .gimmick-primary-list li {
+      font-size: 0.85rem;
+      color: #8a9cb0;
+      padding: 0.2rem 0;
+      border-bottom: 1px solid rgba(212,175,55,0.06);
+    }
+
+    .gimmick-primary-list li::before {
+      content: '— ';
+      color: var(--champ);
+      opacity: 0.5;
+    }
+
+    @media (max-width: 800px) {
+      .gimmick-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 500px) {
+      .gimmick-cards { grid-template-columns: 1fr; }
+    }
+
+    /* ── DOUBLES MECHANIC ── */
+    .doubles-section { margin-bottom: 5rem; }
+
+    .doubles-feature {
+      background: linear-gradient(135deg, #10152a 0%, #18203a 100%);
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 4px;
+      padding: 3rem;
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .doubles-feature::before {
+      content: '2d10';
+      position: absolute;
+      top: -10px;
+      right: 2rem;
+      font-family: 'Bangers', cursive;
+      font-size: 8rem;
+      color: var(--champ);
+      opacity: 0.04;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .doubles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .doubles-headline {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+      color: var(--champ-lt);
+      margin-bottom: 1rem;
+      line-height: 1.25;
+    }
+
+    .doubles-body {
+      font-size: 1rem;
+      color: #9aacbf;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .doubles-stat {
+      display: inline-block;
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      background: rgba(212,175,55,0.08);
+      border: 1px solid rgba(212,175,55,0.2);
+      padding: 0.4rem 0.8rem;
+      border-radius: 2px;
+    }
+
+    .doubles-effects {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .doubles-effect {
+      background: rgba(0,0,0,0.3);
+      border-left: 3px solid var(--champ);
+      padding: 1.2rem 1.5rem;
+      border-radius: 0 2px 2px 0;
+    }
+
+    .doubles-effect h4 {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--champ-lt);
+      margin-bottom: 0.4rem;
+    }
+
+    .doubles-effect p {
+      font-size: 0.9rem;
+      color: #8a9cb0;
+      line-height: 1.65;
+    }
+
+    @media (max-width: 700px) {
+      .doubles-grid { grid-template-columns: 1fr; }
+      .doubles-feature::before { display: none; }
+    }
+
+    /* ── WIN CONDITIONS ── */
+    .win-section { margin-bottom: 5rem; }
+
+    .win-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .win-card {
+      background: var(--stone);
+      border: 1px solid rgba(212,175,55,0.12);
+      padding: 1.8rem;
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .win-number {
+      position: absolute;
+      top: 1rem;
+      right: 1.2rem;
+      font-family: 'Bangers', cursive;
+      font-size: 2.5rem;
+      color: rgba(212,175,55,0.08);
+      line-height: 1;
+    }
+
+    .win-type {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      color: var(--champ);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .win-name {
+      font-family: 'Russo One', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gold-pale);
+      margin-bottom: 0.8rem;
+    }
+
+    .win-desc {
+      font-size: 0.9rem;
+      color: #8a9cb0;
+      line-height: 1.7;
+    }
+
+    .win-req {
+      margin-top: 0.8rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(212,175,55,0.1);
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 600px) {
+      .win-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── TURN STRUCTURE ── */
+    .turn-section { margin-bottom: 5rem; }
+
+    .turn-phases {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(212,175,55,0.15);
+      border: 1px solid rgba(212,175,55,0.15);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 2rem;
+    }
+
+    .turn-phase {
+      background: var(--stone);
+      padding: 1.8rem 1.4rem;
+      text-align: center;
+    }
+
+    .phase-num {
+      font-family: 'Bangers', cursive;
+      font-size: 1.8rem;
+      color: rgba(212,175,55,0.25);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-name {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--champ);
+      margin-bottom: 0.6rem;
+    }
+
+    .phase-desc {
+      font-size: 0.85rem;
+      color: #7a8fa5;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+      .turn-phases { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 420px) {
+      .turn-phases { grid-template-columns: 1fr; }
+    }
+
+    /* ── DECK BUILDING ── */
+    .deck-section { margin-bottom: 5rem; }
+
+    .deck-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .deck-panel {
+      background: var(--stone);
+      border: 1px solid rgba(212,175,55,0.12);
+      padding: 2rem;
+      border-radius: 2px;
+    }
+
+    .deck-panel h3 {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      color: var(--champ);
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(212,175,55,0.15);
+    }
+
+    .deck-rule {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .deck-rule-label {
+      font-size: 0.9rem;
+      color: #8a9cb0;
+    }
+
+    .deck-rule-value {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--champ-lt);
+    }
+
+    .deck-cost-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+    }
+
+    .deck-cost-table td {
+      padding: 0.45rem 0;
+      font-size: 0.88rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .deck-cost-table td:first-child {
+      color: #8a9cb0;
+    }
+
+    .deck-cost-table td:last-child {
+      text-align: right;
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.8rem;
+      color: var(--champ);
+    }
+
+    @media (max-width: 700px) {
+      .deck-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── TOURNAMENT ── */
+    .tournament-section { margin-bottom: 5rem; }
+
+    .tournament-formats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .format-card {
+      background: var(--stone);
+      border: 1px solid rgba(212,175,55,0.12);
+      border-top: 2px solid var(--champ);
+      padding: 1.6rem;
+      border-radius: 2px;
+    }
+
+    .format-name {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--champ-lt);
+      margin-bottom: 0.4rem;
+    }
+
+    .format-tag {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .format-desc {
+      font-size: 0.88rem;
+      color: #8a9cb0;
+      line-height: 1.65;
+    }
+
+    .tournament-feature {
+      margin-top: 2rem;
+      background: linear-gradient(135deg, #10152a 0%, #181f38 100%);
+      border: 1px solid rgba(212,175,55,0.25);
+      padding: 2rem 2.5rem;
+      border-radius: 3px;
+    }
+
+    .tournament-feature h3 {
+      font-family: 'Bangers', cursive;
+      font-size: 1.1rem;
+      color: var(--champ-lt);
+      margin-bottom: 0.6rem;
+    }
+
+    .tournament-feature p {
+      font-size: 0.95rem;
+      color: #8a9cb0;
+      line-height: 1.75;
+    }
+
+    @media (max-width: 700px) {
+      .tournament-formats { grid-template-columns: 1fr; }
+    }
+
+    /* ── EXPANSIONS ── */
+    .expansions-section { margin-bottom: 5rem; }
+
+    .expansions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .expansion-item {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      background: var(--stone);
+      border: 1px solid rgba(212,175,55,0.1);
+      padding: 1.5rem 1.8rem;
+      border-radius: 2px;
+    }
+
+    .expansion-tag {
+      flex-shrink: 0;
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: #0a0d18;
+      background: var(--champ);
+      padding: 0.3rem 0.7rem;
+      border-radius: 2px;
+      margin-top: 0.3rem;
+      white-space: nowrap;
+    }
+
+    .expansion-body h4 {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.9rem;
+      color: var(--champ-lt);
+      margin-bottom: 0.3rem;
+    }
+
+    .expansion-body p {
+      font-size: 0.9rem;
+      color: #8a9cb0;
+      line-height: 1.65;
+    }
+
+    /* ── CURRENTS GRID ── */
+    .currents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.8rem; margin-top: 2rem;
+    }
+    .current-card {
+      background: rgba(19,23,42,0.90); border: 1px solid rgba(196,59,26,0.18);
+      border-top: 2px solid rgba(196,59,26,0.5);
+      padding: 1rem 1.2rem; text-align: center;
+    }
+    .current-card--pop { border-top-color: #f5d060; }
+    .current-name {
+      font-family: 'Russo One', sans-serif; font-size: 0.8rem;
+      color: #f5d060; margin-bottom: 0.3rem;
+      text-shadow: 0 0 8px rgba(245,208,96,0.5);
+    }
+    .current-desc { font-size: 0.78rem; color: #b0bccf; line-height: 1.5; }
+
+    /* ── GIMMICK DESC ── */
+    .gimmick-desc { font-size: 0.85rem; color: #b0bccf; line-height: 1.65; margin-top: 0.6rem; }
+
+    /* ── VILLAINS ── */
+    .villains-section { margin-bottom: 5rem; }
+    .villains-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem; margin-top: 2rem;
+    }
+    .villain-card {
+      border: 1px solid rgba(245,208,96,0.12);
+      background: rgba(10,13,22,0.90); padding: 1.4rem;
+      border-top: 2px solid rgba(196,59,26,0.6);
+      transition: border-color 0.25s;
+    }
+    .villain-card:hover { border-top-color: #f5d060; }
+    .villain-icon { font-size: 1.6rem; display: block; margin-bottom: 0.4rem; }
+    .villain-name {
+      font-family: 'Bangers', cursive; font-size: 1.1rem;
+      letter-spacing: 0.06em; color: #e05828; margin-bottom: 0.15rem;
+    }
+    .villain-tagline { font-size: 0.8rem; color: var(--text-dim); font-style: italic; margin-bottom: 0.6rem; }
+    .villain-reveal {
+      margin-top: 0.6rem; padding-top: 0.6rem;
+      border-top: 1px solid rgba(245,208,96,0.10);
+      font-size: 0.82rem; color: #f5d060;
+    }
+    .villain-reveal strong {
+      font-family: 'Russo One', sans-serif; font-size: 0.5rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); display: block;
+      margin-bottom: 0.3rem; font-style: normal;
+    }
+    @media (max-width: 640px) { .currents-grid, .villains-grid { grid-template-columns: 1fr; } }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      background: var(--deep);
+      border-top: 1px solid rgba(212,175,55,0.15);
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: 'Bangers', cursive;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-tagline {
+      font-size: 0.8rem;
+      color: #3a4560;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+<div id="topbar-mount"></div>
+<div class="site-wrapper">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar-mount"></div>
+
+  <main class="main-content">
+
+    <!-- ═══════════════════════════════════════════════════════ HERO -->
+    <section class="hero">
+      <img class="scs-hero-bg" src="../images/aswi-board-game-bg.jpg" alt="" />
+
+      <div style="position:relative; z-index:10; width:100%; text-align:center; padding:0 2rem 0;">
+        <div style="display:flex; align-items:center; justify-content:center; gap:1rem; flex-wrap:nowrap;">
+          <div style="padding:0.5rem 1.2rem; border:1px solid rgba(196,59,26,0.55); background:rgba(6,8,16,0.70); font-family:'Russo One',sans-serif; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:#f5d060; text-shadow:0 0 8px rgba(245,208,96,0.8);">🎲 Board Game</div>
+          <div style="padding:0.5rem 1.2rem; border:1px solid rgba(196,59,26,0.55); background:rgba(6,8,16,0.70); font-family:'Russo One',sans-serif; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:#f5d060; text-shadow:0 0 8px rgba(245,208,96,0.8);">🃏 Deck Builder</div>
+          <div style="padding:0.5rem 1.2rem; border:1px solid rgba(196,59,26,0.55); background:rgba(6,8,16,0.70); font-family:'Russo One',sans-serif; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:#f5d060; text-shadow:0 0 8px rgba(245,208,96,0.8);">🤼 2 Players</div>
+          <div style="padding:0.5rem 1.2rem; border:1px solid rgba(196,59,26,0.55); background:rgba(6,8,16,0.70); font-family:'Russo One',sans-serif; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:#f5d060; text-shadow:0 0 8px rgba(245,208,96,0.8);">⏱ 30–45 Min</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ SYSTEM BADGE -->
+    <div class="system-badge">
+      <div class="system-badge-text">
+        System
+        <strong>2d10 Dice Mechanic</strong>
+      </div>
+      <div class="system-divider"></div>
+      <div class="system-badge-text">
+        Published by
+        <strong>Ribhian Games LLC</strong>
+      </div>
+      <div class="system-divider"></div>
+      <div class="system-badge-text">
+        Play Time
+        <strong>30 – 45 Minutes</strong>
+      </div>
+      <div class="system-divider"></div>
+      <div class="system-badge-text">
+        Players
+        <strong>2 Players</strong>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ MAIN CONTENT -->
+    <div class="page-inner">
+
+      <!-- SETTING TITLE -->
+      <section style="padding: 3.5rem 0 1rem; text-align:center;">
+        <h1 class="scs-setting-title">Squared Circle<br>Showdown</h1>
+        <p style="font-family:'Russo One',sans-serif; font-size:0.65rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); opacity:0.8; margin-top:-0.5rem;">An All Star Wrestlers Investigate Game</p>
+      </section>
+
+      <!-- OVERVIEW -->
+      <section class="overview-section">
+        <div class="section-header">
+          <span class="section-eyebrow">The Game</span>
+          <h2 class="section-title">Body Slams. Clue Drops. Masks Off.</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">
+            All Star Wrestlers Investigate is a tabletop RPG where players take on the roles of over-the-top professional wrestlers — the heroes, heels, and oddballs of the 80s and 90s — who investigate supernatural mysteries at carnivals, fairgrounds, and small-town arenas. Think Hulk Hogan meets Scooby-Doo. Every ghost has a guy in a suit behind it. Every unmasking ends with someone saying they would've gotten away with it too.
+          </p>
+        </div>
+        <div class="overview-grid">
+          <div class="overview-panel">
+            <h3>The Setup</h3>
+            <p>Your crew of wrestlers rolls into town for a charity match. Something spooky is going on. The carnival owner is desperate. You split up to look for clues, chase suspects through tent corridors, and eventually build a trap using folding chairs and your own signature moves.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>The System</h3>
+            <p>ASWI runs on a custom 2d10 system built around seven wrestling-themed stats called Currents. Roll 2d10, add your relevant Current modifier, beat the target number. Land doubles and something special happens — a comeback, a momentum shift, a moment the whole table will remember.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>The Work Pool</h3>
+            <p>Your Work Pool is your resource engine — the energy you spend to pull off signature moves, interference, and spectacular spots. Manage it wisely. Run dry and you're just another guy taking bumps.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>Squared Circle Showdown</h3>
+            <p>Can't make it to a full campaign? Squared Circle Showdown is the standalone competitive board and card game built on the same 2d10 engine. Two players. One ring. Thirty minutes. From your kitchen table to the main event.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CURRENTS -->
+      <section class="gimmicks-section">
+        <div class="section-header">
+          <span class="section-eyebrow">The Seven Stats</span>
+          <h2 class="section-title">The Currents</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Every wrestler is built around seven wrestling-themed attributes. Your Gimmick determines which two are Primary — the ones you roll with advantage and spend less Work Pool to activate.</p>
+        </div>
+        <div class="currents-grid">
+          <div class="current-card"><div class="current-name">Body</div><div class="current-desc">Raw power, strikes, grappling</div></div>
+          <div class="current-card"><div class="current-name">Speed</div><div class="current-desc">Agility, evasion, aerial moves</div></div>
+          <div class="current-card"><div class="current-name">Testicular Fortitude</div><div class="current-desc">Toughness, resisting submissions, kicking out</div></div>
+          <div class="current-card"><div class="current-name">Wits</div><div class="current-desc">Ring psychology, reading the room, counters</div></div>
+          <div class="current-card"><div class="current-name">Savvy</div><div class="current-desc">Mic work, deception, working the crowd</div></div>
+          <div class="current-card"><div class="current-name">Luck</div><div class="current-desc">High-risk moves, chaos, the unexpected</div></div>
+          <div class="current-card current-card--pop"><div class="current-name">Pop</div><div class="current-desc">Your connection to the crowd — and your fuel</div></div>
+        </div>
+      </section>
+
+      <!-- GIMMICKS -->
+      <section class="gimmicks-section">
+        <div class="section-header">
+          <span class="section-eyebrow">Your Character Class</span>
+          <h2 class="section-title">The Gimmicks</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Your Gimmick is your character class. It defines your wrestling persona, your best stats, your signature abilities, and how you age out of the sport — gracefully or otherwise.</p>
+        </div>
+        <div class="gimmick-cards">
+          <div class="gimmick-card">
+            <div class="gimmick-card-name">The Strongman</div>
+            <div class="gimmick-card-role">Raw power. Unstoppable. Mountains tremble when he flexes.</div>
+            <div class="gimmick-work-die">Body + Testicular Fortitude</div>
+            <p class="gimmick-desc">Hits hard, takes harder. His No-Sell ability lets him shake off damage that would flatten anyone else. When it's time to hang up the boots, he doesn't leave — he becomes the Manager who everyone is quietly afraid of.</p>
+          </div>
+          <div class="gimmick-card">
+            <div class="gimmick-card-name">The Technician</div>
+            <div class="gimmick-card-role">Excellence of execution. Every move has a counter.</div>
+            <div class="gimmick-work-die">Wits + Savvy</div>
+            <p class="gimmick-desc">The smartest wrestler in any room. Chains submissions together, controls pace, makes his opponent look foolish. The kind of wrestler who's never actually hurt — just always in control.</p>
+          </div>
+          <div class="gimmick-card">
+            <div class="gimmick-card-name">The High-Flyer</div>
+            <div class="gimmick-card-role">Gravity forgot about me.</div>
+            <div class="gimmick-work-die">Speed + Luck</div>
+            <p class="gimmick-desc">Death-Defying Spots can change a match in an instant. The body doesn't hold up forever, but the legend does. Built around Speed and Luck — because the only way to attempt a 450 Splash is to be fast and a little reckless.</p>
+          </div>
+          <div class="gimmick-card">
+            <div class="gimmick-card-name">The Brawler</div>
+            <div class="gimmick-card-role">Forget technical wrestling. This is a FIGHT.</div>
+            <div class="gimmick-work-die">Body + Testicular Fortitude</div>
+            <p class="gimmick-desc">Where the Strongman is a force of nature, the Brawler is a bar fight with a championship belt. Weapons, chaos, blood and thunder. Resistant to things that would hospitalize normal people.</p>
+          </div>
+          <div class="gimmick-card">
+            <div class="gimmick-card-name">The Tag Team Specialist</div>
+            <div class="gimmick-card-role">Together we're unstoppable.</div>
+            <div class="gimmick-work-die">Savvy + Speed</div>
+            <p class="gimmick-desc">Makes everyone around them better. Hot Tags, Double Team Maneuvers, cutting the ring. The Gimmick for players who want to be the glue that holds everything together.</p>
+          </div>
+          <div class="gimmick-card">
+            <div class="gimmick-card-name">The Manager</div>
+            <div class="gimmick-card-role">The brains behind the operation.</div>
+            <div class="gimmick-work-die">Pop + Wits</div>
+            <p class="gimmick-desc">Never takes a bump if they can help it. Slips foreign objects to clients, calls strategy from ringside, and once per major match can attempt the Ultimate Screwjob — a move so villainous it creates storylines that run for months.</p>
+          </div>
+          <div class="gimmick-card">
+            <div class="gimmick-card-name">The Ring Announcer</div>
+            <div class="gimmick-card-role">Ladies and gentlemen...</div>
+            <div class="gimmick-work-die">Pop + Savvy</div>
+            <p class="gimmick-desc">The voice that makes every entrance feel like history. Once in a career they can deliver a Legendary Introduction that grants a wrestler buffs for the entire match and permanently increases both their Pops.</p>
+          </div>
+          <div class="gimmick-card">
+            <div class="gimmick-card-name">The Jobber</div>
+            <div class="gimmick-card-role">Somebody's gotta lose. Might as well look incredible doing it.</div>
+            <div class="gimmick-work-die">Savvy + Testicular Fortitude</div>
+            <p class="gimmick-desc">The most misunderstood Gimmick — and the one with the highest Work Pool. Once every ten matches, when the moment is exactly right: the Surprise Victory. A shocking upset that nobody sees coming and everyone remembers forever.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- DOUBLES MECHANIC -->
+      <section class="doubles-section">
+        <div class="section-header">
+          <span class="section-eyebrow">The Signature Mechanic</span>
+          <h2 class="section-title">The Doubles Rule</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Roll double 7s. The card returns to your hand. You recover 1 Work Pool. The crowd — and the table — erupts.</p>
+        </div>
+        <div class="doubles-feature">
+          <div class="doubles-dice-wrap">
+            <div class="doubles-die">7</div>
+            <div class="doubles-die">7</div>
+          </div>
+          <div class="doubles-text">
+            <p>When you roll matching dice on any 2d10 check — attack, defence, a Work Pool activation — something beyond the result itself happens. A card returns to your hand. Work Pool recovers. An already-successful action gains an additional effect. A failed action still produces something useful.</p>
+            <p>Doubles don't happen every roll. They happen often enough that building toward them is a legitimate strategy — and rare enough that when they land, the moment belongs to the table.</p>
+            <div class="doubles-example">
+              <span class="doubles-example-label">Example</span>
+              The Technician has the Cotton Candy Phantom cornered in the funhouse. He plays Figure Four Leglock, paying 3 Work Pool. He rolls 2d10, adds his Wits modifier, beats the target. The Phantom must make a Testicular Fortitude save or tap out immediately. He rolled double 7s. The card returns to his hand. He recovers 1 Work Pool.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MYSTERY STRUCTURE -->
+      <section class="adventure-section">
+        <div class="section-header">
+          <span class="section-eyebrow">How It Plays</span>
+          <h2 class="section-title">The Seven-Beat Mystery</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Every ASWI session follows the classic seven-beat format — sixty years of Saturday morning cartoon DNA distilled into a tabletop structure. Every supernatural threat has a mundane explanation. Always.</p>
+        </div>
+        <div class="adventure-steps">
+          <div class="adventure-step"><div class="step-number">1</div><div class="step-content"><h4>The Setup</h4><p>Wrestlers arrive for a charity match. Everything seems perfectly normal — suspiciously normal.</p></div></div>
+          <div class="adventure-step"><div class="step-number">2</div><div class="step-content"><h4>The Hook</h4><p>A spooky supernatural event occurs. The carnival owner, frantic and desperate, begs the only people around who can help.</p></div></div>
+          <div class="adventure-step"><div class="step-number">3</div><div class="step-content"><h4>Investigation</h4><p>Split up to search for clues. Classic corridor chases ensue. Suspects are identified. Red herrings abound.</p></div></div>
+          <div class="adventure-step"><div class="step-number">4</div><div class="step-content"><h4>Confrontation</h4><p>A wrestling match against the monster and their henchmen. The ring is the great equaliser.</p></div></div>
+          <div class="adventure-step"><div class="step-number">5</div><div class="step-content"><h4>The Trap</h4><p>An elaborate scheme combining wrestling moves with carnival equipment. Timing, teamwork, and spectacle required.</p></div></div>
+          <div class="adventure-step"><div class="step-number">6</div><div class="step-content"><h4>Unmasking</h4><p>"Old Man Jenkins! The Dunking Booth Operator!" The monster is revealed — always someone with a motive.</p></div></div>
+          <div class="adventure-step"><div class="step-number">7</div><div class="step-content"><h4>Confession</h4><p>"And I would've gotten away with it too, if it weren't for you meddling wrestlers!"</p></div></div>
+        </div>
+      </section>
+
+      <!-- VILLAINS -->
+      <section class="villains-section">
+        <div class="section-header">
+          <span class="section-eyebrow">The Mystery Component</span>
+          <h2 class="section-title">Classic Carnie Villains</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Every ASWI mystery follows the golden rule: it was never actually supernatural. Behind every monster is a disgruntled employee with a grudge and access to carnival equipment.</p>
+        </div>
+        <div class="villains-grid">
+          <div class="villain-card"><span class="villain-icon">💪</span><div class="villain-name">The Haunted Strongman</div><div class="villain-tagline">"He's been lifting... FROM BEYOND THE GRAVE!"</div><div class="villain-reveal"><strong>🔍 True Identity</strong>The fired carnival accountant — using hydraulic assists and phosphorescent face paint.</div></div>
+          <div class="villain-card"><span class="villain-icon">🍬</span><div class="villain-name">The Cotton Candy Phantom</div><div class="villain-tagline">"Sticky pink webs everywhere. Nobody is safe."</div><div class="villain-reveal"><strong>🔍 True Identity</strong>The rival carnival owner — operating a modified industrial cotton candy machine on a concealed cart.</div></div>
+          <div class="villain-card"><span class="villain-icon">🔮</span><div class="villain-name">The Fortune Teller's Floating Head</div><div class="villain-tagline">"Madame Mysteria sees ALL!"</div><div class="villain-reveal"><strong>🔍 True Identity</strong>A network of mirrors and projection equipment controlled by the tent owner's nephew.</div></div>
+          <div class="villain-card"><span class="villain-icon">🎡</span><div class="villain-name">The Tunnel of Love Monster</div><div class="villain-tagline">"The rides are being sabotaged. Love hurts."</div><div class="villain-reveal"><strong>🔍 True Identity</strong>The heartbroken maintenance worker whose partner left them for someone they met on this very ride.</div></div>
+          <div class="villain-card"><span class="villain-icon">💨</span><div class="villain-name">The Human Cannonball Ghost</div><div class="villain-tagline">"Flying through the air... mysteriously."</div><div class="villain-reveal"><strong>🔍 True Identity</strong>The disgraced stunt coordinator using hidden zip lines and a luminescent suit.</div></div>
+        </div>
+      </section>
+
+      <!-- TOURNAMENT -->
+      <section class="adventure-section">
+        <div class="section-header">
+          <span class="section-eyebrow">Squared Circle Showdown</span>
+          <h2 class="section-title">Tournament Ready</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Squared Circle Showdown is built for organised play from day one. Two players. One ring. Thirty minutes. Deck construction rules, Swiss and bracket formats, and the full WrestleCon Grand Prix format — complete with entrance music, ring announcers, and championship belts — are all included.</p>
+        </div>
+        <div class="overview-grid">
+          <div class="overview-panel">
+            <h3>Deck Construction</h3>
+            <p>Build a 25-card Talent deck within a 60-point budget. Primary Talents cost less but define your Gimmick's style. Secondary Talents add flexibility. Universal Talents round out any strategy.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>Match Format</h3>
+            <p>Each match plays in 30–45 minutes. Manage your Work Pool, read your opponent's Gimmick, and build toward your win condition — pinfall, submission, or Work Pool depletion.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>Swiss & Brackets</h3>
+            <p>Full Swiss round rules, single elimination brackets, and prize structures supported. Judge guides and bracket management tools included for running events of any size.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>The WrestleCon Grand Prix</h3>
+            <p>The full production guide for running a WrestleCon-style event — entrance music, ring announcers, championship belts, kayfabe names. From your kitchen table to the main event.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHO IS THIS FOR -->
+      <section class="overview-section">
+        <div class="section-header">
+          <span class="section-eyebrow">The Audience</span>
+          <h2 class="section-title">Who Is This For?</h2>
+          <div class="section-rule"></div>
+        </div>
+        <div class="overview-grid">
+          <div class="overview-panel"><h3>Wrestling Fans</h3><p>Who've always wanted a game that gets the drama of pro wrestling — the kayfabe, the gimmicks, the storytelling.</p></div>
+          <div class="overview-panel"><h3>Board Game Players</h3><p>Looking for something with genuine depth and personality. Deck building that rewards knowing your Gimmick inside out.</p></div>
+          <div class="overview-panel"><h3>TTRPG Groups</h3><p>Who want shorter, punchier sessions with a clear structure and a built-in satisfying ending — the unmasking.</p></div>
+          <div class="overview-panel"><h3>Anyone</h3><p>Who has ever watched a Scooby-Doo unmasking and thought: this would be better with a Gorilla Press.</p></div>
+        </div>
+      </section>
+
+    </div><!-- /page-inner -->
+
+    <!-- ═══════════════════════════════════════════════════════ FOOTER -->
+    <footer class="page-footer">
+      <div class="footer-brand">Ribhian Games LLC</div>
+      <div class="footer-tagline">Squared Circle Showdown · The All Star Wrestlers Investigate Card Game</div>
+    </footer>
+
+  </main>
+</div>
+
+<script src="../js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!--Unmatched Tournament Verification page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Email verification landing page for tournament registration. Reads token from URL query string and confirms registration in Supabase.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify Registration | Unmatched Tournament</title>
+  <link rel="icon" href="../images/knotted Hex_V3.png" type="image/png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a; --deep: #111111; --surface: #1a1a1a;
+      --border: rgba(201,151,58,0.18); --gold: #c9973a; --gold-light: #e0b85a;
+      --text: #e8e0d0; --text-dim: rgba(232,224,208,0.55);
+      --red-bright: #ff2200; --green: #4caf50; --radius: 6px;
+    }
+    body { background:var(--black); color:var(--text); font-family:'Georgia',serif; min-height:100vh; display:flex; flex-direction:column; }
+    .page-header {
+      background:var(--deep); border-bottom:1px solid var(--border);
+      padding:1.5rem 2rem; display:flex; align-items:center; gap:1.2rem;
+    }
+    .page-header img { height:48px; width:auto; }
+    .page-header-text h1 { font-size:1.4rem; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase; }
+    .page-header-text p { font-size:0.85rem; color:var(--text-dim); margin-top:0.2rem; }
+    .back-link { margin-left:auto; color:var(--gold); text-decoration:none; font-size:0.9rem; opacity:0.8; }
+    .back-link:hover { opacity:1; }
+    .page-main { flex:1; display:flex; align-items:center; justify-content:center; padding:3rem 1.5rem; }
+    .verify-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:3rem 2rem; max-width:520px;
+      width:100%; text-align:center;
+    }
+    .status-icon { font-size:3.5rem; margin-bottom:1.2rem; }
+    .verify-card h2 { font-size:1.4rem; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.8rem; }
+    .verify-card p { font-size:0.95rem; color:var(--text-dim); line-height:1.7; }
+    .hero-name {
+      display:inline-block; margin:1rem 0;
+      padding:0.6rem 1.4rem;
+      background:rgba(201,151,58,0.14); border:1px solid var(--gold);
+      border-radius:var(--radius); color:var(--gold-light); font-size:1.1rem; font-style:italic;
+    }
+    .success h2 { color:var(--gold); }
+    .error h2 { color:var(--red-bright); }
+    .expired h2 { color:var(--text-dim); }
+    .loading h2 { color:var(--text-dim); }
+    .btn {
+      display:inline-block; margin-top:1.5rem; padding:0.7rem 1.6rem;
+      background:linear-gradient(135deg,var(--gold),var(--gold-light));
+      color:var(--black); font-family:'Georgia',serif; font-size:0.88rem;
+      font-weight:bold; letter-spacing:0.1em; text-transform:uppercase;
+      text-decoration:none; border-radius:var(--radius);
+    }
+    .event-detail {
+      margin-top:1.5rem; padding:1rem 1.2rem;
+      background:var(--deep); border:1px solid var(--border);
+      border-radius:var(--radius); font-size:0.85rem; color:var(--text-dim); line-height:1.8;
+    }
+    .spinner {
+      width:40px; height:40px; border:3px solid rgba(201,151,58,0.2);
+      border-top-color:var(--gold); border-radius:50%;
+      animation:spin 0.8s linear infinite; margin:0 auto 1.5rem;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .page-footer {
+      text-align:center; padding:1.5rem; border-top:1px solid var(--border);
+      font-size:0.78rem; color:var(--text-dim); letter-spacing:0.08em;
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <img src="../images/ribhian-games-logo.png" alt="Ribhian Games" />
+  <div class="page-header-text">
+    <h1>Unmatched Tournament</h1>
+    <p>Dire Consequences Gaming Convention · November 7, 2026</p>
+  </div>
+  <a href="../events/events.html" class="back-link">← Back to Events</a>
+</header>
+
+<main class="page-main">
+  <div class="verify-card loading" id="verify-card">
+    <div class="spinner"></div>
+    <h2>Verifying…</h2>
+    <p>Please wait while we confirm your registration.</p>
+  </div>
+</main>
+
+<footer class="page-footer">
+  Ribhian Games LLC &nbsp;·&nbsp; Dire Consequences 2026 &nbsp;·&nbsp; Unmatched Tournament
+</footer>
+
+<script>
+const SUPABASE_URL = 'https://kjjycuynetkappoedefb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_FbfOymRGuKGdMDyeEPZNTA_Qrrd9OSR';
+const EXPIRY_MINUTES = 10;
+
+async function supabaseFetch(path, options = {}) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': options.prefer || '',
+      ...(options.headers || {})
+    }
+  });
+  return res;
+}
+
+async function verify() {
+  const card = document.getElementById('verify-card');
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+
+  if (!token) {
+    card.className = 'verify-card error';
+    card.innerHTML = `
+      <div class="status-icon">⚠️</div>
+      <h2>Invalid Link</h2>
+      <p>This verification link is invalid or malformed. Please use the link from your registration email.</p>
+      <a href="register.html" class="btn">Back to Registration</a>`;
+    return;
+  }
+
+  try {
+    // Look up the token
+    const res = await supabaseFetch(`unmatched_registrations?token=eq.${encodeURIComponent(token)}&select=*`);
+    const data = await res.json();
+
+    if (!data || data.length === 0) {
+      card.className = 'verify-card error';
+      card.innerHTML = `
+        <div class="status-icon">❌</div>
+        <h2>Not Found</h2>
+        <p>This verification link is invalid or has already been used. If you believe this is an error, contact <a href="mailto:ribhiangames@gmail.com" style="color:var(--gold);">ribhiangames@gmail.com</a>.</p>
+        <a href="register.html" class="btn">Back to Registration</a>`;
+      return;
+    }
+
+    const reg = data[0];
+
+    // Already confirmed
+    if (reg.confirmed) {
+      card.className = 'verify-card success';
+      card.innerHTML = `
+        <div class="status-icon">⚔️</div>
+        <h2>Already Confirmed</h2>
+        <div class="hero-name">${reg.hero_selected}</div>
+        <p>This registration is already confirmed, ${reg.first_name}. Your hero is locked and ready for battle.</p>
+        <div class="event-detail">
+          📅 November 7, 2026 &nbsp;·&nbsp; 2:00 PM – 6:00 PM<br>
+          📍 Dire Consequences Gaming Convention
+        </div>`;
+      return;
+    }
+
+    // Check expiry
+    const created = new Date(reg.created_at);
+    const now = new Date();
+    const minutesElapsed = (now - created) / (1000 * 60);
+
+    if (minutesElapsed > EXPIRY_MINUTES) {
+      // Delete the expired registration
+      await supabaseFetch(`unmatched_registrations?token=eq.${encodeURIComponent(token)}`, {
+        method: 'DELETE', prefer: 'return=minimal'
+      });
+      card.className = 'verify-card expired';
+      card.innerHTML = `
+        <div class="status-icon">⏰</div>
+        <h2>Link Expired</h2>
+        <p>This verification link expired after 10 minutes. Your hero selection for <strong style="color:var(--gold-light);">${reg.hero_selected}</strong> has been released and is now available to other players.</p>
+        <p style="margin-top:1rem;">You're welcome to register again.</p>
+        <a href="register.html" class="btn">Register Again</a>`;
+      return;
+    }
+
+    // Confirm the registration
+    const updateRes = await supabaseFetch(`unmatched_registrations?token=eq.${encodeURIComponent(token)}`, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({ confirmed: true, confirmed_at: new Date().toISOString() })
+    });
+
+    if (updateRes.ok || updateRes.status === 204) {
+      card.className = 'verify-card success';
+      card.innerHTML = `
+        <div class="status-icon">⚔️</div>
+        <h2>Hero Confirmed!</h2>
+        <div class="hero-name">${reg.hero_selected}</div>
+        <p>${reg.first_name}, your registration is confirmed and your hero is locked. No one else can select ${reg.hero_selected}.</p>
+        <div class="event-detail">
+          📅 November 7, 2026 &nbsp;·&nbsp; 2:00 PM – 6:00 PM<br>
+          📍 Dire Consequences Gaming Convention<br>
+          🏆 Prize: Sealed <em>Unmatched: Adventures — Tales to Amaze</em>
+        </div>
+        <a href="../events/events.html" class="btn" style="margin-top:1.5rem;">Back to Events</a>`;
+    } else {
+      throw new Error('Update failed');
+    }
+
+  } catch(e) {
+    card.className = 'verify-card error';
+    card.innerHTML = `
+      <div class="status-icon">⚠️</div>
+      <h2>Something Went Wrong</h2>
+      <p>We couldn't verify your registration. Please try clicking the link again or contact <a href="mailto:ribhiangames@gmail.com" style="color:var(--gold);">ribhiangames@gmail.com</a>.</p>`;
+  }
+}
+
+verify();
+</script>
+</body>
+</html>

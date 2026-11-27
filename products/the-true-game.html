@@ -1,0 +1,989 @@
+<!--The True Game page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Product page for The True Game standalone product.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The True Game — Ribhian Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:        #080504;
+      --deep:         #100c08;
+      --stone:        #1a1208;
+      --stone-mid:    #221808;
+      --stone-light:  #2e2010;
+      --crystal:      #c87820;        /* tarnished gold         */
+      --crystal-lt:   #e09830;        /* bright amber           */
+      --crystal-pale: #f0c870;        /* pale gold highlight    */
+      --violet:       #a04020;        /* blood red-sienna       */
+      --violet-lt:    #c86030;        /* warm blood orange      */
+      --violet-pale:  #e89060;        /* faded blood            */
+      --silver:       #d8c898;        /* aged parchment         */
+      --silver-dim:   #907858;        /* tarnished silver       */
+      --text-body:    #c8b888;        /* warm parchment text    */
+      --text-dim:     #786040;        /* old ink dim            */
+      --gold:         #c87820;
+      --gold-bright:  #e09830;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--text-body);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .page-wrapper { display: flex; min-height: 100vh; }
+    .content-area { flex: 1; margin-left: 260px; }
+    @media (max-width: 900px) { .content-area { margin-left: 0; } }
+
+    /* ══════════════════════════════════════ HERO */
+    .hero {
+      position: relative;
+      width: 100%;
+      min-height: 560px;
+      background: linear-gradient(180deg, #080402 0%, #120c04 50%, #1a1006 100%);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 3.5rem;
+    }
+
+    .ttg-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-logo {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .logo-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-placeholder-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════════════ SYSTEM BADGE */
+    .system-badge {
+      background: linear-gradient(135deg, var(--stone) 0%, var(--stone-mid) 100%);
+      border-top: 1px solid rgba(200,120,32,0.2);
+      border-bottom: 1px solid rgba(200,120,32,0.2);
+      padding: 1.4rem 2rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .system-badge-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .system-badge-text strong {
+      color: var(--crystal);
+      display: block;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      margin-top: 0.2rem;
+    }
+
+    .system-divider {
+      width: 1px;
+      height: 36px;
+      background: rgba(200,120,32,0.25);
+    }
+
+    /* ══════════════════════════════════════ LAYOUT */
+    .page-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 4rem 2.5rem 6rem;
+    }
+
+    .section-header { margin-bottom: 2.5rem; }
+
+    .ttg-setting-title {
+      font-family: 'Almendra', serif;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 700;
+      font-style: italic;
+      color: #f0c870;
+      text-shadow:
+        0 0 6px rgba(200,120,32,1.0),
+        0 0 18px rgba(180,90,20,0.95),
+        0 0 40px rgba(160,60,10,0.75),
+        0 0 80px rgba(140,40,0,0.45),
+        0 0 130px rgba(120,30,0,0.22),
+        0 2px 4px rgba(0,0,0,0.98);
+      text-align: center;
+      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
+    }
+
+    .section-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--violet);
+      text-shadow: 0 0 8px rgba(160,64,32,0.9), 0 0 22px rgba(160,64,32,0.5), 0 0 45px rgba(160,64,32,0.25);
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--crystal-pale);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-rule {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--crystal), transparent);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-intro {
+      font-size: 1.05rem;
+      color: var(--text-body);
+      max-width: 720px;
+      line-height: 1.8;
+    }
+
+    /* ══════════════════════════════════════ OVERVIEW */
+    .overview-section { margin-bottom: 5rem; }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .overview-panel {
+      background: linear-gradient(135deg, var(--stone) 0%, var(--stone-mid) 100%);
+      border: 1px solid rgba(110,168,212,0.12);
+      border-left: 3px solid var(--crystal);
+      padding: 1.8rem;
+      border-radius: 2px;
+    }
+
+    .overview-panel h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--crystal);
+      margin-bottom: 0.8rem;
+    }
+
+    .overview-panel p { font-size: 0.95rem; color: #8aaabf; line-height: 1.75; }
+
+    @media (max-width: 700px) { .overview-grid { grid-template-columns: 1fr; } }
+
+    /* ══════════════════════════════════════ SEVEN CURRENTS */
+    .currents-section { margin-bottom: 5rem; }
+
+    .currents-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .current-card {
+      background: var(--stone);
+      border: 1px solid rgba(110,168,212,0.12);
+      border-top: 2px solid var(--crystal);
+      padding: 1.2rem 0.8rem;
+      text-align: center;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .current-card:hover { background: var(--stone-mid); transform: translateY(-2px); }
+    .current-card:last-child { border-top-color: var(--violet); }
+
+    .current-abbr {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.2rem;
+      color: var(--crystal-lt);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .current-card:last-child .current-abbr { color: var(--violet-lt); }
+
+    .current-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: var(--text-body);
+      letter-spacing: 0.1em;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .current-sub {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 900px) { .currents-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 500px) { .currents-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* ══════════════════════════════════════ HERITAGES */
+    .heritages-section { margin-bottom: 5rem; }
+
+    .heritages-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .heritage-card {
+      background: linear-gradient(160deg, var(--stone) 0%, var(--stone-mid) 100%);
+      border: 1px solid rgba(200,120,32,0.18);
+      border-top: 2px solid var(--crystal);
+      padding: 1.6rem;
+      border-radius: 2px;
+      transition: border-color 0.25s, transform 0.2s;
+    }
+
+    .heritage-card:hover { border-color: rgba(200,120,32,0.45); transform: translateY(-2px); }
+    .heritage-card.immutable { border-top-color: var(--violet); grid-column: 1 / -1; }
+
+    .heritage-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: var(--crystal);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .heritage-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--crystal-pale);
+      margin-bottom: 0.25rem;
+    }
+
+    .heritage-card.immutable .heritage-name { color: var(--violet-pale); }
+
+    .heritage-subtitle {
+      font-size: 0.82rem;
+      color: var(--silver-dim);
+      font-style: italic;
+      margin-bottom: 0.9rem;
+    }
+
+    .heritage-traits {
+      list-style: none;
+      margin-bottom: 0.8rem;
+    }
+
+    .heritage-traits li {
+      font-size: 0.88rem;
+      color: var(--text-body);
+      padding: 0.2rem 0;
+      border-bottom: 1px solid rgba(200,120,32,0.08);
+      line-height: 1.5;
+    }
+
+    .heritage-traits li::before { content: '◈ '; color: var(--crystal); opacity: 0.7; font-size: 0.7rem; }
+    .heritage-card.immutable .heritage-traits li::before { color: var(--violet-lt); opacity: 0.9; }
+
+    /* Immutable lineages sub-grid */
+    .lineages-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.6rem;
+      margin-top: 1.2rem;
+    }
+
+    .lineage-pill {
+      background: rgba(160,64,32,0.08);
+      border: 1px solid rgba(160,64,32,0.25);
+      padding: 0.8rem 0.5rem;
+      text-align: center;
+      border-radius: 2px;
+    }
+
+    .lineage-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--violet-pale);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .lineage-motto {
+      font-size: 0.72rem;
+      color: var(--text-body);
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 900px) {
+      .heritages-grid { grid-template-columns: repeat(2, 1fr); }
+      .heritages-grid .heritage-card.immutable { grid-column: 1 / -1; }
+      .lineages-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .heritages-grid { grid-template-columns: 1fr; }
+      .lineages-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ══════════════════════════════════════ ELEVEN TRADITIONS */
+    .traditions-section { margin-bottom: 5rem; }
+
+    .traditions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .tradition-card {
+      background: linear-gradient(160deg, var(--stone) 0%, var(--stone-mid) 100%);
+      border: 1px solid rgba(110,168,212,0.1);
+      padding: 1.5rem;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .tradition-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--crystal), var(--violet), transparent);
+    }
+
+    .tradition-card:hover { border-color: rgba(110,168,212,0.3); transform: translateY(-2px); }
+
+    .tradition-number {
+      font-family: 'Cinzel', serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      margin-bottom: 0.3rem;
+    }
+
+    .tradition-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--crystal-lt);
+      margin-bottom: 0.2rem;
+    }
+
+    .tradition-founder {
+      font-size: 0.8rem;
+      font-style: italic;
+      color: var(--text-dim);
+      margin-bottom: 0.8rem;
+    }
+
+    .tradition-desc {
+      font-size: 0.88rem;
+      color: #7a9ab5;
+      line-height: 1.65;
+    }
+
+    @media (max-width: 750px) { .traditions-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .traditions-grid { grid-template-columns: 1fr; } }
+
+
+
+    /* ══════════════════════════════════════ BACKGROUNDS */
+    .backgrounds-section { margin-bottom: 5rem; }
+
+    .backgrounds-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .bg-card {
+      background: var(--stone);
+      border: 1px solid rgba(110,168,212,0.1);
+      padding: 1.2rem;
+      border-radius: 2px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .bg-card:hover { background: var(--stone-mid); border-color: rgba(110,168,212,0.3); }
+
+    .bg-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--crystal);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+
+    .bg-desc {
+      font-size: 0.82rem;
+      color: #6a8aaa;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 800px) { .backgrounds-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 420px) { .backgrounds-grid { grid-template-columns: 1fr; } }
+
+    /* ══════════════════════════════════════ COSMIC STAKES */
+    .cosmic-section { margin-bottom: 5rem; }
+
+    .cosmic-panel {
+      background: linear-gradient(135deg, #080a1a 0%, #0e1028 100%);
+      border: 1px solid rgba(138,80,200,0.25);
+      border-radius: 4px;
+      padding: 3rem;
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cosmic-panel::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(138,80,200,0.15), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .cosmic-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+
+    .cosmic-headline {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      color: var(--violet-pale);
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .cosmic-body {
+      font-size: 1rem;
+      color: #8a9ab5;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .cosmic-quote {
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      border-left: 2px solid var(--violet);
+      padding-left: 1.2rem;
+      margin-top: 1.5rem;
+      line-height: 1.75;
+    }
+
+    .cosmic-stakes {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .stake-item {
+      background: rgba(138,80,200,0.06);
+      border: 1px solid rgba(138,80,200,0.15);
+      border-left: 3px solid var(--violet);
+      padding: 1.1rem 1.3rem;
+      border-radius: 0 2px 2px 0;
+    }
+
+    .stake-item h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: var(--violet-lt);
+      margin-bottom: 0.3rem;
+    }
+
+    .stake-item p { font-size: 0.88rem; color: #7a8aaa; line-height: 1.6; }
+
+    @media (max-width: 700px) { .cosmic-grid { grid-template-columns: 1fr; } }
+
+    /* ══════════════════════════════════════ FOOTER */
+    .page-footer {
+      background: var(--deep);
+      border-top: 1px solid rgba(200,120,32,0.12);
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--crystal-lt);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-tagline { font-size: 0.8rem; color: var(--text-body); font-style: italic; }
+  </style>
+</head>
+<body>
+
+<div id="topbar-mount"></div>
+<div class="site-wrapper">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <div id="sidebar-mount"></div>
+
+  <main class="main-content">
+
+    <!-- ══════════════════════════════════════════════════════ HERO -->
+    <section class="hero">
+      <img class="ttg-hero-bg" src="../images/true-game-bg.png" alt="" />
+    </section>
+
+    <!-- ═══════════════════════════════════════ SYSTEM BADGE -->
+    <div class="system-badge">
+      <div class="system-badge-text">
+        System
+        <strong>Ribhian Games 2d10</strong>
+      </div>
+      <div class="system-divider"></div>
+      <div class="system-badge-text">
+        Published by
+        <strong>Ribhian Games LLC</strong>
+      </div>
+      <div class="system-divider"></div>
+      <div class="system-badge-text">
+        Genre
+        <strong>Psychic Hierarchy · Political Intrigue</strong>
+      </div>
+      <div class="system-divider"></div>
+      <div class="system-badge-text">
+        Heptaverse Setting
+        <strong>The Psychic Element</strong>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ MAIN CONTENT -->
+    <div class="page-inner">
+
+      <!-- OVERVIEW -->
+      <section class="overview-section">
+        <div class="section-header">
+          <h2 class="ttg-setting-title">The True Game</h2>
+          <span class="section-eyebrow">The Setting</span>
+          <h2 class="section-title">Where Thought Becomes Reality and Hierarchy Follows Power</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">
+            The True Game is the Heptaverse's psychic approach to cosmic sustainability — a world where mental ability determines social position, crystal-enhanced talent shapes reality, and advancement through the Game's ranks is both personal ambition and existential necessity. Eleven psychic traditions trace back to Eleven Founders, and every soul in the Game knows their place within the hierarchy.
+          </p>
+        </div>
+
+        <div class="overview-grid">
+          <div class="overview-panel">
+            <h3>The Experiment</h3>
+            <p>Originally a modest Core research expedition studying Didir's telepathic abilities, the True Game has become a crucial test of whether talent-based social hierarchies can create civilization resistant to entropy. The outcome matters for all seven realities.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>The Hierarchy</h3>
+            <p>Social position flows from psychic talent. Those who command more traditions, or who hold a single tradition at its purest expression, hold authority over those who do not. Every interaction is coloured by rank. Every advancement is earned, observed, and recorded.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>Crystal Technology</h3>
+            <p>Psychic talent is amplified, stored, and weaponised through gemstone technology. Focus Crystals enhance manifestations. Memory Stones preserve thoughts. And in the deep places of the world, Corrupted Gemstones offer terrible shortcuts — at a permanent cost.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>The Stunts System</h3>
+            <p>All psychic abilities are called Stunts — emphasising their mental and technological nature over any magical interpretation. Characters advance through nine Circles of power within their tradition, each Circle unlocking greater manifestations of their inherited talent.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEVEN CURRENTS -->
+      <section class="currents-section">
+        <div class="section-header">
+          <span class="section-eyebrow">Core Attributes</span>
+          <h2 class="section-title">The Seven Currents</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">The True Game uses the universal Heptaverse seven-attribute system expressed through psychic society terminology. The seventh — Talent — is unique to this setting, measuring raw psychic force and Game standing simultaneously.</p>
+        </div>
+
+        <div class="currents-grid">
+          <div class="current-card">
+            <span class="current-abbr">FOR</span>
+            <span class="current-name">Force</span>
+            <span class="current-sub">Physical power behind martial manifestations</span>
+          </div>
+          <div class="current-card">
+            <span class="current-abbr">PRE</span>
+            <span class="current-name">Precision</span>
+            <span class="current-sub">Fine control for delicate psychic work</span>
+          </div>
+          <div class="current-card">
+            <span class="current-abbr">VIT</span>
+            <span class="current-name">Vitality</span>
+            <span class="current-sub">Endurance for sustained talent use</span>
+          </div>
+          <div class="current-card">
+            <span class="current-abbr">ACU</span>
+            <span class="current-name">Acuity</span>
+            <span class="current-sub">Mental sharpness for complex patterns</span>
+          </div>
+          <div class="current-card">
+            <span class="current-abbr">AWA</span>
+            <span class="current-name">Awareness</span>
+            <span class="current-sub">Perception of psychic emanations</span>
+          </div>
+          <div class="current-card">
+            <span class="current-abbr">AUT</span>
+            <span class="current-name">Authority</span>
+            <span class="current-sub">Social influence in hierarchical society</span>
+          </div>
+          <div class="current-card">
+            <span class="current-abbr">TAL</span>
+            <span class="current-name">Talent</span>
+            <span class="current-sub">Raw psychic force and Game standing</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- HERITAGES -->
+      <section class="heritages-section">
+        <div class="section-header">
+          <span class="section-eyebrow">Who You Are</span>
+          <h2 class="section-title">Heritages</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Four playable heritages shape your relationship with the Game's talent traditions — and one stands entirely apart from the hierarchy as something the system cannot easily classify.</p>
+        </div>
+
+        <div class="heritages-grid">
+          <!-- Humans -->
+          <div class="heritage-card">
+            <div class="heritage-tag">Universal Heritage</div>
+            <div class="heritage-name">Humans</div>
+            <div class="heritage-subtitle">The Foundation Stock</div>
+            <ul class="heritage-traits">
+              <li>Original colonists enhanced through bio-engineering</li>
+              <li>Access to all eleven talent traditions</li>
+              <li>Full participation at all hierarchy levels</li>
+              <li>The benchmark against which all others are measured</li>
+            </ul>
+          </div>
+          <!-- Lightborn -->
+          <div class="heritage-card">
+            <div class="heritage-tag">Universal Heritage</div>
+            <div class="heritage-name">Lightborn</div>
+            <div class="heritage-subtitle">The Celestial-Blessed</div>
+            <ul class="heritage-traits">
+              <li>Descendants touched by celestial energies</li>
+              <li>Natural affinity for Healing and Clairvoyance traditions</li>
+              <li>Cannot access the Necromancy tradition</li>
+              <li>Enhanced resonance with light-aligned stunts</li>
+            </ul>
+          </div>
+          <!-- Felidar -->
+          <div class="heritage-card">
+            <div class="heritage-tag">Setting-Specific Heritage</div>
+            <div class="heritage-name">Felidar</div>
+            <div class="heritage-subtitle">The Cat-Folk</div>
+            <ul class="heritage-traits">
+              <li>+2 Precision, +1 Awareness</li>
+              <li>Natural affinity for Shifting, Clairvoyance, Teleportation</li>
+              <li>Low-light vision, +4 Stealth, mental resistance</li>
+              <li>Difficulty with Necromancy, reduced Firestarting access</li>
+            </ul>
+          </div>
+          <!-- Gnomes -->
+          <div class="heritage-card">
+            <div class="heritage-tag">Setting-Specific Heritage</div>
+            <div class="heritage-name">Gnomes</div>
+            <div class="heritage-subtitle">The Small Folk</div>
+            <ul class="heritage-traits">
+              <li>+2 Acuity, +1 Precision</li>
+              <li>Strong affinity for Telekinesis, Sorcerian, Healing</li>
+              <li>+2 bonus to crafting and technical skills</li>
+              <li>Physical Flying restrictions, limited Shifting access</li>
+            </ul>
+          </div>
+          <!-- Immutables (full width) -->
+          <div class="heritage-card immutable">
+            <div class="heritage-tag">Unique Heritage — Outside the Hierarchy</div>
+            <div class="heritage-name">Immutables</div>
+            <div class="heritage-subtitle">The Null-Minded · Talent fixed at 3, cannot be raised or lowered</div>
+            <ul class="heritage-traits">
+              <li>+2 Vitality, +1 Awareness — Talent permanently fixed at 3</li>
+              <li>Resist and suppress psychic effects of all kinds</li>
+              <li>Exist outside the normal hierarchy as advisors and neutral arbiters</li>
+              <li>Seven distinct Lineages, each with a unique form of nullification</li>
+            </ul>
+            <div class="lineages-grid">
+              <div class="lineage-pill">
+                <span class="lineage-name">Voidmind</span>
+                <span class="lineage-motto">"Where thought becomes silence"</span>
+              </div>
+              <div class="lineage-pill">
+                <span class="lineage-name">Turnkey</span>
+                <span class="lineage-motto">"The locks that guard all doors"</span>
+              </div>
+              <div class="lineage-pill">
+                <span class="lineage-name">Mirror</span>
+                <span class="lineage-motto">"Those who reflect what cannot be absorbed"</span>
+              </div>
+              <div class="lineage-pill">
+                <span class="lineage-name">Groundstone</span>
+                <span class="lineage-motto">"The foundation that cannot be moved"</span>
+              </div>
+              <div class="lineage-pill">
+                <span class="lineage-name">Breakwater</span>
+                <span class="lineage-motto">"Where psychic storms crash and scatter"</span>
+              </div>
+              <div class="lineage-pill">
+                <span class="lineage-name">Clearwater</span>
+                <span class="lineage-motto">"Through whom truth flows unimpeded"</span>
+              </div>
+              <div class="lineage-pill">
+                <span class="lineage-name">Shadowveil</span>
+                <span class="lineage-motto">"The spaces between thoughts"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ELEVEN TRADITIONS -->
+      <section class="traditions-section">
+        <div class="section-header">
+          <span class="section-eyebrow">Psychic Power</span>
+          <h2 class="section-title">The Eleven Traditions</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">The foundation of True Game society rests upon eleven fundamental psychic talents. Each traces back to one of the Eleven Founders — exceptional individuals from The Core who became test subjects in Barish's original psychic hierarchy experiment. Their bloodlines still run true today.</p>
+        </div>
+
+        <div class="traditions-grid">
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition I</div>
+            <div class="tradition-name">Teleportation</div>
+            <div class="tradition-founder">Founded by Hafnor the Elator</div>
+            <div class="tradition-desc">Instant travel, dimensional mastery, and spatial manipulation. At its highest Circle, the creation of permanent portal networks that reshape the geography of demesnes.</div>
+          </div>
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition II</div>
+            <div class="tradition-name">Telekinesis</div>
+            <div class="tradition-founder">Founded by Wafnor the Tragamor</div>
+            <div class="tradition-desc">Matter manipulation and force control. Tragamors can move objects without touch, shape terrain, and at 9th Circle exert force across enormous distances.</div>
+          </div>
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition III</div>
+            <div class="tradition-name">Telepathy</div>
+            <div class="tradition-founder">Founded by Didir the Demon</div>
+            <div class="tradition-desc">Mind reading and mental influence. The tradition whose first practitioner triggered the entire True Game experiment — and whose networks may one day form a consciousness that anchors reality itself.</div>
+          </div>
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition IV</div>
+            <div class="tradition-name">Flying</div>
+            <div class="tradition-founder">Founded by Tamor the Armiger</div>
+            <div class="tradition-desc">Perfect flight and aerial supremacy. Armigers command the skies, serving as messengers, scouts, and an elite military caste that patrols the boundaries between demesnes.</div>
+          </div>
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition V</div>
+            <div class="tradition-name">Beguilement</div>
+            <div class="tradition-founder">Founded by Trandilar the Ruler</div>
+            <div class="tradition-desc">Social control and emotional manipulation. Rulers are the most politically powerful members of the Game — their influence reshaping loyalties, policies, and alliances with a word.</div>
+          </div>
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition VI</div>
+            <div class="tradition-name">Sorcerian</div>
+            <div class="tradition-founder">Founded by Shattnir the Sorcerer</div>
+            <div class="tradition-desc">Energy absorption and redistribution across six elemental forces. Sorcerers choose up to two forces — Fire, Water, Earth, Air, Time, or Void — and cannot combine opposing pairs.</div>
+          </div>
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition VII</div>
+            <div class="tradition-name">Firestarting</div>
+            <div class="tradition-founder">Founded by Buinel the Sentinel</div>
+            <div class="tradition-desc">Flame creation and heat mastery. Sentinels serve as guardians at the borders of demesnes, their fire a visible marker of power and territorial claim against both rivals and Elder Being incursions.</div>
+          </div>
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition VIII</div>
+            <div class="tradition-name">Shifting</div>
+            <div class="tradition-founder">Founded by Thandbar the Shifter</div>
+            <div class="tradition-desc">Perfect mimicry and form adaptation. Shifters can replicate the physical appearance of any creature or person — an invaluable talent for espionage, infiltration, and the Game's more clandestine politics.</div>
+          </div>
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition IX</div>
+            <div class="tradition-name">Clairvoyance</div>
+            <div class="tradition-founder">Founded by Sorah the Seer</div>
+            <div class="tradition-desc">Future sight and remote perception. Seers are among the most sought-after advisors in the Game — their visions of potential futures making them indispensable to Great Houses and Academy councils alike.</div>
+          </div>
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition X</div>
+            <div class="tradition-name">Healing</div>
+            <div class="tradition-founder">Founded by Dealpas the Healer</div>
+            <div class="tradition-desc">Life restoration and regeneration. At the highest Circle, Healers can create permanent sanctuaries where wounds close and sickness cannot enter. They are simultaneously revered and politically vulnerable.</div>
+          </div>
+          <div class="tradition-card">
+            <div class="tradition-number">Tradition XI</div>
+            <div class="tradition-name">Necromancy</div>
+            <div class="tradition-founder">Founded by Dorn the Necromancer</div>
+            <div class="tradition-desc">Death mastery and spirit control. The most feared and misunderstood tradition — Necromancers hold power over the boundary between living and dead, a position that makes them both essential and deeply distrusted.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CRYSTALS OF LOM -->
+      <section class="overview-section">
+        <div class="section-header">
+          <span class="section-eyebrow">Crystal Technology</span>
+          <h2 class="section-title">The Crystals of Lom</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Scattered across the True Game's landscape are crystals generated by Lom — geological formations that have absorbed psychic energy over millennia. They are among the setting's most coveted and most feared resources.</p>
+        </div>
+
+        <div class="overview-grid">
+          <div class="overview-panel">
+            <h3>Crystals of Insight</h3>
+            <p>Many of Lom's crystals enhance and focus talent. They amplify manifestations, store psychic energy for later use, preserve memories, and enable communication across great distances. Practitioners who learn to work with them gain significant advantages within the hierarchy — and Great Houses expend considerable resources controlling the mines and veins where they are found.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>Crystals of Harm</h3>
+            <p>Not all of Lom's crystals offer insight. Some drain life, corrupt thought, and twist the personalities of those who handle them. Whether these represent natural formations gone wrong or deliberate Elder Being interference within the True Game's crystalline geology remains an open question — and a dangerous one to investigate.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- BACKGROUNDS -->
+      <section class="backgrounds-section">
+        <div class="section-header">
+          <span class="section-eyebrow">Origin Stories</span>
+          <h2 class="section-title">Backgrounds</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Ten backgrounds define where a character enters the Game — and what debts, skills, and connections they carry into play.</p>
+        </div>
+
+        <div class="backgrounds-grid">
+          <div class="bg-card">
+            <div class="bg-name">Game-Born Noble</div>
+            <div class="bg-desc">Born into Great Houses ruling demesnes. Academy-educated, politically connected, and burdened with expectation.</div>
+          </div>
+          <div class="bg-card">
+            <div class="bg-name">Talented Foundling</div>
+            <div class="bg-desc">Discovered showing unusual abilities, with mysterious origins and a possible Founder bloodline waiting to be uncovered.</div>
+          </div>
+          <div class="bg-card">
+            <div class="bg-name">Academy Student</div>
+            <div class="bg-desc">Formally educated in talent development institutions. Theoretically trained, practically inexperienced, well-networked.</div>
+          </div>
+          <div class="bg-card">
+            <div class="bg-name">House Guard</div>
+            <div class="bg-desc">Trained in combat and anti-talent tactics to protect noble families. Loyal, disciplined, and deeply aware of hierarchy.</div>
+          </div>
+          <div class="bg-card">
+            <div class="bg-name">Crystal Miner</div>
+            <div class="bg-desc">Extracted psychic crystals from deep mines. Knows the value of what others take for granted — and what corrupted stones can do.</div>
+          </div>
+          <div class="bg-card">
+            <div class="bg-name">Travelling Performer</div>
+            <div class="bg-desc">Entertained across demesnes using minor talents. Wide contacts, broad news networks, and a talent for reading any crowd.</div>
+          </div>
+          <div class="bg-card">
+            <div class="bg-name">Immutable Guardian</div>
+            <div class="bg-desc">Neutral arbiters and talent suppressors from Immutable lineages. Diplomatic immunity and no allegiance to any Great House.</div>
+          </div>
+          <div class="bg-card">
+            <div class="bg-name">Psychic Investigator</div>
+            <div class="bg-desc">Specialised in talent-based investigation and truth-finding. Credentials, connections, and truth crystals open doors others cannot.</div>
+          </div>
+          <div class="bg-card">
+            <div class="bg-name">Game Rebel</div>
+            <div class="bg-desc">Actively opposed the talent-based hierarchy. Revolutionary networks, underground safe houses, and a dangerous ideology.</div>
+          </div>
+          <div class="bg-card">
+            <div class="bg-name">Underground Refugee</div>
+            <div class="bg-desc">From hidden communities of those rejected by the Game. Survival skills, community bonds, and intimate knowledge of the system's cracks.</div>
+          </div>
+        </div>
+      </section>
+
+
+    </div><!-- /page-inner -->
+
+    <!-- ══════════════════════════════════════════════════════ FOOTER -->
+    <footer class="page-footer">
+      <div class="footer-brand">Ribhian Games LLC</div>
+      <div class="footer-tagline">The True Game · A Standalone Setting · Powered by the Ribhian Games LLC 2d10 Game System</div>
+      <div class="footer-tagline" style="margin-top:0.6rem; font-style:italic;">Based on the True Game novels by Sheri S. Tepper. Rights of use currently pending approval from the estate's IP management.</div>
+    </footer>
+
+  </main>
+</div>
+
+<script src="../js/site.js"></script>
+</body>
+</html>

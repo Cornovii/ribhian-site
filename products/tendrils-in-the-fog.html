@@ -1,0 +1,1047 @@
+<!--Tendrils in the Fog page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Product page for Tendrils in the Fog — Victorian Gothic Horror setting. Part of the Heptaverse system.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tendrils in the Fog — Ribhian Games LLC</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════════
+       TENDRILS IN THE FOG — Setting-Specific Overrides
+       Victorian Gothic Horror · New Cambridge, CT · Gas Lamp Era
+    ═══════════════════════════════════════════════════════ */
+
+    :root {
+      --tf-black:        #070a0d;
+      --tf-deep:         #0c1218;
+      --tf-stone:        #111920;
+      --tf-panel:        #192028;
+      --tf-panel-mid:    #1f2a34;
+
+      --tf-amber:        #c88820;
+      --tf-amber-bright: #e0a840;
+      --tf-amber-pale:   #f0c870;
+      --tf-amber-dim:    #7a5010;
+
+      --tf-fog:          #8aa0b0;
+      --tf-fog-dim:      #4a6070;
+      --tf-fog-pale:     #c0d0d8;
+
+      --tf-brass:        #906838;
+      --tf-copper:       #8a5030;
+      --tf-teal:         #2a7878;
+      --tf-slate:        #2a3848;
+
+      --tf-text:         #b0bcc8;
+      --tf-text-dim:     #4a5e6e;
+      --tf-text-bright:  #d4dce4;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--tf-black);
+      color: var(--tf-text);
+      font-family: 'Lora', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.85;
+      overflow-x: hidden;
+    }
+
+    /* Subtle moisture/rain streak texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        175deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(10,30,50,0.025) 3px,
+        rgba(10,30,50,0.025) 4px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ── HERO ──────────────────────────────────────────── */
+    .product-hero {
+      position: relative;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 2rem 2.5rem 3rem;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, #04060a 0%, #0c1520 65%, #131e28 100%);
+    }
+
+    .product-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 55% 45% at 50% 30%, rgba(200,136,32,0.09) 0%, transparent 65%),
+        radial-gradient(ellipse 90% 50% at 50% 100%, rgba(90,120,140,0.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Foggy atmosphere drifts */
+    .product-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 25% 10% at 15% 72%, rgba(120,150,160,0.07) 0%, transparent 100%),
+        radial-gradient(ellipse 30% 12% at 60% 68%, rgba(120,150,160,0.06) 0%, transparent 100%),
+        radial-gradient(ellipse 20% 8%  at 85% 75%, rgba(120,150,160,0.07) 0%, transparent 100%);
+      pointer-events: none;
+      animation: fog-drift 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes fog-drift {
+      0%   { opacity: 0.6; transform: translateX(0); }
+      100% { opacity: 1.0; transform: translateX(-18px); }
+    }
+
+    /* ── CITY SVG ── */
+    .tf-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .product-hero-content { position: relative; z-index: 2; width: 100%; text-align: center; }
+
+    .product-logo-wrap {
+      position: absolute;
+      top: 2rem; left: 2.5rem;
+      width: 180px; height: 180px;
+      margin: 0;
+      animation: logo-drift 7s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    @keyframes logo-drift {
+      0%, 100% { filter: drop-shadow(0 0 22px rgba(200,136,32,0.28)) drop-shadow(0 0 50px rgba(90,120,150,0.10)); transform: translateY(0); }
+      50%       { filter: drop-shadow(0 0 40px rgba(200,136,32,0.48)) drop-shadow(0 0 70px rgba(90,120,150,0.18)); transform: translateY(-5px); }
+    }
+
+    .product-logo-wrap img {
+      width: 100%; height: 100%; object-fit: contain; display: block;
+    }
+
+    .product-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem; letter-spacing: 0.5em; text-transform: uppercase;
+      color: #f0c040;
+      text-shadow: 0 0 8px rgba(240,180,40,0.7), 0 0 20px rgba(240,160,20,0.4);
+      background: rgba(8, 6, 28, 0.92);
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5.5vw, 4.2rem);
+      font-weight: 900; font-style: italic;
+      color: #3a3472;
+      background: rgba(8, 6, 28, 0.92);
+      display: inline-block;
+      padding: 0.1rem 0.6rem;
+      text-shadow: none;
+      line-height: 1.08;
+      margin-bottom: 0.4rem;
+    }
+
+    .product-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.72rem, 1.8vw, 0.95rem);
+      color: #f0c040;
+      text-shadow: 0 0 8px rgba(240,180,40,0.7), 0 0 20px rgba(240,160,20,0.4);
+      background: rgba(8, 6, 28, 0.92);
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      letter-spacing: 0.22em;
+      margin-bottom: 1.8rem;
+    }
+
+    .product-meta {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.1rem; flex-wrap: wrap;
+    }
+
+    .meta-pill {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.38rem 0.85rem;
+      border: 1px solid rgba(240,180,40,0.45);
+      background: rgba(8, 6, 28, 0.92);
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #f0c040;
+      text-shadow: 0 0 8px rgba(240,180,40,0.7), 0 0 20px rgba(240,160,20,0.4);
+    }
+
+    .setting-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 900;
+      font-style: italic;
+      color: #f0c040;
+      text-shadow: 0 0 18px rgba(240,180,40,0.55), 0 0 40px rgba(240,160,20,0.25);
+      text-align: center;
+      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
+    }
+
+    .overview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    .overview-header-text { flex: 1; }
+
+    .overview-logo {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 10px rgba(200,136,32,0.35));
+    }
+
+    /* ── SECTION BASE ─────────────────────────────────── */
+    section {
+      padding: 4.5rem 3rem;
+      border-top: 1px solid rgba(200,136,32,0.07);
+    }
+
+    section:nth-of-type(odd)  { background: var(--tf-deep); }
+    section:nth-of-type(even) { background: var(--tf-stone); }
+
+    .section-inner { max-width: 920px; margin: 0 auto; }
+
+    .section-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.59rem; letter-spacing: 0.55em; text-transform: uppercase;
+      color: #f0c040;
+      text-shadow: 0 0 8px rgba(240,180,40,0.7), 0 0 20px rgba(240,160,20,0.4);
+      display: block; margin-bottom: 0.5rem;
+    }
+
+    .section-eyebrow::after {
+      content: '';
+      display: block; width: 2rem; height: 1px;
+      background: var(--tf-amber-dim);
+      margin-top: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      color: var(--tf-text-bright);
+      margin-bottom: 1.6rem; line-height: 1.2;
+    }
+
+    .section-body { font-size: 1.04rem; color: #a8b8c4; line-height: 1.9; }
+    .section-body p + p { margin-top: 1.1rem; }
+    .section-body strong { color: var(--tf-amber-pale); font-weight: 600; }
+    .section-body em { color: var(--tf-fog-pale); font-style: italic; }
+
+    .divider {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin: 2.2rem 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: rgba(200,136,32,0.14); }
+    .divider-gem {
+      width: 7px; height: 7px;
+      background: var(--tf-amber);
+      transform: rotate(45deg); flex-shrink: 0;
+    }
+
+    /* ── HERITAGES ────────────────────────────────────── */
+    .heritages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.1rem;
+      margin-top: 2.2rem;
+    }
+
+    .heritage-card {
+      background: rgba(7,10,13,0.85);
+      border: 1px solid rgba(200,136,32,0.11);
+      padding: 1.5rem 1.3rem;
+      position: relative;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .heritage-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--hc-accent, var(--tf-amber));
+      opacity: 0.55;
+    }
+
+    .heritage-card:hover {
+      border-color: rgba(200,136,32,0.28);
+      transform: translateY(-2px);
+    }
+
+    .heritage-card.void-touched {
+      --hc-accent: #3a5070;
+      border-color: rgba(50,70,100,0.28);
+      background: rgba(5,8,14,0.95);
+    }
+    .heritage-card.void-touched:hover { border-color: rgba(70,100,150,0.45); }
+
+    .heritage-icon { font-size: 1.7rem; margin-bottom: 0.75rem; display: block; }
+
+    .heritage-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--tf-text-bright);
+      margin-bottom: 0.2rem;
+    }
+
+    .heritage-tagline {
+      font-family: 'Cinzel', serif;
+      font-size: 0.56rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--tf-fog-dim); display: block; margin-bottom: 0.8rem;
+    }
+
+    .heritage-card.void-touched .heritage-tagline { color: #3a5060; }
+
+    .heritage-desc {
+      font-size: 0.9rem; color: #7a8e9a; line-height: 1.75;
+    }
+
+    .heritage-abilities {
+      margin-top: 0.9rem;
+      display: flex; flex-wrap: wrap; gap: 0.3rem;
+    }
+
+    .heritage-ability {
+      font-family: 'Cinzel', serif;
+      font-size: 0.52rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.22rem 0.55rem;
+      border: 1px solid rgba(200,136,32,0.17);
+      color: var(--tf-amber-dim);
+    }
+
+    .heritage-card.void-touched .heritage-ability {
+      border-color: rgba(50,80,120,0.28);
+      color: #364858;
+    }
+
+    /* ── PATHS ────────────────────────────────────────── */
+    .paths-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem; margin-top: 2.2rem;
+    }
+
+    .path-column {
+      padding: 2rem 1.6rem;
+      background: rgba(7,10,13,0.7);
+      border: 1px solid rgba(200,136,32,0.10);
+      border-top: 2px solid rgba(200,136,32,0.40);
+      text-align: center;
+    }
+
+    .path-icon { font-size: 2.2rem; margin-bottom: 0.9rem; display: block; }
+
+    .path-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.56rem; letter-spacing: 0.45em; text-transform: uppercase;
+      color: var(--tf-fog-dim); margin-bottom: 0.25rem;
+    }
+
+    .path-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem; font-weight: 700;
+      color: var(--tf-amber-pale); margin-bottom: 0.85rem;
+    }
+
+    .path-desc { font-size: 0.91rem; color: #7a8e9a; line-height: 1.75; }
+
+    .path-examples {
+      margin-top: 1rem;
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+
+    .path-example {
+      font-family: 'Cinzel', serif;
+      font-size: 0.54rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--tf-amber-dim);
+      border-left: 2px solid rgba(200,136,32,0.25);
+      padding-left: 0.6rem; text-align: left;
+    }
+
+    /* ── RESONANCE COINS ──────────────────────────────── */
+    .coins-section {
+      background: linear-gradient(180deg, #0c1218 0%, #080d12 100%) !important;
+    }
+
+    .coins-intro {
+      max-width: 700px; margin: 0 auto 2.8rem;
+      text-align: center;
+    }
+
+    .coins-intro p { font-size: 1.04rem; color: #8a9eaa; line-height: 1.88; }
+    .coins-intro strong { color: var(--tf-amber-pale); font-weight: 600; }
+
+    .coins-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.1rem;
+      max-width: 980px; margin: 0 auto;
+    }
+
+    .coin-card {
+      background: rgba(7,10,13,0.92);
+      border: 1px solid rgba(200,136,32,0.09);
+      padding: 1.7rem 1.3rem;
+      text-align: center;
+      position: relative;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .coin-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(200,136,32,0.26);
+    }
+
+    .coin-disc {
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      position: relative;
+    }
+
+    /* Each coin type: unique metal appearance */
+    .coin-bell-bronze .coin-disc {
+      background: radial-gradient(circle at 35% 30%, #d09040, #7a4810 70%);
+      box-shadow: 0 0 18px rgba(200,130,40,0.40), inset 0 1px 3px rgba(255,210,120,0.35);
+    }
+    .coin-steam-silver .coin-disc {
+      background: radial-gradient(circle at 35% 30%, #d8e0e8, #7a8898 70%);
+      box-shadow: 0 0 16px rgba(180,210,230,0.30), inset 0 1px 3px rgba(255,255,255,0.45);
+    }
+    .coin-tunnel-copper .coin-disc {
+      background: radial-gradient(circle at 35% 30%, #c87840, #7a4020 70%);
+      box-shadow: 0 0 16px rgba(180,100,50,0.32), inset 0 1px 3px rgba(230,160,80,0.30);
+    }
+    .coin-dream-gold .coin-disc {
+      background: radial-gradient(circle at 35% 30%, #ead060, #9a7c10 70%);
+      box-shadow: 0 0 24px rgba(230,200,60,0.48), inset 0 1px 3px rgba(255,245,160,0.55);
+      animation: gold-pulse 4s ease-in-out infinite;
+    }
+    .coin-void-iron .coin-disc {
+      background: radial-gradient(circle at 35% 30%, #2e3848, #090c14 70%);
+      box-shadow: 0 0 20px rgba(30,50,90,0.60), inset 0 1px 2px rgba(80,110,160,0.18);
+    }
+    .coin-platinum .coin-disc {
+      background: radial-gradient(circle at 35% 30%, #e8f0f8, #8090a8 70%);
+      box-shadow: 0 0 30px rgba(200,220,245,0.60), inset 0 1px 3px rgba(255,255,255,0.65);
+      animation: platinum-shimmer 3.5s ease-in-out infinite;
+    }
+
+    @keyframes gold-pulse {
+      0%, 100% { box-shadow: 0 0 18px rgba(230,200,60,0.40); }
+      50%       { box-shadow: 0 0 34px rgba(230,200,60,0.70); }
+    }
+    @keyframes platinum-shimmer {
+      0%, 100% { box-shadow: 0 0 24px rgba(200,220,245,0.50); }
+      50%       { box-shadow: 0 0 50px rgba(200,220,245,0.90), 0 0 80px rgba(180,200,240,0.22); }
+    }
+
+    .coin-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--tf-text-bright); margin-bottom: 0.2rem;
+    }
+
+    .coin-domain {
+      font-family: 'Cinzel', serif;
+      font-size: 0.53rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tf-fog-dim); display: block; margin-bottom: 0.8rem;
+    }
+
+    .coin-desc { font-size: 0.87rem; color: #6a7e8e; line-height: 1.72; }
+
+    .coin-tag {
+      display: inline-block; margin-top: 0.85rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.51rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.24rem 0.55rem;
+      border: 1px solid rgba(200,136,32,0.16);
+      color: var(--tf-amber-dim);
+    }
+
+    .coin-void-iron .coin-tag {
+      border-color: rgba(50,75,120,0.30);
+      color: #3a5070;
+    }
+    .coin-platinum .coin-tag {
+      border-color: rgba(160,190,220,0.30);
+      color: #8090a8;
+    }
+
+    /* coin acquisition note at bottom of section */
+    .coins-note {
+      max-width: 700px; margin: 2.8rem auto 0;
+      padding: 1.4rem 1.8rem;
+      border: 1px solid rgba(200,136,32,0.14);
+      border-left: 3px solid var(--tf-amber-dim);
+      background: rgba(7,10,13,0.6);
+      font-size: 0.9rem; color: #7a8e9a; line-height: 1.8;
+      font-style: italic;
+    }
+
+    .coins-note strong { color: var(--tf-amber-dim); font-style: normal; font-weight: 600; }
+
+    /* ── 2D10 SYSTEM ──────────────────────────────────── */
+    .system-section {
+      position: relative;
+    }
+
+    .system-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 75% 60% at 50% 0%, rgba(200,136,32,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 100%, rgba(90,120,140,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .system-columns {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem; margin: 2rem 0 2.4rem;
+    }
+
+    .system-column {
+      padding: 1.7rem 1.4rem;
+      background: rgba(7,10,13,0.75);
+      border: 1px solid rgba(200,136,32,0.09);
+      border-top: 2px solid rgba(200,136,32,0.42);
+    }
+
+    .system-column-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem; letter-spacing: 0.44em; text-transform: uppercase;
+      color: var(--tf-fog-dim); margin-bottom: 0.25rem;
+    }
+
+    .system-column-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: var(--tf-amber-pale); margin-bottom: 0.7rem;
+    }
+
+    .system-column p { font-size: 0.9rem; color: #7a8e9a; line-height: 1.75; }
+
+    .system-formula {
+      background: rgba(7,10,13,0.85);
+      border: 1px solid rgba(200,136,32,0.17);
+      padding: 1.7rem 2rem; text-align: center; margin-bottom: 2rem;
+    }
+
+    .formula-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.75rem);
+      font-weight: 700; color: var(--tf-text-bright); letter-spacing: 0.04em;
+    }
+
+    .formula-text .op { color: var(--tf-amber); margin: 0 0.4rem; }
+    .formula-text .vs { color: var(--tf-fog-dim); margin: 0 0.6rem; font-style: italic; font-size: 0.85em; }
+
+    .formula-desc {
+      margin-top: 0.75rem;
+      font-size: 0.88rem; color: var(--tf-text-dim); line-height: 1.65;
+    }
+
+    .mechanic-callout {
+      background: linear-gradient(135deg, rgba(200,136,32,0.05) 0%, rgba(90,120,140,0.05) 100%);
+      border: 1px solid rgba(200,136,32,0.20);
+      border-left: 3px solid var(--tf-amber);
+      padding: 1.7rem 2rem; margin-top: 2rem;
+    }
+
+    .mechanic-callout-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem; letter-spacing: 0.44em; text-transform: uppercase;
+      color: var(--tf-amber-dim); margin-bottom: 0.4rem;
+    }
+
+    .mechanic-callout-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--tf-amber-pale); margin-bottom: 0.75rem;
+    }
+
+    .mechanic-callout p { font-size: 0.93rem; color: #7a8e9a; line-height: 1.8; }
+
+    .powered-by {
+      display: flex; align-items: center; gap: 1.2rem;
+      margin-top: 2rem; padding-top: 1.4rem;
+      border-top: 1px solid rgba(200,136,32,0.10);
+    }
+
+    .powered-by-logo {
+      width: 50px; height: 50px; flex-shrink: 0;
+      background: rgba(7,10,13,0.8);
+      border: 1px solid rgba(200,136,32,0.20);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.4rem; letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--tf-fog-dim); text-align: center; line-height: 1.5;
+    }
+
+    .powered-by-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--tf-fog-dim); line-height: 1.75;
+    }
+    .powered-by-text strong { color: var(--tf-amber-dim); display: block; margin-bottom: 0.1rem; }
+
+    /* ── BREADCRUMB ───────────────────────────────────── */
+    .breadcrumb {
+      padding: 0.72rem 3rem;
+      background: var(--tf-black);
+      border-bottom: 1px solid rgba(200,136,32,0.07);
+      font-family: 'Cinzel', serif;
+      font-size: 0.59rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--tf-text-dim);
+    }
+    .breadcrumb a { color: var(--tf-text-dim); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--tf-amber); }
+    .breadcrumb span { color: var(--tf-amber); margin: 0 0.45rem; }
+
+    /* ── FOOTER ───────────────────────────────────────── */
+    footer.site-footer {
+      padding: 2rem 3rem;
+      background: var(--tf-black);
+      border-top: 1px solid rgba(200,136,32,0.09);
+      text-align: center;
+    }
+    .footer-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--tf-text-dim); line-height: 1.9;
+    }
+    .footer-text strong { color: var(--tf-amber-dim); }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 900px) {
+      .heritages-grid { grid-template-columns: repeat(2, 1fr); }
+      .coins-grid      { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .paths-grid      { grid-template-columns: 1fr; }
+      .system-columns  { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .product-hero { padding: 3.5rem 1.4rem 3rem; min-height: auto; }
+      .product-logo-wrap { width: 200px; height: 200px; }
+      section { padding: 3rem 1.4rem; }
+      .breadcrumb { padding: 0.7rem 1.4rem; }
+      .heritages-grid { grid-template-columns: 1fr; }
+      .coins-grid     { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="topbar-mount"></div>
+
+  <div class="site-wrapper">
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar-mount"></div>
+
+    <main class="main-content">
+
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>›</span>
+        <a href="heptaverse.html">The Heptaverse</a>
+        <span>›</span>
+        Tendrils in the Fog
+      </div>
+
+      <!-- ═══════════ HERO ═══════════ -->
+      <section class="product-hero">
+
+        <img class="tf-hero-bg" src="../images/tendrils-in-the-fog-bg.jpg" alt="" />
+
+        <!-- Content: bottom center -->
+        <div class="product-hero-content">
+          <p class="product-eyebrow">A Heptaverse Setting · The Fifth Reality</p>
+          <p class="product-subtitle">Victorian Gothic Horror · New Cambridge, Connecticut</p>
+          <div class="product-meta">
+            <div class="meta-pill">🕯 Victorian Horror</div>
+            <div class="meta-pill">🌫 The Fifth Reality</div>
+            <div class="meta-pill">🎲 2d10 Game System</div>
+            <div class="meta-pill">🔔 Resonance Coins</div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ═══════════ OVERVIEW ═══════════ -->
+      <section>
+        <div class="section-inner">
+          <h2 class="setting-title">Tendrils in the Fog</h2>
+          <div class="overview-header">
+            <div class="overview-header-text">
+              <p class="section-eyebrow">Setting Overview</p>
+              <h2 class="section-title">Where Progress Meets the Unknowable</h2>
+            </div>
+          </div>
+          <div class="divider" style="margin-top:0;"></div>
+          <div class="section-body">
+            <p>Gas lamps struggle against the <strong>perpetual fog</strong> of New Cambridge, Connecticut — a city where Victorian propriety has become armour against cosmic horror, and industrial ambition has torn holes in the fabric of reality itself. Steam-powered machinery channels otherworldly forces through copper pipes and brass valves. The bells of three great foundries ring with frequencies that do not belong to this world. And beneath the cobblestone streets, in tunnels that go deeper than any map acknowledges, <strong>something remembers everything you feed it</strong>.</p>
+            <p>This is the <strong>Fifth Reality</strong> of the Heptaverse — a place where progress is measured not in invention, but in how much of the natural order you are willing to discard. Three founding families — <strong>Whitmore</strong> (bells and resonance), <strong>Ashford</strong> (steam and pressure), and <strong>Blackwood</strong> (tunnels and hidden spaces) — have shaped a city that should not exist, conducting industrial experiments that pierce the veils between worlds.</p>
+            <p>In New Cambridge, <strong>Lucidity</strong> is the currency of survival: the mental clarity required to navigate a society built on carefully maintained facades, while beneath them the city's experiments produce citizens who are no longer entirely present in the world they walk through. The fog remembers every compromise. Every bargain. Every choice.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ ENVIRONMENT ═══════════ -->
+      <section>
+        <div class="section-inner">
+          <p class="section-eyebrow">New Cambridge</p>
+          <h2 class="section-title">The City of Perpetual Twilight</h2>
+          <div class="section-body">
+            <p>New Cambridge occupies a peculiar geography — a coastal New England city locked in permanent atmospheric uncertainty. The fog that rolls in off the harbour has never fully retreated since the <strong>Dimensional Engine Project of 1885</strong>, when the Three Families briefly tore open stable apertures to other Heptaverse realities. What came back through those apertures did not belong here. And it stayed.</p>
+            <p>The city is layered in ways that both mirror and defy Victorian social convention. The <strong>industrial quarter</strong> thunders with Ashford steam works, where engineers maintain pressures beyond physical limits and the machinery has begun developing opinions. The <strong>bell quarter</strong> operates under Whitmore oversight — foundries where bronze is alloyed with things that have no chemical name, producing instruments that resonate with the spaces between worlds. Beneath the entire city, the <strong>Blackwood tunnel networks</strong> form a city-within-a-city where spatial relationships grow unreliable and the walls are thinner than they appear.</p>
+            <p>High society maintains its rituals with ferocious precision — dinner parties, charitable galas, the Season — because propriety in New Cambridge is not merely custom. It is <strong>structural load-bearing</strong>. The social facades are the only framework preventing the city from fully acknowledging what it has become: a place where industry and cosmic horror have grown so entangled that neither can be safely removed from the other.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ HERITAGES ═══════════ -->
+      <section>
+        <div class="section-inner">
+          <p class="section-eyebrow">Character Heritages</p>
+          <h2 class="section-title">Who Walks the Gaslit Streets</h2>
+          <div class="section-body">
+            <p>New Cambridge draws its population from across the Heptaverse — and from forces the Heptaverse does not yet have names for. Five heritages walk the fog-slicked streets, each navigating the city's social hierarchies and supernatural dangers in their own way.</p>
+          </div>
+
+          <div class="heritages-grid">
+
+            <!-- Humans -->
+            <div class="heritage-card" style="--hc-accent: #c88820;">
+              <span class="heritage-icon">👤</span>
+              <div class="heritage-name">Humans</div>
+              <span class="heritage-tagline">The Adaptable Foundation</span>
+              <p class="heritage-desc">Humans dominate New Cambridge's social, political, and industrial structures. They founded the Three Families, built the steam infrastructure, and established the hierarchies that define the city — while remaining largely blind to the cosmic consequences of their ambitions.</p>
+              <div class="heritage-abilities">
+                <span class="heritage-ability">+1 to two abilities</span>
+                <span class="heritage-ability">Bonus skill</span>
+                <span class="heritage-ability">Industrial Adaptation</span>
+                <span class="heritage-ability">Social Integration</span>
+              </div>
+            </div>
+
+            <!-- Lightborn -->
+            <div class="heritage-card" style="--hc-accent: #d0c080;">
+              <span class="heritage-icon">✨</span>
+              <div class="heritage-name">Lightborn</div>
+              <span class="heritage-tagline">Children of Celestial Heritage</span>
+              <p class="heritage-desc">Drawn to New Cambridge by the same cosmic disturbances that attract other supernatural phenomena, the Lightborn have integrated into Victorian high society, where their natural bearing reads as exceptional breeding. Their Inner Light appears as a luminous complexion, never obviously supernatural.</p>
+              <div class="heritage-abilities">
+                <span class="heritage-ability">+2 Resolve +1 Lucidity</span>
+                <span class="heritage-ability">Fog Clarity</span>
+                <span class="heritage-ability">Celestial Resistance</span>
+                <span class="heritage-ability">Social Grace</span>
+              </div>
+            </div>
+
+            <!-- Elderkin -->
+            <div class="heritage-card" style="--hc-accent: #6a9040;">
+              <span class="heritage-icon">🌿</span>
+              <div class="heritage-name">Elderkin</div>
+              <span class="heritage-tagline">The Ancient Witnesses</span>
+              <p class="heritage-desc">Among the oldest sentient beings in New Cambridge, the Elderkin remember the land before the fog, before the Three Families, before industry awakened things that should have slept forever. They serve as scholars, antiquarians, and advisors — repositories of knowledge the city would prefer forgotten.</p>
+              <div class="heritage-abilities">
+                <span class="heritage-ability">+2 Awareness +1 Reason</span>
+                <span class="heritage-ability">Primeval Memory</span>
+                <span class="heritage-ability">Natural Resistance</span>
+                <span class="heritage-ability">Ancient Wisdom</span>
+              </div>
+            </div>
+
+            <!-- Elves -->
+            <div class="heritage-card" style="--hc-accent: #7080a8;">
+              <span class="heritage-icon">🎭</span>
+              <div class="heritage-name">Elves</div>
+              <span class="heritage-tagline">Refined Outcasts</span>
+              <p class="heritage-desc">New Cambridge's Elves are refugees from growing industrialisation elsewhere, drawn by the city's supernatural emanations. Their fey heritage makes them exquisitely sensitive to the city's distortions — an asset for investigation, a liability for wellbeing. Victorian society appreciates their aesthetic grace while quietly ignoring their suffering.</p>
+              <div class="heritage-abilities">
+                <span class="heritage-ability">+2 Grace +1 Lucidity</span>
+                <span class="heritage-ability">Fey Ancestry</span>
+                <span class="heritage-ability">Supernatural Sensitivity</span>
+                <span class="heritage-ability">Keen Senses</span>
+              </div>
+            </div>
+
+            <!-- Weefolk -->
+            <div class="heritage-card" style="--hc-accent: #a07838;">
+              <span class="heritage-icon">🔑</span>
+              <div class="heritage-name">Weefolk</div>
+              <span class="heritage-tagline">The Hidden Servants</span>
+              <p class="heritage-desc">The Weefolk occupy New Cambridge's liminal spaces — chimney sweeps, tunnel runners, household servants — moving through places too small for human attention. What they've built in those margins is remarkable: an intelligence network that spans the entire city, passing through gaps in walls and minds alike.</p>
+              <div class="heritage-abilities">
+                <span class="heritage-ability">+2 Grace +1 Awareness</span>
+                <span class="heritage-ability">Hidden Network</span>
+                <span class="heritage-ability">Tunnel Wisdom</span>
+                <span class="heritage-ability">Social Invisibility</span>
+              </div>
+            </div>
+
+            <!-- Void Touched -->
+            <div class="heritage-card void-touched">
+              <span class="heritage-icon">🕳</span>
+              <div class="heritage-name">Void Touched</div>
+              <span class="heritage-tagline">New Cambridge's Unique Heritage</span>
+              <p class="heritage-desc">When the Dimensional Engine Project of 1885 tore open stable apertures to other realities, those present were exposed to the fundamental void between worlds. They survived — but defined thereafter by <em>absences</em> rather than additions. Cold that does not warm. Weight that does not settle. Time that does not flow. Memory that does not hold.</p>
+              <div class="heritage-abilities">
+                <span class="heritage-ability">+2 Lucidity +1 Cognitive</span>
+                <span class="heritage-ability">Primary Absence</span>
+                <span class="heritage-ability">Void Affinity</span>
+                <span class="heritage-ability">Null Presence</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Void Touched absence types note -->
+          <div style="margin-top:1.4rem; padding:1.2rem 1.5rem; border:1px solid rgba(50,70,110,0.25); border-left:3px solid #3a5070; background:rgba(5,8,14,0.7);">
+            <p style="font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.45em; text-transform:uppercase; color:#364858; margin-bottom:0.5rem;">Void Touched — Absence Types</p>
+            <p style="font-size:0.88rem; color:#506070; line-height:1.75;">Each Void Touched individual manifests one primary absence: <strong style="color:#445868;">Thermal</strong> (cold that never warms) · <strong style="color:#445868;">Gravitational</strong> (weight without anchor) · <strong style="color:#445868;">Temporal</strong> (time that flows around you) · <strong style="color:#445868;">Acoustic</strong> (silence where sound should be) · <strong style="color:#445868;">Chromatic</strong> (colour that drains at your touch) · <strong style="color:#445868;">Mnemonic</strong> (presence that cannot be remembered)</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══════════ PATHS ═══════════ -->
+      <section>
+        <div class="section-inner">
+          <p class="section-eyebrow">The Three Paths</p>
+          <h2 class="section-title">How Power Moves in New Cambridge</h2>
+          <div class="section-body">
+            <p>The 2d10 system's three paths of power manifest distinctly in Victorian industrial society — where force, knowledge, and cosmic connection have each found their own peculiar expression in gas-lamp and steam.</p>
+          </div>
+          <div class="paths-grid">
+
+            <div class="path-column">
+              <span class="path-icon">⚔️</span>
+              <p class="path-label">First Path</p>
+              <p class="path-title">Martial</p>
+              <p class="path-desc">Physical prowess adapted to the industrial age — factory guards, military officers, and the Three Families' enforcers who make their mark through force of body and will. Combat in New Cambridge means firearms, industrial weapons, and the terrifying efficiency of those trained against supernatural threats.</p>
+              <div class="path-examples">
+                <span class="path-example">Factory Guardian</span>
+                <span class="path-example">Family Enforcer</span>
+                <span class="path-example">Tunnel Fighter</span>
+              </div>
+            </div>
+
+            <div class="path-column">
+              <span class="path-icon">🔬</span>
+              <p class="path-label">Second Path</p>
+              <p class="path-title">Mental</p>
+              <p class="path-desc">Knowledge and strategy are the weapons of New Cambridge's investigators, engineers, and occult scholars. In a city built on secrets, mastery of information — how to gather it, interpret it, and weaponise it — determines survival as surely as any pistol. The city's mysteries yield only to the relentless mind.</p>
+              <div class="path-examples">
+                <span class="path-example">Bell Founder</span>
+                <span class="path-example">Factory Alienist</span>
+                <span class="path-example">Broadsheet Muckraker</span>
+              </div>
+            </div>
+
+            <div class="path-column">
+              <span class="path-icon">🌌</span>
+              <p class="path-label">Third Path</p>
+              <p class="path-title">Karmic</p>
+              <p class="path-desc">Intuition and spirit find strange expression in New Cambridge. Those who walk the Karmic path sense what others cannot — the resonance behind the bell tones, the intent within the fog, the shape of the void pressing against reality's walls. In this city, cosmic sensitivity is both gift and curse in equal measure.</p>
+              <div class="path-examples">
+                <span class="path-example">Dream Merchant</span>
+                <span class="path-example">Mist Walker</span>
+                <span class="path-example">Gear Priest</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Thirteen Professions teaser -->
+          <div style="margin-top:2rem; padding:1.4rem 1.8rem; border:1px solid rgba(200,136,32,0.14); background:rgba(7,10,13,0.7); text-align:center;">
+            <p style="font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.45em; text-transform:uppercase; color:var(--tf-amber-dim); margin-bottom:0.5rem;">New Cambridge's Unique Professions</p>
+            <p style="font-size:0.9rem; color:#7a8e9a; line-height:1.8;">Beyond the universal eight, New Cambridge offers <strong style="color:var(--tf-amber-pale);">thirteen professions</strong> found nowhere else in the Heptaverse: the <em>Bell Founder</em> who rings the spaces between worlds · the <em>Chronometer</em> who keeps time from unravelling · the <em>Flesh Sculptor</em> who repairs what industry breaks · the <em>Campanologist</em> who rings change-ringing reality itself · and nine others shaped by the unique horror of a city that chose progress over sanity.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══════════ RESONANCE COINS ═══════════ -->
+      <section class="coins-section">
+        <div class="section-inner">
+          <p class="section-eyebrow">Setting Unique Mechanic</p>
+          <h2 class="section-title" style="text-align:center;">The Resonance Coin System</h2>
+
+          <div class="coins-intro">
+            <p>In New Cambridge, <strong>true currency is not measured in pounds or shillings</strong> — it is measured in coins that ring with cosmic frequencies. The six types of Resonance Coin serve simultaneously as money, keys, and conduits for supernatural power, creating a shadow economy that operates parallel to ordinary Victorian commerce. They cannot be purchased. They must be <strong>earned</strong> — through cosmic exposure, entity bargains, ritual sacrifice, or professional service at the edge of the possible.</p>
+          </div>
+
+          <div class="coins-grid">
+
+            <div class="coin-card coin-bell-bronze">
+              <div class="coin-disc">🔔</div>
+              <div class="coin-name">Bell Bronze</div>
+              <span class="coin-domain">Time · Sound · Resonance</span>
+              <p class="coin-desc">Tarnished bronze that rings faintly when touched. Grows warm near temporal anomalies. Created in the Whitmore Grand Foundry through alchemical processes that are not discussed in polite society. Grants access to bell towers, temporal research chambers, and the acoustic machinery that underpins the city's supernatural infrastructure.</p>
+              <span class="coin-tag">Warns of temporal distortions</span>
+            </div>
+
+            <div class="coin-card coin-steam-silver">
+              <div class="coin-disc">⚙️</div>
+              <div class="coin-name">Steam Silver</div>
+              <span class="coin-domain">Force · Pressure · Industry</span>
+              <p class="coin-desc">Perpetually warm silver that trails mist in cool air. Impossible to tarnish. Condensed from the Ashford Central Works' master steam vents under conditions that would kill an unprotected worker. Grants access to pressure facilities, Ashford industrial complexes, and mechanical engineering workshops where physics is treated as a suggestion.</p>
+              <span class="coin-tag">Powers devices without pressure</span>
+            </div>
+
+            <div class="coin-card coin-tunnel-copper">
+              <div class="coin-disc">🗺️</div>
+              <div class="coin-name">Tunnel Copper</div>
+              <span class="coin-domain">Space · Dimension · Navigation</span>
+              <p class="coin-desc">Oxidized copper bearing patterns that resemble tunnel maps — patterns that shift when unobserved. Mined from the deepest Blackwood tunnels where reality grows thin and distances are approximate. Grants access to the underground networks, dimensional transit facilities, and spatial research laboratories where rooms are larger inside than out.</p>
+              <span class="coin-tag">Points toward tunnel entrances</span>
+            </div>
+
+            <div class="coin-card coin-dream-gold">
+              <div class="coin-disc">💤</div>
+              <div class="coin-name">Dream Gold</div>
+              <span class="coin-domain">Mind · Nightmare · Sleep</span>
+              <p class="coin-desc">Semi-real gold that changes weight based on the holder's mental state. Lighter when dreaming. Crystallized from the collective unconscious of New Cambridge's sleeping population — which has not slept peacefully since 1885. Grants access to dream parlors, oneiric research facilities, and the nightmare treatment centres that do a brisk trade.</p>
+              <span class="coin-tag">Records and replays dreams</span>
+            </div>
+
+            <div class="coin-card coin-void-iron">
+              <div class="coin-disc">⬛</div>
+              <div class="coin-name">Void Iron</div>
+              <span class="coin-domain">Negation · Absence · Entropy</span>
+              <p class="coin-desc">Light-absorbing black metal that seems to exist slightly outside normal space. Harvested from the spaces between realities, where the Void Touched first emerged. Disrupts supernatural effects. Creates small reality distortions. Grants access to void research facilities and entity containment services — at the cost of attracting attention from things beyond reality.</p>
+              <span class="coin-tag" style="color:#3a5070; border-color:rgba(50,75,120,0.3);">Extremely dangerous to carry</span>
+            </div>
+
+            <div class="coin-card coin-platinum">
+              <div class="coin-disc">💠</div>
+              <div class="coin-name">Resonance Platinum</div>
+              <span class="coin-domain">Master Currency · Universal Access</span>
+              <p class="coin-desc">Iridescent metal that hums with all harmonic frequencies simultaneously, appearing to contain shifting colours that have no name. Created only when all other coin types achieve perfect harmonic resonance — an event that has occurred fewer than one hundred times. Grants access to anywhere. Fewer than one hundred exist in the entire city.</p>
+              <span class="coin-tag" style="color:#8090a8; border-color:rgba(160,190,220,0.3);">Fewer than 100 in existence</span>
+            </div>
+
+          </div>
+
+          <div class="coins-note">
+            <strong>"Remember: Resonance Coins are not toys or simple currency. They are fragments of New Cambridge's soul, crystallized moments where the impossible became inevitable. Treat them with respect, or discover why the city's previous coin-holders disappeared into the fog."</strong>
+            <br/><em style="font-size:0.82rem; color:#3a5060;">— Warning posted at all registered Coin Exchange locations</em>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══════════ 2D10 SYSTEM ═══════════ -->
+      <section class="system-section">
+        <div class="section-inner">
+          <p class="section-eyebrow">Game System</p>
+          <h2 class="section-title">The 2d10 System</h2>
+
+          <div class="system-columns">
+            <div class="system-column">
+              <p class="system-column-label">First Path</p>
+              <p class="system-column-title">Martial</p>
+              <p>Physical prowess and combat training — from military discipline to the brutal pragmatism of factory floors. Those who solve New Cambridge's problems with force of body and will.</p>
+            </div>
+            <div class="system-column">
+              <p class="system-column-label">Second Path</p>
+              <p class="system-column-title">Mental</p>
+              <p>Knowledge, strategy, and the relentless analytical mind. In a city built on secrets, the ability to gather, interpret, and weaponise information is the sharpest blade available.</p>
+            </div>
+            <div class="system-column">
+              <p class="system-column-label">Third Path</p>
+              <p class="system-column-title">Karmic</p>
+              <p>Intuition and cosmic connection — the ability to sense the resonances behind the bell tones, the void pressing against reality, the shape of things that should not be perceived.</p>
+            </div>
+          </div>
+
+          <div class="system-formula">
+            <div class="formula-text">
+              2d10
+              <span class="op">+</span>
+              Attribute
+              <span class="op">+</span>
+              Skill
+              <span class="vs">vs.</span>
+              Difficulty
+            </div>
+            <div class="formula-desc">
+              Unified resolution across all settings. Roll doubles to trigger Class Resonance —<br/>
+              extraordinary effects unique to your profession in New Cambridge.
+            </div>
+          </div>
+
+          <div class="mechanic-callout">
+            <p class="mechanic-callout-label">Setting Unique Mechanic</p>
+            <p class="mechanic-callout-title">The Resonance Coin System</p>
+            <p>New Cambridge runs on a shadow economy invisible to those without the right coin. Six types of supernatural currency — each resonating with a different aspect of the city's industrial-cosmic infrastructure — serve simultaneously as money, keys, and power sources. They cannot be bought. They must be earned through cosmic exposure, entity bargains, or professional service at the edges of the possible. The Resonance Coin System is not just a mechanic; it is a map of what New Cambridge considers valuable, and a reminder that every source of power in this city has a cost that does not appear in the ledger.</p>
+          </div>
+
+          <div class="powered-by">
+            <div class="powered-by-logo">LOGO<br/>COMING<br/>SOON</div>
+            <div class="powered-by-text">
+              <strong>Ribhian Games LLC</strong>
+              Powered by the 2d10 Game System
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="site-footer">
+        <p class="footer-text">
+          &copy; 2025 <strong>Ribhian Games LLC</strong> &nbsp;·&nbsp;
+          <strong>Tendrils in the Fog</strong> is a Heptaverse Setting &nbsp;·&nbsp;
+          Powered by the <strong>Ribhian Games LLC 2d10 Game System</strong>
+        </p>
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="../js/site.js"></script>
+</body>
+</html>

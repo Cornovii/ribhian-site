@@ -1,0 +1,1075 @@
+<!--All Star Wrestlers Investigate page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Product page for All Star Wrestlers Investigate — the ASWI product family hub.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Star Wrestlers Investigate — Ribhian Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Russo+One&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:       #07060a;
+      --deep:        #0e0c12;
+      --stone:       #18151f;
+      --stone-mid:   #241f2e;
+      --stone-light: #332c42;
+      --gold:        #c9973a;
+      --gold-bright: #e8b84b;
+      --gold-pale:   #f2d78a;
+      --crimson:     #8c1f1f;
+      --crimson-mid: #a62828;
+      --carnival:    #c43b1a;
+      --carnival-lt: #e0501f;
+      --ash:         #c8bfb0;
+      --parchment:   #e8dfc8;
+      --text-body:   #bfb49e;
+      --text-dim:    #7a6e5e;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--text-body);
+      font-family: 'Quicksand', sans-serif;
+      font-size: 18px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      width: 100%;
+      min-height: 65vh;
+      background: linear-gradient(180deg, #0a080f 0%, #12091a 40%, #1a0d08 100%);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 0.8rem;
+    }
+
+    .aswi-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── PAGE INNER ── */
+    .page-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 4rem 2.5rem 6rem;
+    }
+
+    .hero-logo {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .hero-logo-img {
+      max-width: 340px;
+      width: 70%;
+      filter: drop-shadow(0 0 24px rgba(201,151,58,0.6));
+    }
+
+    /* Logo placeholder (SVG-based, matches other pages) */
+    .logo-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-placeholder svg {
+      filter: drop-shadow(0 0 18px rgba(201,151,58,0.5));
+    }
+
+    .logo-placeholder-label {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* ── SYSTEM BADGE ── */
+    .system-badge {
+      background: linear-gradient(135deg, var(--stone) 0%, var(--stone-mid) 100%);
+      border-top: 1px solid rgba(201,151,58,0.25);
+      border-bottom: 1px solid rgba(201,151,58,0.25);
+      padding: 1.4rem 2rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .system-badge-text {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .system-badge-text strong {
+      color: var(--gold);
+      display: block;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      margin-top: 0.2rem;
+    }
+
+    .system-divider {
+      width: 1px;
+      height: 36px;
+      background: rgba(201,151,58,0.3);
+    }
+
+    /* ── SETTING TITLE ── */
+    .aswi-setting-title {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: #f5d060;
+      text-shadow:
+        0 0 6px rgba(255,255,255,0.9),
+        0 0 18px rgba(245,208,96,0.95),
+        0 0 40px rgba(196,59,26,0.75),
+        0 0 80px rgba(196,59,26,0.40),
+        3px 3px 0px rgba(196,59,26,0.8),
+        0 2px 4px rgba(0,0,0,0.98);
+      text-align: center;
+      margin-bottom: 2rem;
+      letter-spacing: 0.08em;
+      line-height: 1.05;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .section-eyebrow {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #e05828;
+      text-shadow:
+        0 0 6px rgba(224,88,40,1.0),
+        0 0 16px rgba(196,59,26,0.9),
+        0 0 35px rgba(196,59,26,0.55);
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--gold-pale);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .section-rule {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--carnival), transparent);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-intro {
+      font-size: 1.05rem;
+      color: var(--text-body);
+      max-width: 680px;
+      line-height: 1.8;
+    }
+
+    /* ── OVERVIEW ── */
+    .overview-section {
+      margin-bottom: 5rem;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .overview-panel {
+      background: linear-gradient(135deg, var(--stone) 0%, var(--stone-mid) 100%);
+      border: 1px solid rgba(201,151,58,0.15);
+      border-left: 3px solid var(--carnival);
+      padding: 1.8rem;
+      border-radius: 2px;
+    }
+
+    .overview-panel h3 {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .overview-panel p {
+      font-size: 0.95rem;
+      color: #b8a88a;
+      line-height: 1.75;
+    }
+
+    @media (max-width: 700px) {
+      .overview-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── GIMMICKS / PATHS ── */
+    .gimmicks-section { margin-bottom: 5rem; }
+
+    .gimmick-tradition-label {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #f5d060;
+      text-shadow: 0 0 8px rgba(245,208,96,0.8), 0 0 20px rgba(245,208,96,0.4);
+      display: block;
+      margin: 2.5rem 0 1rem;
+      border-bottom: 1px solid rgba(196,59,26,0.25);
+      padding-bottom: 0.5rem;
+    }
+
+    .gimmicks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    .gimmick-card {
+      border: 1px solid rgba(196,59,26,0.18);
+      background: rgba(14,12,10,0.88);
+      padding: 1.4rem;
+      position: relative;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+    }
+
+    .gimmick-card:hover {
+      border-color: rgba(245,208,96,0.35);
+      background: rgba(24,18,10,0.95);
+      transform: translateY(-2px);
+    }
+
+    .gimmick-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,208,96,0.22), transparent);
+    }
+
+    .gimmick-header { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 0.4rem; }
+    .gimmick-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+    .gimmick-name {
+      font-family: 'Bangers', cursive;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      color: #f5d060;
+      line-height: 1.05;
+    }
+
+    .gimmick-tagline {
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--ash);
+      margin-bottom: 0.6rem;
+      line-height: 1.4;
+    }
+
+    .gimmick-desc {
+      font-size: 0.88rem;
+      color: var(--text-body);
+      line-height: 1.65;
+      margin-bottom: 0.8rem;
+    }
+
+    .gimmick-specs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.6rem; }
+
+    .gimmick-spec {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.5rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #e05828;
+      border: 1px solid rgba(196,59,26,0.30);
+      padding: 0.18rem 0.5rem;
+      background: rgba(30,10,4,0.40);
+    }
+
+    .gimmick-signature {
+      margin-top: 0.6rem;
+      padding-top: 0.6rem;
+      border-top: 1px solid rgba(196,59,26,0.12);
+      font-size: 0.83rem;
+      color: #f5d060;
+      font-style: italic;
+    }
+
+    .gimmick-signature strong {
+      font-style: normal;
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ── VILLAINS ── */
+    .villains-section { margin-bottom: 5rem; }
+
+    .villains-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .villain-card {
+      border: 1px solid rgba(245,208,96,0.12);
+      background: rgba(10,8,14,0.90);
+      padding: 1.5rem;
+      border-top: 2px solid rgba(196,59,26,0.7);
+      position: relative;
+      transition: border-color 0.25s, background 0.25s;
+    }
+
+    .villain-card:hover { border-top-color: #f5d060; background: rgba(18,14,22,0.95); }
+
+    .villain-icon { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; }
+
+    .villain-name {
+      font-family: 'Bangers', cursive;
+      font-size: 1.25rem;
+      letter-spacing: 0.06em;
+      color: #e05828;
+      margin-bottom: 0.2rem;
+    }
+
+    .villain-tagline {
+      font-style: italic;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
+    }
+
+    .villain-desc {
+      font-size: 0.88rem;
+      color: var(--text-body);
+      line-height: 1.65;
+      margin-bottom: 0.7rem;
+    }
+
+    .villain-reveal {
+      margin-top: 0.7rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid rgba(245,208,96,0.10);
+      font-size: 0.85rem;
+      color: #f5d060;
+    }
+
+    .villain-reveal strong {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: block;
+      margin-bottom: 0.3rem;
+      font-style: normal;
+    }
+
+    @media (max-width: 640px) {
+      .gimmicks-grid, .villains-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── TALENTS ── */
+    /* ── TALENTS ── */
+    .talents-section {
+      margin-bottom: 5rem;
+    }
+
+    .talents-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .talent-pill {
+      background: var(--stone);
+      border: 1px solid rgba(201,151,58,0.15);
+      padding: 0.9rem 0.8rem;
+      text-align: center;
+      border-radius: 2px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .talent-pill:hover {
+      background: var(--stone-mid);
+      border-color: rgba(201,151,58,0.4);
+    }
+
+    .talent-pill-name {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 700px) {
+      .talents-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── ADVENTURE STRUCTURE ── */
+    .adventure-section {
+      margin-bottom: 5rem;
+    }
+
+    .adventure-steps {
+      margin-top: 2rem;
+      position: relative;
+    }
+
+    .adventure-steps::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--carnival), transparent);
+    }
+
+    .adventure-step {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+      padding-left: 0.5rem;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: var(--carnival);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-content {
+      background: var(--stone);
+      border: 1px solid rgba(201,151,58,0.12);
+      padding: 1.2rem 1.5rem;
+      flex: 1;
+      border-radius: 2px;
+    }
+
+    .step-content h4 {
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .step-content p {
+      font-size: 0.9rem;
+      color: #a89878;
+      line-height: 1.65;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      background: var(--deep);
+      border-top: 1px solid rgba(201,151,58,0.15);
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: 'Bangers', cursive;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-tagline {
+      font-size: 0.8rem;
+      color: var(--text-body);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+<div id="topbar-mount"></div>
+<div class="site-wrapper">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar-mount"></div>
+
+  <main class="main-content">
+
+    <!-- ═══════════════════════════════════════════════════════ HERO -->
+    <section class="hero">
+      <img class="aswi-hero-bg" src="../images/all-star-wrestlers-investigates-bg.jpg" alt="" />
+      <div style="position:relative; z-index:2; width:100%; text-align:center;">
+        <div style="display:flex; align-items:center; justify-content:center; gap:1.2rem; flex-wrap:nowrap; width:100%;">
+          <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem; padding:0.5rem 1.2rem; border:1px solid rgba(196,59,26,0.55); background:rgba(7,6,10,0.60); font-family:'Russo One',sans-serif; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:#f5d060; text-shadow:0 0 8px rgba(245,208,96,0.8); flex:1; max-width:220px;">🤼 Pro Wrestling</div>
+          <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem; padding:0.5rem 1.2rem; border:1px solid rgba(196,59,26,0.55); background:rgba(7,6,10,0.60); font-family:'Russo One',sans-serif; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:#f5d060; text-shadow:0 0 8px rgba(245,208,96,0.8); flex:1; max-width:220px;">🎪 Carnival Mysteries</div>
+          <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem; padding:0.5rem 1.2rem; border:1px solid rgba(196,59,26,0.55); background:rgba(7,6,10,0.60); font-family:'Russo One',sans-serif; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:#f5d060; text-shadow:0 0 8px rgba(245,208,96,0.8); flex:1; max-width:220px;">🎲 2d10 System</div>
+          <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem; padding:0.5rem 1.2rem; border:1px solid rgba(196,59,26,0.55); background:rgba(7,6,10,0.60); font-family:'Russo One',sans-serif; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:#f5d060; text-shadow:0 0 8px rgba(245,208,96,0.8); flex:1; max-width:220px;">👻 Saturday Morning</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ SYSTEM BADGE -->
+    <div class="system-badge">
+      <div class="system-badge-text">
+        System
+        <strong>Ribhian Games 2d10</strong>
+      </div>
+      <div class="system-divider"></div>
+      <div class="system-badge-text">
+        Published by
+        <strong>Ribhian Games LLC</strong>
+      </div>
+      <div class="system-divider"></div>
+      <div class="system-badge-text">
+        Genre
+        <strong>Mystery · Comedy · Wrestling</strong>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ MAIN CONTENT -->
+    <div class="page-inner">
+
+      <!-- OVERVIEW -->
+      <section class="overview-section">
+        <div class="section-header">
+          <h2 class="aswi-setting-title">All Star Wrestlers<br>Investigate</h2>
+          <span class="section-eyebrow">The Concept</span>
+          <h2 class="section-title">Pro Wrestlers. Carnival Mysteries. Supernatural Shenanigans.</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">
+            All Star Wrestlers Investigate throws the biggest personalities from the 80s and 90s squared circle into a world ripped straight from Saturday morning cartoons. When spooky things start happening at carnivals and fairgrounds, there's only one team qualified to body-slam the truth out of whatever's lurking behind the curtain.
+          </p>
+        </div>
+
+        <div class="overview-grid">
+          <div class="overview-panel">
+            <h3>The Tone</h3>
+            <p>Campy, theatrical, and gleefully over-the-top. Every mystery ends with an unmasking, every villain gets a monologue, and every wrestler has a catchphrase for the occasion. Family-friendly chaos with Saturday morning cartoon sensibilities.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>The Setting</h3>
+            <p>Carnivals, fairgrounds, and travelling sideshows. Strange things happen here — haunted strongmen, phantom fortune tellers, monsters that turn out to be disgruntled employees with a grudge and a fog machine.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>The System</h3>
+            <p>The Ribhian Games 2d10 system powers All Star Wrestlers Investigate — fast, dramatic, and built for big moments. Roll 2d10 against your stats, spend from your Fortune Pool to push harder, and rolling doubles refills it no matter what. Every session has a Surge moment waiting to happen.</p>
+          </div>
+          <div class="overview-panel">
+            <h3>The Characters</h3>
+            <p>Each wrestler is built around a Gimmick — their in-ring persona and out-of-ring identity — paired with Talents that define their toolkit. From technical masterminds to airborne highflyers to supernatural outsiders, the roster covers every crowd-pleasing archetype.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ALIGNMENT / WHO YOU ARE -->
+      <section class="gimmicks-section">
+        <div class="section-header">
+          <span class="section-eyebrow">Who You Are</span>
+          <h2 class="section-title">Alignment — Face, Heel, or Tweener</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Before you choose your Gimmick, you choose your alignment — your relationship with the crowd. It shapes your Work Pool, your Heat track, and how the world reacts to everything you do inside and outside the ring.</p>
+        </div>
+
+        <span class="gimmick-tradition-label">🎭 Choose Your Relationship With The Crowd</span>
+        <div class="gimmicks-grid">
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">⭐</span>
+              <div class="gimmick-name">The Face</div>
+            </div>
+            <div class="gimmick-tagline">"The crowd is my power. Every cheer fills me up. Every boo makes me stronger."</div>
+            <div class="gimmick-desc">The hero. The crowd favourite. You fight with integrity, defend the weak, and give the people what they came to see. Your strength comes from the audience — when they believe in you, you are genuinely unstoppable.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Heat +5 or higher</span>
+              <span class="gimmick-spec">Work Pool +2</span>
+              <span class="gimmick-spec">Pop bonus active</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Alignment Benefit</strong>
+              Strong Face (+5 or higher Heat): +2 Work Pool. Crowd cheers restore Fortune Pool on doubles.
+            </div>
+          </div>
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">💀</span>
+              <div class="gimmick-name">The Heel</div>
+            </div>
+            <div class="gimmick-tagline">"Your boos? That's music to me. Keep hating — it means I'm doing my job."</div>
+            <div class="gimmick-desc">The villain. The crowd hates you and that's exactly how you like it. You cheat, you manipulate, you take shortcuts — and you thrive on every boo and insult hurled from the stands. Heel Heat is still Heat.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Heat -5 or lower</span>
+              <span class="gimmick-spec">Work Pool +2</span>
+              <span class="gimmick-spec">Intimidation bonus</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Alignment Benefit</strong>
+              Strong Heel (-5 or lower Heat): +2 Work Pool. Cheap heat and crowd antagonism fuel your abilities.
+            </div>
+          </div>
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">🎭</span>
+              <div class="gimmick-name">The Tweener</div>
+            </div>
+            <div class="gimmick-tagline">"I don't care if they cheer or boo. I care if they're watching."</div>
+            <div class="gimmick-desc">The wildcard. Neither hero nor villain, you operate in the grey — respected, unpredictable, and impossible to categorise. The crowd never quite knows how to feel about you, which is exactly where you want them.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Heat near 0</span>
+              <span class="gimmick-spec">Work Pool +0</span>
+              <span class="gimmick-spec">Flexible allegiance</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Alignment Benefit</strong>
+              Tweener (Heat 0): No Work Pool bonus, but Heat can shift rapidly — a single moment can turn you Face or Heel.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- GIMMICKS -->
+      <section class="gimmicks-section">
+        <div class="section-header">
+          <span class="section-eyebrow">Who You Become</span>
+          <h2 class="section-title">The Gimmicks</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Your Gimmick is your character class — your wrestling persona, in-ring style, and signature capabilities. All Gimmicks follow the 2-1-1 pattern: two Primary Currents at 12+, one Secondary at 10+, and Pop at 10+ for everyone. You need crowd connection no matter what.</p>
+        </div>
+
+        <!-- In-Ring Competitors -->
+        <span class="gimmick-tradition-label">🤼 In-Ring Competitors</span>
+        <div class="gimmicks-grid">
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">💪</span>
+              <div class="gimmick-name">The Strongman</div>
+            </div>
+            <div class="gimmick-tagline">"I am the strongest there is, brother! When I flex, mountains tremble!"</div>
+            <div class="gimmick-desc">The powerhouse of professional wrestling — raw strength, devastating impact moves, and an intimidating presence. The most resilient Gimmick in the locker room. When subtlety fails, raw strength does not.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Body 12+</span>
+              <span class="gimmick-spec">TF 12+</span>
+              <span class="gimmick-spec">Savvy 10+</span>
+              <span class="gimmick-spec">Vitality d12</span>
+              <span class="gimmick-spec">Work Pool +2</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Signature Abilities</strong>
+              Show of Strength · No-Sell · Big Boot · Gorilla Press · Unstoppable Force · Finishing Power Bomb
+            </div>
+          </div>
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">🧠</span>
+              <div class="gimmick-name">The Technician</div>
+            </div>
+            <div class="gimmick-tagline">"Excellence of execution. Every move has a counter, every hold has a purpose."</div>
+            <div class="gimmick-desc">The master of mat wrestling. You chain moves seamlessly, counter everything thrown at you, and control every match through superior ring psychology. The smartest wrestler in the room — and they know it.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Wits 12+</span>
+              <span class="gimmick-spec">Savvy 12+</span>
+              <span class="gimmick-spec">Speed/TF 10+</span>
+              <span class="gimmick-spec">Vitality d8</span>
+              <span class="gimmick-spec">Work Pool +1</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Signature Abilities</strong>
+              Counter Wrestling · Technical Precision · Perfect Execution · Ring General · Submission Specialist · Finishing Submission
+            </div>
+          </div>
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">🦅</span>
+              <div class="gimmick-name">The High-Flyer</div>
+            </div>
+            <div class="gimmick-tagline">"Gravity forgot about me. When I'm up top, miracles happen!"</div>
+            <div class="gimmick-desc">The death-defying aerial artist. Soar through the air with grace and precision, taking risks that make crowds gasp and opponents regret looking up. High risk, high reward — every night is a potential career-defining moment.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Speed 12+</span>
+              <span class="gimmick-spec">Luck 12+</span>
+              <span class="gimmick-spec">Body 10+</span>
+              <span class="gimmick-spec">Vitality d8</span>
+              <span class="gimmick-spec">Work Pool +1</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Signature Abilities</strong>
+              Evasive Movement · Aerial Superiority · Springboard Attack · Death-Defying Spot · Innovative Offense · Finishing Shooting Star Press
+            </div>
+          </div>
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">🪑</span>
+              <div class="gimmick-name">The Brawler</div>
+            </div>
+            <div class="gimmick-tagline">"Forget technical wrestling. Forget high-flying. This is a FIGHT!"</div>
+            <div class="gimmick-desc">The street-fighting hardcore specialist who turns every match into a war. Thrives in chaos, uses weapons creatively, and has the scars to prove it. Rules are suggestions and pain is a language everyone understands.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Body 12+</span>
+              <span class="gimmick-spec">TF 12+</span>
+              <span class="gimmick-spec">Wits 10+</span>
+              <span class="gimmick-spec">Vitality d10</span>
+              <span class="gimmick-spec">Work Pool +1</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Signature Abilities</strong>
+              Stiff Shots · Hardcore Resilience · Hardcore Tactics · Brawling Combo · Extreme Spot · Finishing Piledriver
+            </div>
+          </div>
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">🤝</span>
+              <div class="gimmick-name">The Tag Team Specialist</div>
+            </div>
+            <div class="gimmick-tagline">"Together we're unstoppable. Alone, we're good. As a team, we're legendary!"</div>
+            <div class="gimmick-desc">The master of coordination — whether half of a duo or stable anchor. Makes everyone better through devastating combinations and intuitive partnership that singles wrestlers cannot replicate. Work Pool can be shared with a partner.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Savvy 12+</span>
+              <span class="gimmick-spec">Speed/Body 12+</span>
+              <span class="gimmick-spec">Pop 10+</span>
+              <span class="gimmick-spec">Vitality d10</span>
+              <span class="gimmick-spec">Work Pool +1</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Signature Abilities</strong>
+              Tag Team Coordination · Quick Tag · Double Team Maneuver · Cut the Ring · Hot Tag Comeback · Finishing Team Maneuver
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Support Roles -->
+        <span class="gimmick-tradition-label">🎤 Support Roles</span>
+        <div class="gimmicks-grid">
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">🕴</span>
+              <div class="gimmick-name">The Manager</div>
+            </div>
+            <div class="gimmick-tagline">"My client is the most dangerous wrestler in this company. I'm the brains behind the operation."</div>
+            <div class="gimmick-desc">The mastermind outside the ring. You don't wrestle — you guide careers, interfere strategically, build stables, and turn good wrestlers into champions. The largest Work Pool reflects how much your ringside presence is worth.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Pop 12+</span>
+              <span class="gimmick-spec">Wits 12+</span>
+              <span class="gimmick-spec">Savvy 10+</span>
+              <span class="gimmick-spec">Vitality d6</span>
+              <span class="gimmick-spec">Work Pool +3</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Signature Abilities</strong>
+              Strategic Interference · Managerial Presence · Foreign Object · Coaching · Stable Strategy · Ultimate Screwjob
+            </div>
+          </div>
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">🎙</span>
+              <div class="gimmick-name">The Ring Announcer</div>
+            </div>
+            <div class="gimmick-tagline">"Ladies and gentlemen, from Parts Unknown, weighing in at 285 pounds... INTRODUCING..."</div>
+            <div class="gimmick-desc">The voice of professional wrestling. Control crowd energy, build anticipation, and make every match feel like history in the making. A perfectly timed catchphrase from the announcer changes everything — including the outcome.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Pop 12+</span>
+              <span class="gimmick-spec">Savvy 12+</span>
+              <span class="gimmick-spec">Wits 10+</span>
+              <span class="gimmick-spec">Vitality d6</span>
+              <span class="gimmick-spec">Work Pool +3</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Signature Abilities</strong>
+              Hype Introduction · Voice of Authority · Dramatic Pause · Story Enhancement · Catchphrase Moment · Legendary Introduction
+            </div>
+          </div>
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">📋</span>
+              <div class="gimmick-name">The Jobber</div>
+            </div>
+            <div class="gimmick-tagline">"Somebody's gotta lose. That doesn't mean I can't make them look REALLY good doing it."</div>
+            <div class="gimmick-desc">The consummate professional who makes other wrestlers look like a million bucks. Ironically one of the most skilled Gimmicks — making someone look good takes more craft than looking good yourself. Highest base Work Pool in the game.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Savvy 12+</span>
+              <span class="gimmick-spec">TF 12+</span>
+              <span class="gimmick-spec">Pop 10+</span>
+              <span class="gimmick-spec">Vitality d8</span>
+              <span class="gimmick-spec">Work Pool +4</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Signature Abilities</strong>
+              Perfect Bump · Enhancement Specialist · Get Your Shit In · Sympathetic Selling · Building Future Stars · Surprise Victory
+            </div>
+          </div>
+
+          <div class="gimmick-card">
+            <div class="gimmick-header">
+              <span class="gimmick-icon">🔔</span>
+              <div class="gimmick-name">The Referee</div>
+            </div>
+            <div class="gimmick-tagline">"I am the law in this ring. You want to argue? Take it up with the commission."</div>
+            <div class="gimmick-desc">The official — you enforce the rules, or choose not to. An advanced optional Gimmick for players who want a unique support role. Best in campaigns with multiple wrestlers. The ref bump, the fast count, the screwjob — all in your hands.</div>
+            <div class="gimmick-specs">
+              <span class="gimmick-spec">Wits 12+</span>
+              <span class="gimmick-spec">Savvy 12+</span>
+              <span class="gimmick-spec">TF 10+</span>
+              <span class="gimmick-spec">Vitality d6</span>
+              <span class="gimmick-spec">Work Pool +2</span>
+            </div>
+            <div class="gimmick-signature">
+              <strong>Signature Abilities</strong>
+              Official's Authority · Match Control · Referee Bump · Judgment Call · Fighting Referee · Screwjob Architect
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- VILLAINS -->
+      <section class="villains-section">
+        <div class="section-header">
+          <span class="section-eyebrow">The Mystery Component</span>
+          <h2 class="section-title">Classic Carnie Villains</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Every ASWI mystery follows the golden rule: it was never actually supernatural. Behind every monster is a disgruntled employee with a grudge and access to carnival equipment. The wrestlers just have to figure out which one.</p>
+        </div>
+
+        <div class="villains-grid">
+
+          <div class="villain-card">
+            <span class="villain-icon">💪</span>
+            <div class="villain-name">The Haunted Strongman</div>
+            <div class="villain-tagline">"He's been lifting... FROM BEYOND THE GRAVE!"</div>
+            <div class="villain-desc">A massive figure of impossible strength stalking the carnival at night, bending steel bars and lifting equipment no human should move. Witnesses report glowing eyes and an unearthly groan echoing through the midway.</div>
+            <div class="villain-reveal">
+              <strong>🔍 True Identity</strong>
+              The fired carnival accountant — using hydraulic assists hidden under a costume and phosphorescent face paint. The impossible lifts are rigged with counterweights.
+            </div>
+          </div>
+
+          <div class="villain-card">
+            <span class="villain-icon">🍬</span>
+            <div class="villain-name">The Cotton Candy Phantom</div>
+            <div class="villain-tagline">"Sticky pink webs everywhere. Nobody is safe."</div>
+            <div class="villain-desc">A spectral figure that leaves trails of sticky pink webbing across the carnival, tangling rides and trapping unfortunate victims. The webbing is bizarrely resistant and smells of artificial strawberry.</div>
+            <div class="villain-reveal">
+              <strong>🔍 True Identity</strong>
+              The rival carnival owner — operating a heavily modified industrial cotton candy machine on a concealed cart. The supernatural webs are just very, very efficient candy floss.
+            </div>
+          </div>
+
+          <div class="villain-card">
+            <span class="villain-icon">🔮</span>
+            <div class="villain-name">The Fortune Teller's Floating Head</div>
+            <div class="villain-tagline">"Madame Mysteria sees ALL!"</div>
+            <div class="villain-desc">A disembodied glowing head appears in the fortune teller's tent, speaking prophecies and terrifying customers. The head floats, rotates, and seems to pass through solid objects with impossible ease.</div>
+            <div class="villain-reveal">
+              <strong>🔍 True Identity</strong>
+              A network of mirrors and projection equipment controlled by the tent owner's nephew. The prophecies are educated guesses based on carnival gossip and local newspaper research.
+            </div>
+          </div>
+
+          <div class="villain-card">
+            <span class="villain-icon">🎡</span>
+            <div class="villain-name">The Tunnel of Love Monster</div>
+            <div class="villain-tagline">"The rides are being sabotaged. Love hurts."</div>
+            <div class="villain-desc">A lurking figure systematically sabotaging the carnival's most beloved attraction — boats stall, lights flicker, terrifying sounds echo through the darkness. The sabotage is elaborate and deeply personal.</div>
+            <div class="villain-reveal">
+              <strong>🔍 True Identity</strong>
+              The heartbroken maintenance worker whose partner left them for someone they met on the very ride they now haunt. Precision sabotage. Very relatable, honestly.
+            </div>
+          </div>
+
+          <div class="villain-card">
+            <span class="villain-icon">💨</span>
+            <div class="villain-name">The Human Cannonball Ghost</div>
+            <div class="villain-tagline">"Flying through the air... mysteriously."</div>
+            <div class="villain-desc">A glowing figure soars overhead between the carnival tents at night performing impossible aerial maneuvers. No cannon fires. No net catches it. It simply flies — and leaves no footprints on landing.</div>
+            <div class="villain-reveal">
+              <strong>🔍 True Identity</strong>
+              The disgraced stunt coordinator — using hidden zip lines installed during the off-season, a luminescent suit, and precisely timed launches from a concealed compressed air device.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TALENTS -->
+      <section class="talents-section">
+        <div class="section-header">
+          <span class="section-eyebrow">Skills & Specialisations</span>
+          <h2 class="section-title">Talents</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Talents define what your wrestler excels at — inside and outside the ring. Every Gimmick has Primary Talents that come naturally and Secondary Talents that require more effort to master.</p>
+        </div>
+
+        <div class="talents-grid">
+          <div class="talent-pill"><div class="talent-pill-name">Submissions</div></div>
+          <div class="talent-pill"><div class="talent-pill-name">Acrobatics</div></div>
+          <div class="talent-pill"><div class="talent-pill-name">Off the Top</div></div>
+          <div class="talent-pill"><div class="talent-pill-name">Strikes</div></div>
+          <div class="talent-pill"><div class="talent-pill-name">Power Moves</div></div>
+          <div class="talent-pill"><div class="talent-pill-name">Unstoppable</div></div>
+          <div class="talent-pill"><div class="talent-pill-name">Improvised Weapons</div></div>
+          <div class="talent-pill"><div class="talent-pill-name">Pain Resistance</div></div>
+          <div class="talent-pill"><div class="talent-pill-name">Crowd Control</div></div>
+          <div class="talent-pill"><div class="talent-pill-name">Mic Work</div></div>
+        </div>
+      </section>
+
+      <!-- ADVENTURE STRUCTURE -->
+      <section class="adventure-section">
+        <div class="section-header">
+          <span class="section-eyebrow">How It Plays</span>
+          <h2 class="section-title">The Classic Mystery Format</h2>
+          <div class="section-rule"></div>
+          <p class="section-intro">Every ASWI adventure follows the seven-beat structure that made Saturday morning cartoons legendary. From the opening hook to the final unmasking, the formula never gets old.</p>
+        </div>
+
+        <div class="adventure-steps">
+          <div class="adventure-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Setup</h4>
+              <p>The wrestlers arrive at the carnival for a charity wrestling match. Everything seems perfectly normal — suspiciously normal.</p>
+            </div>
+          </div>
+          <div class="adventure-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>The Hook</h4>
+              <p>A spooky supernatural event occurs. The carnival owner, frantic and desperate, begs the only people around who can help.</p>
+            </div>
+          </div>
+          <div class="adventure-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Investigation</h4>
+              <p>Split up to search for clues. Classic cartoon corridor chases ensue. Suspects are identified. Red herrings abound.</p>
+            </div>
+          </div>
+          <div class="adventure-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Confrontation</h4>
+              <p>A wrestling match against the monster and their henchmen. The ring is the great equaliser.</p>
+            </div>
+          </div>
+          <div class="adventure-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>The Trap</h4>
+              <p>An elaborate scheme combining wrestling moves with carnival equipment. Timing, teamwork, and spectacle required.</p>
+            </div>
+          </div>
+          <div class="adventure-step">
+            <div class="step-number">6</div>
+            <div class="step-content">
+              <h4>Unmasking</h4>
+              <p>"Old Man Jenkins! The Dunking Booth Operator!" The monster is revealed — and it's always someone with a motive.</p>
+            </div>
+          </div>
+          <div class="adventure-step">
+            <div class="step-number">7</div>
+            <div class="step-content">
+              <h4>Confession</h4>
+              <p>"And I would've gotten away with it too, if it weren't for you meddling wrestlers!" Curtain falls. Catchphrases delivered.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /page-inner -->
+
+    <!-- ═══════════════════════════════════════════════════════ FOOTER -->
+    <footer class="page-footer">
+      <div class="footer-brand">Ribhian Games LLC</div>
+      <div class="footer-tagline">All Star Wrestlers Investigate · A Ribhian Games 2d10 Setting</div>
+    </footer>
+
+  </main>
+</div>
+
+<script src="../js/site.js"></script>
+</body>
+</html>

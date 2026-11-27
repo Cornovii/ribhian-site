@@ -1,0 +1,917 @@
+<!--Home page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved Note: Includes Dire Consequences convention promo GIF + live
+countdown timer in the upper-right corner, linking to events.html#dire-consequences.
+The whole promo (GIF + countdown) is currently switched off since the event has passed; its markup, styles and
+script are kept in this file for reuse.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ribhian Games LLC</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── HOMEPAGE-SPECIFIC STYLES ── */
+
+    /* Dire Consequences corner promo */
+    .dc-promo {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+
+    .dc-promo:hover {
+      transform: scale(1.04);
+    }
+
+    .dc-promo img {
+      width: 200px;
+      height: auto;
+      display: block;
+      border: 1px solid rgba(201,151,58,0.35);
+      border-radius: 6px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+    }
+
+    .dc-promo-countdown {
+      margin-top: 0.7rem;
+      text-align: center;
+      background: rgba(8,7,7,0.75);
+      border: 1px solid rgba(201,151,58,0.3);
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      line-height: 1.25;
+    }
+
+    .dc-promo-countdown .dc-days {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold-bright, #e8b84b);
+    }
+
+    /* Countdown switched off after the event. To show it again, remove
+       "is-hidden" from the dc-promo-countdown span in the hero section. */
+    .dc-promo-countdown.is-hidden {
+      display: none;
+    }
+
+    .dc-promo-countdown .dc-label {
+      display: block;
+      margin-top: 0.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.65), 0 0 24px rgba(201,151,58,0.5);
+    }
+
+    @media (max-width: 680px) {
+      .dc-promo {
+        position: static;
+        margin: 0 auto 1.5rem;
+      }
+    }
+
+    /* Hero */
+    .home-hero {
+      position: relative;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 3rem 4rem;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--black) 0%, var(--deep) 100%);
+    }
+
+    .home-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(140,31,31,0.14) 0%, transparent 65%),
+        radial-gradient(ellipse 80% 40% at 50% 90%, rgba(201,151,58,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Hex grid bg */
+    .home-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(60deg, rgba(201,151,58,0.025) 0px, rgba(201,151,58,0.025) 1px, transparent 1px, transparent 30px),
+        repeating-linear-gradient(-60deg, rgba(201,151,58,0.025) 0px, rgba(201,151,58,0.025) 1px, transparent 1px, transparent 30px),
+        repeating-linear-gradient(0deg, rgba(201,151,58,0.025) 0px, rgba(201,151,58,0.025) 1px, transparent 1px, transparent 30px);
+      pointer-events: none;
+    }
+
+    .home-hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .rg-logo-wrap {
+      margin: 0 auto 2rem;
+      width: 160px;
+      height: 160px;
+      filter: drop-shadow(0 0 30px rgba(201,151,58,0.3));
+      animation: logo-pulse 4s ease-in-out infinite;
+    }
+
+    .rg-logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @keyframes logo-pulse {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(201,151,58,0.25)); }
+      50%       { filter: drop-shadow(0 0 45px rgba(201,151,58,0.5)); }
+    }
+
+    .home-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+      animation: fade-up 0.8s ease both;
+    }
+
+    .home-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      color: var(--parchment);
+      text-shadow: 0 0 60px rgba(201,151,58,0.25), 0 2px 4px rgba(0,0,0,0.8);
+      margin-bottom: 0.4rem;
+      animation: fade-up 0.8s 0.1s ease both;
+    }
+
+    .home-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--text-dim);
+      max-width: 480px;
+      margin: 0.8rem auto 0;
+      animation: fade-up 0.8s 0.2s ease both;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── CONTENT SECTIONS ── */
+    .home-section {
+      padding: 5rem 3rem;
+      position: relative;
+    }
+
+    .home-section + .home-section {
+      border-top: 1px solid rgba(201,151,58,0.1);
+    }
+
+    .home-section--dark { background: var(--stone); }
+    .home-section--deeper { background: var(--deep); }
+
+    /* About prose */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      max-width: 900px;
+      margin: 2.5rem auto 0;
+    }
+
+    @media (max-width: 720px) { .about-grid { grid-template-columns: 1fr; gap: 1.5rem; } }
+
+    .about-col p {
+      font-size: 1.08rem;
+      color: var(--text-body);
+      line-height: 1.9;
+    }
+    .about-col p + p { margin-top: 1rem; }
+    .about-col p strong { color: var(--gold-pale); }
+
+    /* 2d10 mechanic cards */
+    .mechanic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5px;
+      margin: 2.5rem 0;
+      border: 1px solid rgba(201,151,58,0.15);
+    }
+
+    .mechanic-card {
+      background: var(--stone);
+      padding: 2rem 1.6rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .mechanic-card:hover { background: var(--stone-mid); }
+
+    .mechanic-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .mechanic-card:hover::before { opacity: 1; }
+
+    .mechanic-num {
+      position: absolute;
+      top: 0.8rem; right: 1rem;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: rgba(201,151,58,0.08);
+      user-select: none;
+    }
+
+    .mechanic-icon { font-size: 1.8rem; margin-bottom: 0.8rem; display: block; }
+
+    .mechanic-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+
+    .mechanic-body {
+      font-size: 0.95rem;
+      color: var(--text-body);
+      line-height: 1.65;
+    }
+
+    .mechanic-body strong { color: var(--gold-pale); }
+
+    /* System prose */
+    .system-prose {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .system-prose p {
+      font-size: 1.08rem;
+      color: var(--text-body);
+      line-height: 1.9;
+    }
+    .system-prose p + p { margin-top: 1rem; }
+    .system-prose strong { color: var(--gold-pale); }
+
+    /* Powered by strip */
+    .powered-by {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 3.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(201,151,58,0.15);
+    }
+
+    .pb-logo {
+      width: 90px; height: 90px;
+      border: 1px solid rgba(201,151,58,0.3);
+      box-shadow: 0 0 16px rgba(201,151,58,0.12);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .pb-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .pb-text .pb-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.2rem;
+    }
+
+    .pb-text .pb-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .pb-text .pb-sub {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    /* Products teaser grid */
+    .products-teaser {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1px;
+      border: 1px solid rgba(201,151,58,0.12);
+      margin-top: 2.5rem;
+    }
+
+    .product-tile {
+      display: block;
+      background: var(--stone);
+      padding: 1.8rem 1.4rem;
+      text-align: center;
+      transition: background 0.3s;
+      border-top: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .product-tile:hover {
+      background: var(--stone-mid);
+      border-top-color: var(--gold);
+    }
+
+    .product-tile-category {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .product-tile-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      color: var(--ash);
+      font-weight: 600;
+      line-height: 1.3;
+      transition: color 0.2s;
+    }
+
+    .product-tile:hover .product-tile-name { color: var(--gold); }
+
+    /* ── MUSIC TOGGLE BUTTON ── */
+    .music-toggle {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1000;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--stone);
+      border: 1px solid rgba(201,151,58,0.4);
+      color: var(--gold);
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 18px rgba(201,151,58,0.15), 0 2px 8px rgba(0,0,0,0.6);
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .music-toggle:hover {
+      background: var(--stone-mid);
+      border-color: var(--gold);
+      box-shadow: 0 0 28px rgba(201,151,58,0.3), 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .music-toggle.muted {
+      color: var(--text-dim);
+      border-color: rgba(201,151,58,0.2);
+    }
+    .music-toggle .toggle-label {
+      position: absolute;
+      right: 56px;
+      white-space: nowrap;
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .music-toggle:hover .toggle-label { opacity: 1; }
+
+    /* ── WATCH VIDEO BUTTON ── */
+    .watch-video-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 2rem;
+      padding: 0.75rem 1.8rem;
+      background: transparent;
+      border: 1px solid rgba(201,151,58,0.5);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .watch-video-btn:hover {
+      background: rgba(201,151,58,0.08);
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(201,151,58,0.15);
+    }
+    .watch-video-btn .play-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .watch-video-btn .play-icon::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 5px 0 5px 9px;
+      border-color: transparent transparent transparent var(--black);
+      margin-left: 2px;
+    }
+
+    /* ── VIDEO MODAL ── */
+    .video-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,0.88);
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .video-modal-overlay.active {
+      display: flex;
+    }
+    .video-modal-box {
+      position: relative;
+      width: 90vw;
+      max-width: 960px;
+      background: var(--stone);
+      border: 1px solid rgba(201,151,58,0.3);
+      box-shadow: 0 0 60px rgba(0,0,0,0.8), 0 0 30px rgba(201,151,58,0.1);
+    }
+    .video-modal-box video {
+      width: 100%;
+      display: block;
+    }
+    .video-modal-close {
+      position: absolute;
+      top: -2.5rem;
+      right: 0;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0.3rem 0;
+      transition: color 0.2s;
+    }
+    .video-modal-close:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════
+       TOP BAR
+  ══════════════════════════════════ -->
+  <div id="topbar-mount"></div>
+
+
+  <div class="site-wrapper">
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar-mount"></div>
+    <!-- Mobile overlay backdrop -->
+
+    <!-- ══════════════════════════════════
+         SIDEBAR
+    ══════════════════════════════════ -->
+
+    <!-- ══════════════════════════════════
+         MAIN CONTENT
+    ══════════════════════════════════ -->
+    <main class="main-content">
+
+      <!-- HERO -->
+      <section class="home-hero">
+        <!-- Dire Consequences corner promo (GIF + countdown) — switched off after the event.
+             To use it again, remove this comment wrapper and update the link, image and date.
+        <a href="events/events.html#dire-consequences" class="dc-promo" title="Dire Consequences Gaming Convention — Nov 7–8, 2026">
+          <img src="images/dire_consequences_d10_roll.gif" alt="Dire Consequences Gaming Convention" />
+          <span class="dc-promo-countdown is-hidden">
+            <span class="dc-days" id="dc-countdown-days">—</span>
+            <span class="dc-label">Days to Dire Consequences</span>
+          </span>
+        </a>
+        -->
+
+        <div class="home-hero-content">
+          <div class="rg-logo-wrap">
+            <img src="images/ribhian-games-logo.png" alt="Ribhian Games LLC" />
+          </div>
+          <p class="home-eyebrow">Welcome to</p>
+          <h1 class="home-title">Ribhian Games LLC</h1>
+          <p class="home-tagline">Worlds built to last. Games built to matter.</p>
+        </div>
+      </section>
+
+      <!-- ABOUT THE COMPANY -->
+      <section class="home-section home-section--deeper">
+        <div style="max-width:900px;margin:0 auto;text-align:center;">
+          <span class="section-label">Who We Are</span>
+          <h2 class="section-heading">Crafting Worlds of Uncommon Depth</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-col">
+            <p>
+              Ribhian Games LLC is an independent tabletop roleplaying game publisher
+              dedicated to creating <strong>fully realised game worlds</strong> that reward
+              curiosity, punish complacency, and never mistake spectacle for substance.
+              We build settings with the same fundamental commitment as the great
+              pillars of speculative fiction — worlds that existed before the story
+              began, and will continue long after it ends.
+            </p>
+            <p>
+              Our flagship framework is the <strong>Heptaverse</strong> — a cosmological
+              architecture of seven primal elemental forces that underpins seven distinct
+              settings, each one a fully independent game world that shares deep structural
+              DNA with the others. From the high fantasy of the Chronicles of Ribhus to
+              the science fiction of Ray Gun Rapture, the Heptaverse is the connective
+              tissue of everything we build.
+            </p>
+          </div>
+          <div class="about-col">
+            <p>
+              Beyond the Heptaverse, Ribhian Games publishes standalone titles that push
+              into unexpected territory. <strong>The True Game</strong> explores the nature
+              of play itself. <strong>Velvet &amp; Iron</strong> brings political intrigue
+              to the tabletop. <strong>All Star Wrestlers Investigates</strong> proves
+              that no genre is too unexpected when the design is honest.
+            </p>
+            <p>
+              Every product we publish runs on the <strong>Ribhian 2d10 Game System</strong> —
+              our proprietary ruleset built from the ground up to be fast, flexible, and
+              to make every single roll feel like it matters. We design for the table, not
+              the shelf. We write for players who ask questions, and for game masters who
+              want a world that answers them.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- THE 2d10 SYSTEM -->
+      <section class="home-section home-section--dark">
+        <div style="max-width:900px;margin:0 auto;text-align:center;">
+          <span class="section-label">The Game System</span>
+          <h2 class="section-heading">The Ribhian 2d10 Game System</h2>
+          <p style="font-style:italic;color:var(--text-dim);max-width:580px;margin:0 auto 0.5rem;">
+            Elegant in its design. Thrilling in its execution. Built to make every roll matter —
+            and every double unforgettable.
+          </p>
+        </div>
+
+        <div class="mechanic-grid" style="max-width:900px;margin:2.5rem auto;">
+
+          <div class="mechanic-card">
+            <span class="mechanic-num">01</span>
+            <span class="mechanic-icon">🎲</span>
+            <p class="mechanic-title">Roll 2d10</p>
+            <p class="mechanic-body">
+              Every action is resolved by rolling <strong>two ten-sided dice</strong> and adding
+              your ability modifier. Meet or beat the <strong>Difficulty Target</strong> to succeed.
+              The bell curve of two dice means average results are common — and extremes are memorable.
+            </p>
+          </div>
+
+          <div class="mechanic-card">
+            <span class="mechanic-num">02</span>
+            <span class="mechanic-icon">⚡</span>
+            <p class="mechanic-title">Doubles</p>
+            <p class="mechanic-body">
+              When both dice show the same number, something extraordinary happens.
+              <strong>Doubles on a success</strong> produce spectacular results. <strong>Doubles
+              on a failure</strong> compound the complication. Every roll holds the possibility
+              of something unforgettable.
+            </p>
+          </div>
+
+          <div class="mechanic-card">
+            <span class="mechanic-num">03</span>
+            <span class="mechanic-icon">✨</span>
+            <p class="mechanic-title">Class Resonance</p>
+            <p class="mechanic-body">
+              Each character carries a personal pool of <strong>Class Resonance (CR)</strong> —
+              the fuel for their most powerful abilities and special techniques. Limited but
+              recoverable, it ensures every decision about spending it carries genuine weight.
+            </p>
+          </div>
+
+          <div class="mechanic-card">
+            <span class="mechanic-num">04</span>
+            <span class="mechanic-icon">☯</span>
+            <p class="mechanic-title">Karma Points</p>
+            <p class="mechanic-body">
+              A small reserve of <strong>Karma Points (KP)</strong> gives players a safety net
+              for the moments that truly matter. Spend one to roll twice and take the better
+              result — fate bending in your favour when you need it most.
+            </p>
+          </div>
+
+          <div class="mechanic-card">
+            <span class="mechanic-num">05</span>
+            <span class="mechanic-icon">🔗</span>
+            <p class="mechanic-title">Skill Synergy</p>
+            <p class="mechanic-body">
+              When two trained skills naturally complement each other, they work together for
+              a <strong>+2 Synergy Bonus</strong>. Roll Doubles on a synergised check and the
+              bonus compounds — extra expertise, extra resource recovery, or an additional
+              effect the single skill alone could never produce.
+            </p>
+          </div>
+
+          <div class="mechanic-card">
+            <span class="mechanic-num">06</span>
+            <span class="mechanic-icon">⚖</span>
+            <p class="mechanic-title">Reputation</p>
+            <p class="mechanic-body">
+              Characters accumulate <strong>Fame</strong> and <strong>Infamy</strong>
+              independently — your heroic deeds and your darker history are tracked separately,
+              because the world holds both in mind at once. Each opens doors the other cannot,
+              and each attracts exactly the kind of attention you might not want.
+            </p>
+          </div>
+
+          <div class="mechanic-card">
+            <span class="mechanic-num">07</span>
+            <span class="mechanic-icon">⬡</span>
+            <p class="mechanic-title">Hexagonal Combat</p>
+            <p class="mechanic-body">
+              Tactical combat is built on a <strong>hexagonal grid</strong> that rewards
+              positioning, flanking, and movement in equal measure. Three tiers of engagement —
+              from fast convention play to full tactical simulation — mean the same system
+              scales from a two-hour demo to a years-long campaign.
+            </p>
+          </div>
+
+          <div class="mechanic-card">
+            <span class="mechanic-num">08</span>
+            <span class="mechanic-icon">🌀</span>
+            <p class="mechanic-title">Resonance &amp; Dissonance</p>
+            <p class="mechanic-body">
+              When cosmic forces align with your actions, roll <strong>three dice and keep
+              the best two</strong>. When they work against you, keep the worst two. Combine
+              with Skill Synergy and Doubles and a single roll becomes a conversation between
+              your character, their training, and the universe itself.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="system-prose" style="max-width:900px;margin:0 auto;">
+          <p>
+            The 2d10 system was designed to be immediately accessible to veterans of other
+            tabletop roleplaying games while offering a richer probability space. Two dice
+            produce a natural bell curve — consistent enough to reward preparation, dramatic
+            enough to reward ambition. The Doubles mechanic ensures that even the most routine
+            roll carries the possibility of something extraordinary.
+          </p>
+          <p>
+            Every Ribhian Games product is built on this system, and every setting is designed
+            to use it fully — not as a generic engine bolted onto a world, but as a mechanical
+            expression of that world's nature. The Chronicles of Ribhus plays like a Chronicles
+            of Ribhus game. Ray Gun Rapture plays like Ray Gun Rapture. The system bends to
+            the setting. Always.
+          </p>
+        </div>
+
+        <div class="powered-by" style="max-width:900px;margin:3rem auto 0;">
+          <div class="pb-logo">
+            <img src="images/ribhian-games-logo.png" alt="Ribhian Games" />
+          </div>
+          <div class="pb-text">
+            <p class="pb-label">Official Game System</p>
+            <p class="pb-name">Ribhian Games LLC</p>
+            <p class="pb-sub">Powered by the Ribhian Games LLC 2d10 Game System</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRODUCTS OVERVIEW -->
+      <section class="home-section home-section--deeper">
+        <div style="max-width:900px;margin:0 auto;text-align:center;">
+          <span class="section-label">Our Products</span>
+          <h2 class="section-heading">Worlds Worth Exploring</h2>
+          <p style="font-style:italic;color:var(--text-dim);max-width:520px;margin:0 auto;">
+            Every title a complete world. Every world built on the same foundation.
+          </p>
+        </div>
+
+        <div class="products-teaser" style="max-width:900px;margin:2.5rem auto 0;">
+
+          <a href="products/heptaverse.html" class="product-tile">
+            <p class="product-tile-category">Framework</p>
+            <p class="product-tile-name">The Heptaverse</p>
+          </a>
+
+          <a href="products/chronicles-of-ribhus.html" class="product-tile">
+            <p class="product-tile-category">Heptaverse</p>
+            <p class="product-tile-name">Chronicles of Ribhus</p>
+          </a>
+
+          <a href="products/blood-and-stone.html" class="product-tile">
+            <p class="product-tile-category">Heptaverse</p>
+            <p class="product-tile-name">Blood &amp; Stone</p>
+          </a>
+
+          <a href="products/madness-and-dust.html" class="product-tile">
+            <p class="product-tile-category">Heptaverse</p>
+            <p class="product-tile-name">Madness &amp; Dust</p>
+          </a>
+
+          <a href="products/ray-gun-rapture.html" class="product-tile">
+            <p class="product-tile-category">Heptaverse</p>
+            <p class="product-tile-name">Ray Gun Rapture</p>
+          </a>
+
+          <a href="products/spiral-descent.html" class="product-tile">
+            <p class="product-tile-category">Heptaverse</p>
+            <p class="product-tile-name">Spiral Descent</p>
+          </a>
+
+          <a href="products/tendrils-in-the-fog.html" class="product-tile">
+            <p class="product-tile-category">Heptaverse</p>
+            <p class="product-tile-name">Tendrils in the Fog</p>
+          </a>
+
+          <a href="products/the-core.html" class="product-tile">
+            <p class="product-tile-category">Heptaverse</p>
+            <p class="product-tile-name">The Core</p>
+          </a>
+
+          <a href="products/the-true-game.html" class="product-tile">
+            <p class="product-tile-category">Standalone</p>
+            <p class="product-tile-name">The True Game</p>
+          </a>
+
+          <a href="products/velvet-and-iron.html" class="product-tile">
+            <p class="product-tile-category">Standalone</p>
+            <p class="product-tile-name">Velvet &amp; Iron</p>
+          </a>
+
+          <a href="products/aswi-rpg.html" class="product-tile">
+            <p class="product-tile-category">All Star Wrestlers Investigates</p>
+            <p class="product-tile-name">ASWI RPG</p>
+          </a>
+
+          <a href="products/aswi-board-game.html" class="product-tile">
+            <p class="product-tile-category">All Star Wrestlers Investigates</p>
+            <p class="product-tile-name">ASWI Board Game</p>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="site-footer">
+        <p class="footer-text">
+          &copy; 2025 <strong>Ribhian Games LLC</strong> &nbsp;·&nbsp;
+          Powered by the <strong>Ribhian Games LLC 2d10 Game System</strong> &nbsp;·&nbsp;
+          All Rights Reserved
+        </p>
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    // Dire Consequences countdown — auto-decrements at midnight EST, no manual maintenance
+    (function () {
+      const dcTargetEl = document.getElementById('dc-countdown-days');
+      if (!dcTargetEl) return;
+
+      function updateDcCountdown() {
+        const target = new Date('2026-11-07T00:00:00-05:00');
+        const now = new Date();
+        const daysLeft = Math.ceil((target - now) / 86400000);
+        dcTargetEl.textContent = daysLeft > 0 ? daysLeft : (daysLeft === 0 ? 'Today!' : 'Underway');
+      }
+
+      updateDcCountdown();
+      // Recheck every hour so the display rolls over shortly after midnight EST
+      setInterval(updateDcCountdown, 60 * 60 * 1000);
+    })();
+
+    // Toggle top-level sidebar section
+    function toggleSection(id) {
+      const sec = document.getElementById(id);
+      sec.classList.toggle('open');
+    }
+
+    // Toggle product category (Heptaverse, ASWI)
+    function toggleCategory(id) {
+      const cat = document.getElementById(id);
+      cat.classList.toggle('open');
+    }
+
+    // Mobile sidebar toggle with overlay
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('visible');
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('visible');
+    }
+
+    // Highlight active page in sidebar
+    const currentPath = window.location.pathname.split('/').pop();
+    document.querySelectorAll('.sidebar-item, .sidebar-sub-item, .sidebar-category a').forEach(link => {
+      if (link.getAttribute('href') && link.getAttribute('href').includes(currentPath) && currentPath !== '') {
+        link.classList.add('active');
+      }
+    });
+  </script>
+
+  <script src="js/site.js"></script>
+
+  <!-- ── BACKGROUND MUSIC ── -->
+  <audio id="bg-music" loop>
+    <source src="media/Ravlin MP3.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- ── MUSIC TOGGLE BUTTON ── -->
+  <!-- Starts muted — updates once music actually plays -->
+  <button class="music-toggle muted" id="music-toggle" onclick="toggleMusic()" aria-label="Toggle music">
+    <span class="toggle-label" id="music-label">Play Music</span>
+    <span id="music-icon">♪</span>
+  </button>
+
+  <script>
+    (function() {
+      const audio = document.getElementById('bg-music');
+      const btn   = document.getElementById('music-toggle');
+      const label = document.getElementById('music-label');
+      let playing = false;
+      audio.volume = 0.4;
+
+      function setPlaying(isPlaying) {
+        playing = isPlaying;
+        if (isPlaying) {
+          btn.classList.remove('muted');
+          label.textContent = 'Pause Music';
+        } else {
+          btn.classList.add('muted');
+          label.textContent = 'Play Music';
+        }
+      }
+
+      window.toggleMusic = function() {
+        if (playing) {
+          audio.pause();
+          setPlaying(false);
+        } else {
+          audio.play().then(() => setPlaying(true));
+        }
+      };
+    })();
+  </script>
+
+</body>
+</html>

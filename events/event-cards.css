@@ -1,0 +1,258 @@
+/* Ribhian Games — event card styles.
+   Shared by events/events.html (public page) and events/event-admin.html (editor preview),
+   so a card looks identical in both. Relies on the colour variables in ../css/style.css. */
+
+/* ── EVENT CARD ── */
+.event-card {
+  background: var(--stone);
+  border: 1px solid rgba(201,151,58,0.12);
+  border-left: 4px solid var(--gold);
+  margin-bottom: 2rem;
+  transition: background 0.2s;
+}
+
+.event-card:hover { background: var(--stone-mid); }
+
+.event-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.8rem 2rem 1.2rem;
+  border-bottom: 1px solid rgba(201,151,58,0.08);
+  flex-wrap: wrap;
+}
+
+.event-date-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+  border: 1px solid rgba(201,151,58,0.2);
+  padding: 0.8rem 1.2rem;
+  min-width: 72px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.event-date-month {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--crimson-mid);
+}
+
+.event-date-day {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.event-date-year {
+  font-family: 'Cinzel', serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-top: 0.2rem;
+}
+
+.event-header-text { flex: 1; min-width: 200px; }
+
+.event-convention {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--parchment);
+  margin-bottom: 0.3rem;
+}
+
+.event-location {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+.event-status {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(201,151,58,0.3);
+  color: var(--gold);
+  background: rgba(201,151,58,0.05);
+  align-self: flex-start;
+  white-space: nowrap;
+}
+
+/* ── Status + year groups (set by the event-sorting script) ── */
+.event-card.is-past { opacity: 0.72; }
+.event-status--done { color: var(--text-dim); border-color: rgba(255,255,255,0.1); background: transparent; }
+.event-status--now  { color: #fff; border-color: var(--gold); background: rgba(201,151,58,0.25); }
+.events-year {
+  font-family: 'Cinzel', serif; font-size: 1.05rem; letter-spacing: 0.3em; color: var(--gold);
+  margin: 2.4rem 0 1.2rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(201,151,58,0.25);
+}
+#past-list > .events-year:first-child { margin-top: 0; }
+.events-empty {
+  text-align: center; font-style: italic; color: var(--text-dim); font-size: 1.05rem; padding: 1.5rem 0;
+}
+
+/* ── SESSIONS ── */
+.event-sessions {
+  padding: 1.2rem 2rem 1.6rem;
+}
+
+.event-session {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(201,151,58,0.06);
+}
+
+.event-session:last-child { border-bottom: none; }
+
+.session-time {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  padding-top: 0.2rem;
+  min-width: 90px;
+}
+
+.session-info { flex: 1; }
+
+.session-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ash);
+  margin-bottom: 0.2rem;
+}
+
+.session-tag {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border: 1px solid rgba(201,151,58,0.15);
+  padding: 0.15rem 0.5rem;
+  margin-top: 0.2rem;
+}
+
+/* ── REGISTER BUTTON ── */
+.event-footer {
+  padding: 0 2rem 1.6rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.event-register {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--gold);
+  padding: 0.6rem 1.4rem;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+
+.event-register:hover { background: var(--gold-bright); }
+
+/* Colour coding by setting */
+.event-card--cyberpunk  { border-left-color: #00bcd4; }
+.event-card--fantasy    { border-left-color: var(--gold); }
+.event-card--weirdwest  { border-left-color: #cd853f; }
+.event-card--community  { border-left-color: #8bc34a; }
+.event-card--multi      { border-left-color: var(--crimson-mid); }
+.event-card--bloodstone { border-left-color: #3d6b45; }
+.event-card--tendrils   { border-left-color: #7b5ea7; }
+.event-card--core       { border-left-color: #b06a1a; }
+
+.session-tag--cyberpunk  { color: #00bcd4; border-color: rgba(0,188,212,0.25); }
+.session-tag--fantasy    { color: var(--gold); border-color: rgba(201,151,58,0.3); }
+.session-tag--weirdwest  { color: #cd853f; border-color: rgba(205,133,63,0.3); }
+.session-tag--community  { color: #8bc34a; border-color: rgba(139,195,74,0.3); }
+.session-tag--bloodstone { color: #5c9e6a; border-color: rgba(92,158,106,0.35); }
+.session-tag--tendrils   { color: #9c7bb5; border-color: rgba(156,123,181,0.3); }
+.session-tag--core       { color: #c87d2a; border-color: rgba(200,125,42,0.3); }
+.session-tag--aswi       { color: #c43b1a; border-color: rgba(196,59,26,0.3); }
+.session-tag--truegame   { color: #5b8dd9; border-color: rgba(91,141,217,0.3); }
+.session-tag--velvet     { color: #a84455; border-color: rgba(168,68,85,0.3); }
+
+@media (max-width: 600px) {
+  .events-hero { padding: 3.5rem 1.4rem 3rem; }
+  .events-section { padding: 3rem 1.4rem; }
+  .event-card-header { padding: 1.4rem 1.2rem 1rem; }
+  .event-sessions { padding: 0.8rem 1.2rem 1.2rem; }
+  .event-footer { padding: 0 1.2rem 1.2rem; }
+  .session-time { min-width: 70px; font-size: 0.55rem; }
+  .event-date-day { font-size: 1.4rem; }
+}
+
+/* ── SESSION BLURB ── */
+.session-blurb {
+  display: block;
+  margin-top: 0.8rem;
+  padding: 1rem 1.2rem;
+  background: rgba(0,0,0,0.25);
+  border-left: 2px solid rgba(201,151,58,0.2);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  color: var(--ash);
+  line-height: 1.7;
+}
+
+.session-blurb p { margin-bottom: 0.7rem; }
+.session-blurb p:last-child { margin-bottom: 0; }
+
+.session-blurb .blurb-meta {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.session-blurb .blurb-meta span { color: var(--gold); }
+
+.session-blurb .blurb-notes {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-top: 0.6rem;
+  border-top: 1px solid rgba(201,151,58,0.1);
+  padding-top: 0.6rem;
+}
+
+.session-blurb ul {
+  margin: 0.4rem 0 0.7rem 1.2rem;
+  color: var(--ash);
+}
+
+.session-blurb ul li { margin-bottom: 0.2rem; }
+
+/* Greyed-out registration button: "Registration Link Coming Soon" / "Event Concluded" */
+.event-register--off { opacity: 0.5; pointer-events: none; cursor: default; }

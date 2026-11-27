@@ -1,0 +1,1435 @@
+<!--Unmatched Tournament Swiss Manager page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Password-protected Swiss-format tournament manager for Unmatched tournaments. This is the single tournament-director page: drafted players and their heroes are entered here (saved to unmatched_registrations, no email), limited to the event's EVENT_ROSTER. Event name and TOURNAMENT_ID are set in the EVENT SETTINGS block at the top of the script; each event keeps its own saved state. Pulls confirmed players from unmatched_registrations, pairs Round 1 randomly, records results, pairs later rounds by standings (no rematches), and tracks standings with Buchholz and Sonneborn-Berger tiebreaks. Each round must pass a review screen before it locks; any result can be corrected afterwards (including after the tournament is finished) from the round lists or a player's record, and every correction is logged. State is stored in the unmatched_tournament table. NOT linked publicly — access by direct URL only.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tournament Manager | Ribhian Games</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:      #0a0a0a;
+      --deep:       #111111;
+      --surface:    #1a1a1a;
+      --card:       #1f1f1f;
+      --border:     rgba(201,151,58,0.18);
+      --gold:       #c9973a;
+      --gold-light: #e0b85a;
+      --text:       #e8e0d0;
+      --text-dim:   rgba(232,224,208,0.55);
+      --red:        #cc2200;
+      --red-bright: #ff2200;
+      --green:      #4caf50;
+      --radius:     6px;
+    }
+    body { background:var(--black); color:var(--text); font-family:'Georgia',serif; min-height:100vh; }
+
+    /* ── Login ── */
+    #login-screen { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:2rem; }
+    .login-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+      padding:2.5rem 2rem; width:100%; max-width:380px; text-align:center;
+    }
+    .login-card h1 { font-size:1.1rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:0.4rem; }
+    .login-card p { font-size:0.85rem; color:var(--text-dim); margin-bottom:1.8rem; }
+    .login-error { margin-top:1rem; font-size:0.85rem; color:#ff6644; display:none; }
+
+    /* ── Shared ── */
+    #app-screen { display:none; }
+    .page-header {
+      background:var(--deep); border-bottom:1px solid var(--border);
+      padding:1.2rem 2rem; display:flex; align-items:center; gap:1rem;
+    }
+    .page-header h1 { font-size:1.1rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); }
+    .page-header p { font-size:0.82rem; color:var(--text-dim); margin-top:0.15rem; }
+    .header-actions { margin-left:auto; display:flex; gap:0.6rem; }
+    .page-main { max-width:960px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+
+    .card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:1.4rem 1.5rem; margin-bottom:2rem;
+    }
+    .card.accent { border-left:4px solid var(--gold); }
+    .section-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .section-title { font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); }
+    .note { font-size:0.82rem; color:var(--text-dim); font-style:italic; margin-bottom:1rem; }
+
+    .btn {
+      padding:0.6rem 1.2rem; background:linear-gradient(135deg,var(--gold),var(--gold-light));
+      border:none; border-radius:var(--radius); color:var(--black);
+      font-family:'Georgia',serif; font-size:0.82rem; font-weight:bold;
+      letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; white-space:nowrap;
+    }
+    .btn:hover { opacity:0.88; }
+    .btn:disabled { opacity:0.35; cursor:not-allowed; }
+    .btn-ghost {
+      background:transparent; border:1px solid var(--border); color:var(--text-dim);
+      font-family:'Georgia',serif; font-size:0.78rem; padding:0.35rem 0.85rem;
+      border-radius:var(--radius); cursor:pointer; white-space:nowrap;
+    }
+    .btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
+    .btn-ghost:disabled { opacity:0.35; cursor:not-allowed; }
+    .btn-danger { border-color:rgba(204,34,0,0.4); color:#ff6644; }
+    .btn-danger:hover { border-color:var(--red-bright); color:#ff6644; background:rgba(204,34,0,0.12); }
+
+    /* ── Status bar ── */
+    .status-bar {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:2rem;
+    }
+    .stat-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:1.1rem 1.4rem; text-align:center;
+    }
+    .stat-num { font-size:1.8rem; color:var(--gold); line-height:1; }
+    .stat-label { font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-dim); margin-top:0.4rem; }
+
+    /* ── Tables ── */
+    .data-table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .data-table thead th {
+      background:var(--deep); font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase;
+      color:var(--gold); text-align:left; padding:0.6rem 0.8rem; border-bottom:1px solid var(--border);
+    }
+    .data-table tbody tr { border-bottom:1px solid rgba(255,255,255,0.04); }
+    .data-table tbody tr:last-child { border-bottom:none; }
+    .data-table td { padding:0.55rem 0.8rem; vertical-align:middle; }
+    .data-table .num { text-align:center; font-family:monospace; }
+    .hero { color:var(--gold-light); font-style:italic; font-size:0.85rem; }
+    .dim { color:var(--text-dim); }
+    .dropped-row { opacity:0.4; }
+
+    /* ── Matches ── */
+    .match {
+      display:grid; grid-template-columns:52px 1fr auto 1fr; gap:0.8rem; align-items:center;
+      padding:0.8rem 0.6rem; border-bottom:1px solid rgba(255,255,255,0.05);
+    }
+    .match:last-child { border-bottom:none; }
+    .table-no { font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); text-align:center; }
+    .table-no strong { display:block; font-size:1.2rem; color:var(--gold); letter-spacing:0; }
+    .side { display:flex; flex-direction:column; }
+    .side.right { text-align:right; }
+    .side .pname { font-size:0.95rem; }
+    .side.winner .pname { color:var(--green); font-weight:bold; }
+    .side.loser .pname { color:var(--text-dim); }
+    .result-btns { display:flex; gap:0.4rem; }
+    .res-btn {
+      background:var(--card); border:1px solid var(--border); color:var(--text-dim);
+      font-family:'Georgia',serif; font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase;
+      padding:0.45rem 0.7rem; border-radius:var(--radius); cursor:pointer; white-space:nowrap;
+    }
+    .res-btn:hover { border-color:var(--gold); color:var(--gold); }
+    .res-btn.active { background:rgba(201,151,58,0.2); border-color:var(--gold); color:var(--gold-light); font-weight:bold; }
+    .bye-tag {
+      font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold);
+      font-weight:bold; text-align:center;
+    }
+    @media (max-width:640px) {
+      .match { grid-template-columns:40px 1fr; }
+      .result-btns { grid-column:1 / -1; justify-content:center; }
+      .side.right { text-align:left; }
+    }
+
+    /* ── Player entry ── */
+    .entry-grid { display:grid; grid-template-columns:1fr 1fr 1.4fr auto; gap:0.8rem; align-items:end; }
+    @media (max-width:700px) { .entry-grid { grid-template-columns:1fr 1fr; } }
+    .entry-group { display:flex; flex-direction:column; gap:0.35rem; }
+    .entry-group label { font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim); }
+    .entry-group input, .entry-group select {
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius); color:var(--text);
+      font-family:'Georgia',serif; font-size:0.9rem; padding:0.55rem 0.75rem; outline:none; width:100%;
+    }
+    .entry-group input:focus, .entry-group select:focus { border-color:var(--gold); }
+    .entry-group select option:disabled { color:#666; }
+
+    /* ── Draft passes ── */
+    .sub-title { font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-light); margin-bottom:0.6rem; }
+    .pass-row { display:flex; gap:0.8rem; align-items:flex-end; flex-wrap:wrap; }
+    .pass-list { margin-top:0.8rem; display:flex; flex-wrap:wrap; gap:0.4rem; align-items:center; }
+    .pass-label { font-size:0.75rem; color:var(--text-dim); letter-spacing:0.08em; margin-right:0.3rem; }
+    .pass-chip {
+      display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; color:var(--text-dim);
+      background:var(--card); border:1px solid rgba(204,34,0,0.35); border-radius:999px;
+      padding:0.2rem 0.3rem 0.2rem 0.7rem; text-decoration:line-through; text-decoration-color:rgba(255,102,68,0.6);
+    }
+    .pass-undo {
+      background:none; border:none; color:var(--gold); cursor:pointer; font-size:0.85rem;
+      text-decoration:none; padding:0 0.3rem;
+    }
+    .pass-undo:hover { color:var(--gold-light); }
+
+    /* ── Setup list ── */
+    .player-check {
+      display:flex; align-items:center; gap:0.8rem; padding:0.5rem 0.6rem;
+      border-bottom:1px solid rgba(255,255,255,0.04); cursor:pointer;
+    }
+    .player-check:last-child { border-bottom:none; }
+    .player-check input { width:16px; height:16px; accent-color:var(--gold); cursor:pointer; }
+
+    /* ── Champion banner ── */
+    .champion {
+      text-align:center; padding:2rem 1.5rem; margin-bottom:2rem;
+      background:linear-gradient(135deg, rgba(201,151,58,0.16), rgba(201,151,58,0.04));
+      border:1px solid var(--gold); border-radius:var(--radius);
+    }
+    .champion .crown { font-size:2.6rem; }
+    .champion h2 { color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; font-size:1.3rem; margin:0.5rem 0; }
+    .champion .champ-name { font-size:1.5rem; }
+    .champion .champ-hero { color:var(--gold-light); font-style:italic; margin-top:0.3rem; }
+
+    details.past-round { border-bottom:1px solid rgba(255,255,255,0.05); padding:0.6rem 0; }
+    details.past-round:last-child { border-bottom:none; }
+    details.past-round summary {
+      cursor:pointer; font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold);
+    }
+
+    /* ── Clickable player names ── */
+    .plink { color:var(--text); cursor:pointer; border-bottom:1px dotted var(--text-dim); }
+    .plink:hover { color:var(--gold-light); border-bottom-color:var(--gold); }
+
+    /* ── Result buttons carry player names ── */
+    .res-btn.named { max-width:170px; overflow:hidden; text-overflow:ellipsis; text-transform:none; letter-spacing:0.02em; font-size:0.78rem; }
+
+    /* ── Modal ── */
+    .modal-backdrop {
+      position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:500;
+      display:flex; align-items:flex-start; justify-content:center; padding:4vh 1rem; overflow-y:auto;
+    }
+    .modal {
+      background:var(--surface); border:1px solid var(--gold); border-radius:var(--radius);
+      width:100%; max-width:720px; padding:1.6rem 1.6rem 1.3rem;
+    }
+    .modal h2 { color:var(--gold); font-size:1.1rem; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.3rem; }
+    .modal .sub { color:var(--text-dim); font-size:0.85rem; margin-bottom:1.2rem; }
+    .modal-footer { display:flex; justify-content:flex-end; gap:0.7rem; margin-top:1.4rem; flex-wrap:wrap; }
+
+    .review-row {
+      display:grid; grid-template-columns:70px 1fr; gap:0.8rem; align-items:center;
+      padding:0.75rem 0.4rem; border-bottom:1px solid rgba(255,255,255,0.06); font-size:1rem;
+    }
+    .review-row:last-child { border-bottom:none; }
+    .review-row .tno { font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); }
+    .review-row .w { color:var(--green); font-weight:bold; }
+    .review-row .l { color:var(--text-dim); }
+    .review-row .d { color:var(--gold-light); font-weight:bold; }
+    .review-row .verb { color:var(--text-dim); font-style:italic; margin:0 0.4rem; }
+    .review-row .missing { color:#ff6644; font-weight:bold; }
+    .review-row .h { color:var(--gold-light); font-style:italic; font-size:0.8rem; }
+    .review-tally {
+      margin-top:1.2rem; padding:0.9rem 1rem; background:var(--deep); border:1px solid var(--border);
+      border-radius:var(--radius); font-size:0.85rem; color:var(--text-dim); line-height:1.7;
+    }
+    .review-tally strong { color:var(--text); font-weight:normal; }
+
+    .rec-table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    .rec-table th {
+      font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold);
+      text-align:left; padding:0.5rem 0.6rem; border-bottom:1px solid var(--border);
+    }
+    .rec-table td { padding:0.6rem; border-bottom:1px solid rgba(255,255,255,0.05); vertical-align:middle; }
+    .rec-table tr:last-child td { border-bottom:none; }
+    .rec-btns { display:flex; gap:0.35rem; justify-content:flex-end; }
+    .rec-btns .res-btn.active.win  { background:rgba(76,175,80,0.18); border-color:var(--green); color:var(--green); }
+    .rec-btns .res-btn.active.loss { background:rgba(204,34,0,0.15); border-color:var(--red-bright); color:#ff6644; }
+
+    .log-row { font-size:0.82rem; color:var(--text-dim); padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+    .log-row:last-child { border-bottom:none; }
+    .log-row .when { font-family:monospace; color:var(--gold); margin-right:0.6rem; }
+    .log-row s { color:#ff6644; }
+    .log-row .to { color:var(--green); }
+
+    /* Toast */
+    #toast {
+      position:fixed; bottom:2rem; right:2rem; background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:0.8rem 1.2rem; font-size:0.88rem; color:var(--text);
+      opacity:0; transform:translateY(10px); transition:opacity 0.3s, transform 0.3s;
+      pointer-events:none; z-index:999; max-width:360px;
+    }
+    #toast.show { opacity:1; transform:translateY(0); }
+    #toast.success { border-color:var(--green); color:var(--green); }
+    #toast.error { border-color:var(--red-bright); color:#ff6644; }
+  </style>
+</head>
+<body>
+
+<!-- ── Login Screen ── -->
+<div id="login-screen">
+  <div class="login-card">
+    <h1 class="event-name">Unmatched Tournament</h1>
+    <p>Tournament Director · Ribhian Games</p>
+    <div style="position:relative;margin-bottom:1rem;">
+      <input type="password" id="admin-password" placeholder="Admin password"
+        onkeydown="if(event.key==='Enter')doLogin()"
+        style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:Georgia,serif;font-size:0.95rem;padding:0.7rem 2.8rem 0.7rem 1rem;outline:none;text-align:left;letter-spacing:0.1em;" />
+      <button onclick="togglePassword()" tabindex="-1" id="toggle-pw"
+        style="position:absolute;right:0.7rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:1rem;padding:0;">👁</button>
+    </div>
+    <button class="btn" style="width:100%;padding:0.75rem;font-size:0.9rem;" onclick="doLogin()">Enter</button>
+    <p class="login-error" id="login-error">Incorrect password.</p>
+    <p id="lockout-msg" style="display:none;margin-top:0.8rem;font-size:0.82rem;color:#ff6644;">Too many failed attempts. Try again in 5 minutes.</p>
+  </div>
+</div>
+
+<!-- ── App ── -->
+<div id="app-screen">
+  <header class="page-header">
+    <div>
+      <h1 class="event-name">Unmatched Tournament</h1>
+      <p>Tournament Manager · Swiss · <span id="rounds-label">4</span> Rounds</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-ghost" onclick="reloadAll()">↻ Refresh</button>
+      <button class="btn-ghost" onclick="doLogout()">Log Out</button>
+    </div>
+  </header>
+
+  <main class="page-main" id="main">
+    <div class="card"><p class="dim" style="text-align:center;font-style:italic;">Loading…</p></div>
+  </main>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast"></div>
+
+<script>
+const SUPABASE_URL   = 'https://kjjycuynetkappoedefb.supabase.co';
+const SUPABASE_KEY   = 'sb_publishable_FbfOymRGuKGdMDyeEPZNTA_Qrrd9OSR';
+// ══ EVENT SETTINGS — change these for each event ═════════════════════════
+// Each event needs its own TOURNAMENT_ID. Past events stay saved under their own ID
+// (Dire Consequences = 'dire-consequences-2026').
+const TOURNAMENT_ID  = 'monodaemon-january-2027';
+const EVENT_NAME     = 'Monodaemon January Unmatched Tournament';
+const MAX_PLAYERS    = 11;
+// Heroes available at this event (site spelling). Each hero can be assigned to one player.
+const EVENT_ROSTER = [
+  'Abe Sapien', 'Achilles', 'Alice', 'Baba Yaga', 'Beowulf', 'Bigfoot', 'Black Panther',
+  'Black Widow', 'Blackbeard', 'Bloody Mary', 'Bruce Lee', 'Bullseye', 'Chupacabra',
+  'Count Dracula', 'Daredevil', 'Deadpool', 'Doctor Strange', 'Dr. Jekyll & Mr. Hyde',
+  'Elektra', 'George Washington', 'Ghost Rider', 'Hamlet', 'Harry Houdini', 'Hellboy',
+  'John Henry', 'King Arthur', 'Little Red Riding Hood', 'Liz Sherman', 'Loki', 'Luke Cage',
+  'Medusa', 'Moon Knight', 'Muhammad Ali', 'Oda Nobunaga', 'Pandora', 'Robert Muldoon',
+  'Robin Hood', 'Rosie the Riveter', 'She-Hulk', 'Sherlock Holmes', 'Sinbad', 'Spider-Man',
+  'Sun Wukong', 'The Genie', 'The Invisible Man', 'The Wayward Sisters', 'Titania',
+  'Tomoe Gozen', 'Velociraptors', 'William Shakespeare', 'Winter Soldier',
+  'Wyatt Earp & Doc Holliday', 'Yennenga',
+];
+// ═════════════════════════════════════════════════════════════════════════
+const TOTAL_ROUNDS   = 4;
+const PTS_WIN        = 1.0;
+const PTS_DRAW       = 0.5;
+const PTS_LOSS       = 0.0;
+const PTS_BYE        = 1.0;
+
+// Show the event name on the login screen, the page header and the browser tab
+document.querySelectorAll('.event-name').forEach(el => { el.textContent = EVENT_NAME; });
+document.getElementById('rounds-label').textContent = TOTAL_ROUNDS;
+document.title = `${EVENT_NAME} | Ribhian Games`;
+
+// ── Simple password (keep in sync with admin.html) ────────────────────────
+const ADMIN_PASSWORD = 'RibhianAdmin2026!';
+
+// ── State ─────────────────────────────────────────────────────────────────
+let state        = null;   // tournament state object, or null if not started
+let version      = 0;      // row version for conflict detection
+let rowExists    = false;
+let confirmedRegs = [];    // confirmed rows from unmatched_registrations
+let busy         = false;
+
+/*
+  state = {
+    status: 'running' | 'complete',
+    totalRounds: 4,
+    players: [ { id, name, hero, seed, dropped } ],
+    rounds:  [ { number, matches: [ { table, a, b, result } ] } ]
+  }
+  match.b === null means a bye; result: null | 'A' | 'B' | 'D' | 'BYE'
+*/
+
+// ── Login ─────────────────────────────────────────────────────────────────
+let failedAttempts = 0;
+let lockedUntil = null;
+
+function togglePassword() {
+  const input = document.getElementById('admin-password');
+  const btn = document.getElementById('toggle-pw');
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁'; }
+}
+
+function doLogin() {
+  if (lockedUntil && new Date() < lockedUntil) {
+    document.getElementById('lockout-msg').style.display = 'block';
+    document.getElementById('login-error').style.display = 'none';
+    return;
+  }
+  const pw = document.getElementById('admin-password').value;
+  if (pw === ADMIN_PASSWORD) {
+    failedAttempts = 0; lockedUntil = null;
+    try { sessionStorage.setItem('rg_director', '1'); } catch (e) {}
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+    reloadAll();
+  } else {
+    failedAttempts++;
+    document.getElementById('admin-password').value = '';
+    if (failedAttempts >= 5) {
+      lockedUntil = new Date(Date.now() + 5 * 60 * 1000);
+      document.getElementById('login-error').style.display = 'none';
+      document.getElementById('lockout-msg').style.display = 'block';
+    } else {
+      document.getElementById('login-error').textContent =
+        `Incorrect password. ${5 - failedAttempts} attempt${5 - failedAttempts !== 1 ? 's' : ''} remaining.`;
+      document.getElementById('login-error').style.display = 'block';
+      document.getElementById('lockout-msg').style.display = 'none';
+    }
+  }
+}
+
+function doLogout() {
+  try { sessionStorage.removeItem('rg_director'); } catch (e) {}
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-password').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function fmtPts(n) { return (Math.round(n * 10) / 10).toFixed(1); }
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `show ${type}`;
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => { t.className = ''; }, 3800);
+}
+
+// ── Supabase ──────────────────────────────────────────────────────────────
+async function supabaseFetch(path, options = {}) {
+  return fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    }
+  });
+}
+
+async function loadState() {
+  const res = await supabaseFetch(`unmatched_tournament?id=eq.${encodeURIComponent(TOURNAMENT_ID)}&select=state,version`);
+  if (!res.ok) throw new Error('Tournament table not reachable (' + res.status + ')');
+  const data = await res.json();
+  if (data.length) {
+    state = data[0].state; version = data[0].version; rowExists = true;
+  } else {
+    state = null; version = 0; rowExists = false;
+  }
+}
+
+async function loadConfirmed() {
+  const res = await supabaseFetch('unmatched_registrations?confirmed=eq.true&select=id,first_name,last_name,hero_selected,created_at&order=created_at.asc');
+  if (!res.ok) throw new Error('Registrations not reachable (' + res.status + ')');
+  const data = await res.json();
+  confirmedRegs = data.map(r => ({
+    id: String(r.id),
+    name: ((r.first_name || '') + ' ' + (r.last_name || '')).trim(),
+    hero: r.hero_selected
+  }));
+}
+
+// Saves with optimistic locking. Returns true on success.
+async function saveState(newState) {
+  try {
+    if (!rowExists) {
+      const res = await supabaseFetch('unmatched_tournament', {
+        method: 'POST',
+        headers: { 'Prefer': 'return=representation' },
+        body: JSON.stringify({ id: TOURNAMENT_ID, state: newState, version: 1 })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        console.error('Insert failed', err);
+        if (err.code === '23505') {
+          showToast('Tournament was started on another device. Reloaded.', 'error');
+          await reloadAll();
+        } else {
+          showToast('Save failed. Check console.', 'error');
+        }
+        return false;
+      }
+      rowExists = true; version = 1; state = newState;
+      return true;
+    }
+
+    const res = await supabaseFetch(
+      `unmatched_tournament?id=eq.${encodeURIComponent(TOURNAMENT_ID)}&version=eq.${version}`,
+      {
+        method: 'PATCH',
+        headers: { 'Prefer': 'return=representation' },
+        body: JSON.stringify({ state: newState, version: version + 1, updated_at: new Date().toISOString() })
+      }
+    );
+    if (!res.ok) {
+      console.error('Update failed', await res.json().catch(() => ({})));
+      showToast('Save failed. Check console.', 'error');
+      return false;
+    }
+    const data = await res.json();
+    if (!data.length) {
+      showToast('Changed on another device. Reloaded the latest version.', 'error');
+      await reloadAll();
+      return false;
+    }
+    version = version + 1; state = newState;
+    return true;
+  } catch (e) {
+    console.error(e);
+    showToast('Network error. Change not saved.', 'error');
+    return false;
+  }
+}
+
+async function reloadAll() {
+  try {
+    await Promise.all([loadState(), loadConfirmed(), loadDraft()]);
+    render();
+  } catch (e) {
+    console.error(e);
+    document.getElementById('main').innerHTML =
+      `<div class="card"><p style="color:#ff6644;text-align:center;">${esc(e.message)}<br><br>
+       If this is the first run, create the <code>unmatched_tournament</code> table in Supabase.</p></div>`;
+  }
+}
+
+// ── Scoring ───────────────────────────────────────────────────────────────
+function computeStats(st) {
+  const s = {};
+  st.players.forEach(p => {
+    s[p.id] = { id:p.id, pts:0, w:0, d:0, l:0, byes:0, met:new Set(), results:[] };
+  });
+
+  st.rounds.forEach(r => r.matches.forEach(m => {
+    if (!s[m.a]) return;
+    if (m.b === null) {
+      if (m.result === 'BYE') { s[m.a].pts += PTS_BYE; s[m.a].w++; s[m.a].byes++; }
+      return;
+    }
+    if (!s[m.b]) return;
+    s[m.a].met.add(m.b); s[m.b].met.add(m.a);
+    if (m.result === 'A') {
+      s[m.a].pts += PTS_WIN; s[m.a].w++; s[m.b].pts += PTS_LOSS; s[m.b].l++;
+      s[m.a].results.push({ opp:m.b, score:1 }); s[m.b].results.push({ opp:m.a, score:0 });
+    } else if (m.result === 'B') {
+      s[m.b].pts += PTS_WIN; s[m.b].w++; s[m.a].pts += PTS_LOSS; s[m.a].l++;
+      s[m.b].results.push({ opp:m.a, score:1 }); s[m.a].results.push({ opp:m.b, score:0 });
+    } else if (m.result === 'D') {
+      s[m.a].pts += PTS_DRAW; s[m.a].d++; s[m.b].pts += PTS_DRAW; s[m.b].d++;
+      s[m.a].results.push({ opp:m.b, score:0.5 }); s[m.b].results.push({ opp:m.a, score:0.5 });
+    }
+  }));
+
+  // Buchholz: sum of opponents' points (byes add nothing)
+  // Sonneborn-Berger: points of beaten opponents + half points of drawn opponents
+  Object.values(s).forEach(p => {
+    p.buch = p.results.reduce((sum, r) => sum + s[r.opp].pts, 0);
+    p.sb   = p.results.reduce((sum, r) => sum + r.score * s[r.opp].pts, 0);
+  });
+  return s;
+}
+
+function rankPlayers(st, stats) {
+  return st.players.slice().sort((x, y) => {
+    const a = stats[x.id], b = stats[y.id];
+    return (b.pts - a.pts) || (b.buch - a.buch) || (b.sb - a.sb) || (x.seed - y.seed);
+  });
+}
+
+// ── Pairing ───────────────────────────────────────────────────────────────
+function pairPool(pool, stats, allowRematch) {
+  if (pool.length === 0) return [];
+  const [first, ...rest] = pool;
+  for (let i = 0; i < rest.length; i++) {
+    const opp = rest[i];
+    if (!allowRematch && stats[first].met.has(opp)) continue;
+    const remaining = rest.slice(0, i).concat(rest.slice(i + 1));
+    const sub = pairPool(remaining, stats, allowRematch);
+    if (sub) return [[first, opp], ...sub];
+  }
+  return null;
+}
+
+function buildNextRound(st) {
+  const stats  = computeStats(st);
+  const ranked = rankPlayers(st, stats).filter(p => !p.dropped).map(p => p.id);
+
+  let byeCandidates = [null];
+  if (ranked.length % 2 === 1) {
+    const bottomUp = ranked.slice().reverse();
+    const noBye = bottomUp.filter(id => stats[id].byes === 0);
+    byeCandidates = noBye.length ? noBye : bottomUp;
+  }
+
+  for (const allowRematch of [false, true]) {
+    for (const bye of byeCandidates) {
+      const pool = ranked.filter(id => id !== bye);
+      const pairs = pairPool(pool, stats, allowRematch);
+      if (pairs) {
+        if (allowRematch) showToast('No rematch-free pairing exists. One or more rematches were used.', 'error');
+        return { pairs, bye };
+      }
+    }
+  }
+  return null;
+}
+
+function makeRound(number, pairs, bye) {
+  const matches = pairs.map((pr, i) => ({ table: i + 1, a: pr[0], b: pr[1], result: null }));
+  if (bye) matches.push({ table: matches.length + 1, a: bye, b: null, result: 'BYE' });
+  return { number, matches };
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────
+async function startTournament() {
+  if (busy) return;
+  const checked = [...document.querySelectorAll('.setup-player:checked')].map(c => c.value);
+  if (checked.length < 2) { showToast('Need at least 2 players.', 'error'); return; }
+  if (!confirm(`Start the tournament with ${checked.length} players?\n\nRound 1 will be paired randomly.`)) return;
+
+  busy = true;
+  const order = shuffle(checked);
+  const players = order.map((id, i) => {
+    const r = confirmedRegs.find(x => x.id === id);
+    return { id, name: r.name, hero: r.hero, seed: i + 1, dropped: false };
+  });
+
+  const pairs = [];
+  for (let i = 0; i + 1 < order.length; i += 2) pairs.push([order[i], order[i + 1]]);
+  const bye = order.length % 2 === 1 ? order[order.length - 1] : null;
+
+  const newState = {
+    status: 'running',
+    totalRounds: TOTAL_ROUNDS,
+    players,
+    rounds: [ makeRound(1, pairs, bye) ]
+  };
+  if (await saveState(newState)) showToast('Round 1 paired.', 'success');
+  busy = false;
+  render();
+}
+
+// Plain-English description of a match result, used in confirmations and the log
+function describeResult(m, result) {
+  const a = nameOf(m.a), b = nameOf(m.b);
+  if (m.b === null) return `${a} had a bye`;
+  if (result === 'A') return `${a} beat ${b}`;
+  if (result === 'B') return `${b} beat ${a}`;
+  if (result === 'D') return `${a} drew with ${b}`;
+  return 'no result entered';
+}
+
+// A round is "locked" once a later round has been paired, or the tournament is finished.
+function isLocked(roundIdx) {
+  return roundIdx < state.rounds.length - 1 || state.status === 'complete';
+}
+
+async function setResult(roundIdx, matchIdx, value) {
+  if (busy) return;
+  const m = state.rounds[roundIdx].matches[matchIdx];
+  if (m.result === value) return;
+
+  const from = describeResult(m, m.result);
+  const to   = value === null ? 'no result entered' : describeResult(m, value);
+  const round = state.rounds[roundIdx].number;
+
+  if (isLocked(roundIdx)) {
+    if (!confirm(
+      `CORRECT A RESULT — Round ${round}, Table ${m.table}\n\n` +
+      `Was:  ${from}\nNow:  ${to}\n\n` +
+      `Standings and the champion will recalculate. Later pairings stay as they were played.`
+    )) return;
+  }
+
+  busy = true;
+  const newState = clone(state);
+  newState.rounds[roundIdx].matches[matchIdx].result = value;
+
+  // Log every change to a result that had already been entered
+  if (m.result !== null) {
+    newState.log = newState.log || [];
+    newState.log.push({ at: new Date().toISOString(), round, table: m.table, from, to });
+  }
+
+  if (newState.status === 'complete' && !allResultsIn(newState.rounds[newState.rounds.length - 1])) {
+    newState.status = 'running';
+  }
+  if (await saveState(newState) && isLocked(roundIdx)) {
+    showToast(`Corrected: ${to}.`, 'success');
+  }
+  busy = false;
+  render();
+}
+
+async function clearResult(roundIdx, matchIdx) {
+  return setResult(roundIdx, matchIdx, null);
+}
+
+function allResultsIn(round) {
+  return round.matches.every(m => m.result !== null);
+}
+
+async function nextRound() {
+  if (busy) return;
+  const current = state.rounds[state.rounds.length - 1];
+  if (!allResultsIn(current)) { showToast('Enter every result first.', 'error'); return; }
+  if (state.rounds.length >= state.totalRounds) return;
+
+  const result = buildNextRound(state);
+  if (!result) { showToast('Could not pair the next round. Need at least 2 active players.', 'error'); return; }
+
+  closeModal();
+  busy = true;
+  const newState = clone(state);
+  newState.rounds.push(makeRound(state.rounds.length + 1, result.pairs, result.bye));
+  if (await saveState(newState)) showToast(`Round ${newState.rounds.length} paired.`, 'success');
+  busy = false;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Count entered (non-bye) results in a set of rounds
+function countResults(rounds) {
+  return rounds.reduce((n, r) => n + r.matches.filter(m => m.b !== null && m.result !== null).length, 0);
+}
+
+function logEntry(newState, entry) {
+  newState.log = newState.log || [];
+  newState.log.push({ at: new Date().toISOString(), ...entry });
+}
+
+// Roll back so that round index `roundIdx` becomes the current round again.
+// Every later round (pairings and results) is discarded. Results in rounds up to
+// and including `roundIdx` are kept and stay editable.
+async function rollBackTo(roundIdx) {
+  if (busy) return;
+  const target    = state.rounds[roundIdx];
+  const discarded = state.rounds.slice(roundIdx + 1);
+  const final     = state.status === 'complete';
+
+  if (!discarded.length && !final) return;
+
+  const lost = countResults(discarded);
+  const msg = discarded.length
+    ? `ROLL BACK to Round ${target.number}?\n\n` +
+      `Discards: Round${discarded.length > 1 ? 's' : ''} ${discarded.map(r => r.number).join(', ')} ` +
+      `(pairings and ${lost} result${lost !== 1 ? 's' : ''}).\n` +
+      `Kept: all results up to and including Round ${target.number}.\n\n` +
+      `Round ${target.number} becomes the current round. Fix any results, then Review and pair again.`
+    : `REOPEN Round ${target.number}?\n\nThe tournament goes back to "in progress" with all results kept.\nFix any results, then Review and Finish again.`;
+  if (!confirm(msg)) return;
+
+  busy = true;
+  const newState = clone(state);
+  newState.rounds = newState.rounds.slice(0, roundIdx + 1);
+  newState.status = 'running';
+  logEntry(newState, { type: 'rollback', round: target.number,
+    text: discarded.length
+      ? `Rolled back to Round ${target.number} (discarded Round${discarded.length > 1 ? 's' : ''} ${discarded.map(r => r.number).join(', ')}, ${lost} result${lost !== 1 ? 's' : ''})`
+      : `Reopened Round ${target.number} after finish` });
+  if (await saveState(newState)) showToast(`Round ${target.number} is now the current round.`, 'success');
+  busy = false;
+  closeModal();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Back to the previous round: discards the current round's pairing (and any results in it).
+async function undoPairing() {
+  if (busy) return;
+  const curIdx  = state.rounds.length - 1;
+  const current = state.rounds[curIdx];
+
+  if (curIdx === 0) {
+    const lost = countResults([current]);
+    if (!confirm(`Undo Round 1?${lost ? `\n\nThis discards ${lost} entered result${lost !== 1 ? 's' : ''}.` : ''}\n\nReturns to the player check-in screen.`)) return;
+    busy = true;
+    const ok = await deleteTournamentRow();
+    busy = false;
+    if (ok) { showToast('Back to check-in.', 'success'); await reloadAll(); }
+    return;
+  }
+  return rollBackTo(curIdx - 1);
+}
+
+// Throw away the current round's pairing and pair it again from the current standings.
+// Use after correcting an earlier result, dropping a player, or adding a late player.
+async function repairRound() {
+  if (busy) return;
+  const curIdx  = state.rounds.length - 1;
+  const current = state.rounds[curIdx];
+  const lost    = countResults([current]);
+
+  if (!confirm(
+    `RE-PAIR Round ${current.number}?\n\n` +
+    (curIdx === 0 ? 'Round 1 is shuffled and paired randomly again.' : `Round ${current.number} is paired again from the current standings.`) +
+    (lost ? `\n\nThis discards ${lost} result${lost !== 1 ? 's' : ''} already entered for Round ${current.number}.` : '')
+  )) return;
+
+  const base = clone(state);
+  base.rounds.pop();
+
+  let round;
+  if (curIdx === 0) {
+    const order = shuffle(base.players.filter(p => !p.dropped).map(p => p.id));
+    const pairs = [];
+    for (let i = 0; i + 1 < order.length; i += 2) pairs.push([order[i], order[i + 1]]);
+    round = makeRound(1, pairs, order.length % 2 ? order[order.length - 1] : null);
+  } else {
+    const res = buildNextRound(base);
+    if (!res) { showToast('Could not pair this round. Need at least 2 active players.', 'error'); return; }
+    round = makeRound(current.number, res.pairs, res.bye);
+  }
+
+  busy = true;
+  base.rounds.push(round);
+  logEntry(base, { type: 'rollback', round: current.number,
+    text: `Re-paired Round ${current.number}${lost ? ` (discarded ${lost} result${lost !== 1 ? 's' : ''})` : ''}` });
+  if (await saveState(base)) showToast(`Round ${current.number} re-paired.`, 'success');
+  busy = false;
+  render();
+}
+
+async function finishTournament() {
+  if (busy) return;
+  const current = state.rounds[state.rounds.length - 1];
+  if (!allResultsIn(current)) { showToast('Enter every result first.', 'error'); return; }
+  closeModal();
+  busy = true;
+  const newState = clone(state);
+  newState.status = 'complete';
+  if (await saveState(newState)) showToast('Tournament complete.', 'success');
+  busy = false;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function toggleDrop(playerId) {
+  if (busy) return;
+  const p = state.players.find(x => x.id === playerId);
+  const msg = p.dropped
+    ? `Return ${p.name} to the tournament? They will be paired from the next round.`
+    : `Drop ${p.name}? They keep their points but won't be paired in future rounds.`;
+  if (!confirm(msg)) return;
+  busy = true;
+  const newState = clone(state);
+  const np = newState.players.find(x => x.id === playerId);
+  np.dropped = !np.dropped;
+  await saveState(newState);
+  busy = false;
+  render();
+}
+
+// ── Player entry (drafted players are entered here) ───────────────────────
+let uncheckedIds = new Set();   // players unticked at check-in (kept across re-renders)
+
+function takenHeroSet() { return new Set(confirmedRegs.map(r => r.hero)); }
+
+// ── Draft passes: heroes passed on during the draft leave the pool for good ──
+// Stored in unmatched_tournament under its own id, separate from the tournament itself.
+const DRAFT_ID = TOURNAMENT_ID + '-draft';
+let passedHeroes = [];     // [{ hero, at }]
+let draftVersion = 0;
+let draftExists  = false;
+
+function passedSet() { return new Set(passedHeroes.map(p => p.hero)); }
+function poolLeft()  { const t = takenHeroSet(), p = passedSet(); return EVENT_ROSTER.filter(h => !t.has(h) && !p.has(h)); }
+
+async function loadDraft() {
+  const res = await supabaseFetch(`unmatched_tournament?id=eq.${encodeURIComponent(DRAFT_ID)}&select=state,version`);
+  if (!res.ok) throw new Error('Draft record not reachable (' + res.status + ')');
+  const data = await res.json();
+  if (data.length) { passedHeroes = data[0].state.passed || []; draftVersion = data[0].version; draftExists = true; }
+  else { passedHeroes = []; draftVersion = 0; draftExists = false; }
+}
+
+async function saveDraft(newPassed) {
+  try {
+    let res;
+    if (!draftExists) {
+      res = await supabaseFetch('unmatched_tournament', {
+        method: 'POST', headers: { 'Prefer': 'return=representation' },
+        body: JSON.stringify({ id: DRAFT_ID, state: { passed: newPassed }, version: 1 })
+      });
+      if (!res.ok) { showToast('Changed on another device. Reloaded.', 'error'); await reloadAll(); return false; }
+      draftExists = true; draftVersion = 1; passedHeroes = newPassed; return true;
+    }
+    res = await supabaseFetch(
+      `unmatched_tournament?id=eq.${encodeURIComponent(DRAFT_ID)}&version=eq.${draftVersion}`, {
+        method: 'PATCH', headers: { 'Prefer': 'return=representation' },
+        body: JSON.stringify({ state: { passed: newPassed }, version: draftVersion + 1, updated_at: new Date().toISOString() })
+      });
+    const data = res.ok ? await res.json() : [];
+    if (!data.length) { showToast('Changed on another device. Reloaded — please try again.', 'error'); await reloadAll(); return false; }
+    draftVersion++; passedHeroes = newPassed; return true;
+  } catch (e) { showToast('Network error. Not saved.', 'error'); return false; }
+}
+
+async function markPassed() {
+  if (busy) return;
+  const hero = document.getElementById('pass-hero').value;
+  if (!hero) { showToast('Select the hero that was passed.', 'error'); return; }
+  busy = true;
+  try { await Promise.all([loadConfirmed(), loadDraft()]); } catch (e) { busy = false; showToast('Could not reach the database.', 'error'); return; }
+  if (takenHeroSet().has(hero) || passedSet().has(hero)) {
+    busy = false; showToast(`${hero} is already out of the pool.`, 'error'); render(); return;
+  }
+  if (await saveDraft([...passedHeroes, { hero, at: new Date().toISOString() }])) {
+    showToast(`${hero} passed — removed from the pool.`, 'success');
+  }
+  busy = false;
+  render();
+}
+
+async function undoPass(hero) {
+  if (busy) return;
+  if (!confirm(`Put ${hero} back into the draft pool?`)) return;
+  busy = true;
+  try { await loadDraft(); } catch (e) { busy = false; showToast('Could not reach the database.', 'error'); return; }
+  if (await saveDraft(passedHeroes.filter(p => p.hero !== hero))) showToast(`${hero} is back in the pool.`, 'success');
+  busy = false;
+  render();
+}
+
+function heroOptions() {
+  const taken = takenHeroSet(), passed = passedSet();
+  return '<option value="">— Select drafted hero —</option>' + EVENT_ROSTER.map(h => {
+    const tag = taken.has(h) ? '  [TAKEN]' : passed.has(h) ? '  [PASSED]' : '';
+    return `<option value="${esc(h)}" ${tag ? 'disabled' : ''}>${esc(h)}${tag}</option>`;
+  }).join('');
+}
+
+function passFormHtml() {
+  const left = poolLeft();
+  const chips = passedHeroes.length
+    ? passedHeroes.map(p => `<span class="pass-chip">${esc(p.hero)}
+        <button class="pass-undo" title="Put back in the pool" onclick="undoPass('${esc(p.hero).replace(/&#39;/g, "\\'")}')">↶</button></span>`).join('')
+    : '<span class="dim" style="font-size:0.82rem;font-style:italic;">No heroes passed yet.</span>';
+  return `<div class="pass-row">
+      <div class="entry-group" style="flex:1;"><label for="pass-hero">Hero</label>
+        <select id="pass-hero"><option value="">— Select passed hero —</option>
+          ${left.map(h => `<option value="${esc(h)}">${esc(h)}</option>`).join('')}</select></div>
+      <button class="btn-ghost btn-danger" style="padding:0.55rem 1rem;" onclick="markPassed()">Mark Passed</button>
+    </div>
+    <div class="pass-list"><span class="pass-label">Passed (${passedHeroes.length}):</span> ${chips}</div>`;
+}
+
+function playerFormHtml(late) {
+  return `<div class="entry-grid">
+    <div class="entry-group"><label for="pe-first">First Name</label>
+      <input type="text" id="pe-first" placeholder="First name" autocomplete="off" onkeydown="if(event.key==='Enter')addPlayer(${late})"></div>
+    <div class="entry-group"><label for="pe-last">Last Name</label>
+      <input type="text" id="pe-last" placeholder="Optional" autocomplete="off" onkeydown="if(event.key==='Enter')addPlayer(${late})"></div>
+    <div class="entry-group"><label for="pe-hero">Hero</label>
+      <select id="pe-hero">${heroOptions()}</select></div>
+    <button class="btn" id="pe-btn" onclick="addPlayer(${late})">Add Player</button>
+  </div>`;
+}
+
+// Saves the player to unmatched_registrations (confirmed, no email).
+// late = true adds them straight into the running tournament with 0 points.
+async function addPlayer(late) {
+  if (busy) return;
+  const first = document.getElementById('pe-first').value.trim();
+  const last  = document.getElementById('pe-last').value.trim();
+  const hero  = document.getElementById('pe-hero').value;
+  if (!first) { showToast('First name is required.', 'error'); return; }
+  if (!hero)  { showToast('Select the drafted hero.', 'error'); return; }
+
+  busy = true;
+  try { await loadConfirmed(); } catch (e) { busy = false; showToast('Could not reach the database.', 'error'); return; }
+  try { await loadDraft(); } catch (e) { /* passes unavailable: fall back to taken-only check */ }
+  if (takenHeroSet().has(hero)) {
+    busy = false; showToast(`${hero} is already taken.`, 'error'); render(); return;
+  }
+  if (passedSet().has(hero)) {
+    busy = false; showToast(`${hero} was passed and is out of the pool. Undo the pass first if that was a mistake.`, 'error'); render(); return;
+  }
+  const count = state ? state.players.filter(p => !p.dropped).length : confirmedRegs.length;
+  if (count >= MAX_PLAYERS && !confirm(`There are already ${count} players (cap ${MAX_PLAYERS}). Add ${first} anyway?`)) {
+    busy = false; return;
+  }
+
+  let row;
+  try {
+    const res = await supabaseFetch('unmatched_registrations', {
+      method: 'POST',
+      headers: { 'Prefer': 'return=representation' },
+      body: JSON.stringify({
+        first_name: first, last_name: last, email: null, hero_selected: hero,
+        confirmed: true, confirmed_at: new Date().toISOString(), token: crypto.randomUUID()
+      })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      console.error('Add player failed', err);
+      busy = false;
+      showToast(err.code === '23502' ? 'Database still requires email. Run the walk-in SQL in Supabase.'
+              : err.code === '42501' ? 'Blocked by row-level security. Check the INSERT policy.'
+              : 'Add failed. Check console.', 'error');
+      return;
+    }
+    row = (await res.json())[0];
+  } catch (e) { busy = false; showToast('Network error. Player not added.', 'error'); return; }
+
+  const name = (first + ' ' + last).trim();
+  if (late && state) {
+    const newState = clone(state);
+    newState.players.push({ id: String(row.id), name, hero, seed: newState.players.length + 1, dropped: false });
+    logEntry(newState, { type: 'note', round: newState.rounds.length, text: `Added late player ${name} (${hero}) during Round ${newState.rounds.length}` });
+    await loadConfirmed();
+    if (await saveState(newState)) showToast(`${name} added with ${hero}. Paired from the next round.`, 'success');
+    busy = false;
+    closeModal();
+  } else {
+    await loadConfirmed();
+    busy = false;
+    showToast(`${name} added with ${hero}.`, 'success');
+  }
+  render();
+  const f = document.getElementById('pe-first'); if (f) f.focus();
+}
+
+// Remove a player before the tournament starts (wrong name or hero entered)
+async function removePlayer(id) {
+  if (busy) return;
+  const r = confirmedRegs.find(x => x.id === id);
+  if (!r || !confirm(`Remove ${r.name} (${r.hero})?\n\nTheir hero becomes available again.`)) return;
+  busy = true;
+  try {
+    const res = await supabaseFetch(`unmatched_registrations?id=eq.${encodeURIComponent(id)}`, {
+      method: 'DELETE', headers: { 'Prefer': 'return=minimal' }
+    });
+    if (!res.ok && res.status !== 204) throw new Error('delete failed');
+    uncheckedIds.delete(id);
+    await loadConfirmed();
+    showToast(`${r.name} removed. ${r.hero} is available again.`, 'success');
+  } catch (e) { showToast('Remove failed.', 'error'); }
+  busy = false;
+  render();
+}
+
+function addLatePlayers() {
+  if (busy) return;
+  modal = { type: 'late' };
+  renderModal();
+  const f = document.getElementById('pe-first'); if (f) f.focus();
+}
+
+async function deleteTournamentRow() {
+  try {
+    const res = await supabaseFetch(`unmatched_tournament?id=eq.${encodeURIComponent(TOURNAMENT_ID)}`, {
+      method: 'DELETE', headers: { 'Prefer': 'return=minimal' }
+    });
+    if (!res.ok && res.status !== 204) { showToast('Reset failed.', 'error'); return false; }
+    state = null; version = 0; rowExists = false;
+    return true;
+  } catch (e) {
+    showToast('Network error.', 'error');
+    return false;
+  }
+}
+
+async function resetTournament() {
+  if (busy) return;
+  if (!confirm('RESET the entire tournament?\n\nAll pairings and results will be deleted. Registrations are not affected.')) return;
+  if (prompt('Type RESET to confirm.') !== 'RESET') { showToast('Reset cancelled.', 'error'); return; }
+  busy = true;
+  const ok = await deleteTournamentRow();
+  busy = false;
+  if (ok) { showToast('Tournament reset.', 'success'); await reloadAll(); }
+}
+
+// ── Rendering ─────────────────────────────────────────────────────────────
+function render() {
+  const main = document.getElementById('main');
+  if (!state) { main.innerHTML = renderSetup(); modal = null; renderModal(); return; }
+  main.innerHTML = renderTournament();
+  renderModal();
+}
+
+// ── Modals: round review + player record ──────────────────────────────────
+let modal = null;   // null | { type:'review' } | { type:'player', id }
+
+function openReview() {
+  const current = state.rounds[state.rounds.length - 1];
+  if (!allResultsIn(current)) { showToast('Enter every result first.', 'error'); return; }
+  modal = { type: 'review' };
+  renderModal();
+}
+function openPlayer(id) { modal = { type: 'player', id }; renderModal(); }
+function closeModal()   { modal = null; renderModal(); }
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal) closeModal(); });
+
+function renderModal() {
+  const root = document.getElementById('modal-root');
+  if (!modal || !state) { root.innerHTML = ''; return; }
+  const body = modal.type === 'review' ? renderReview()
+             : modal.type === 'late'   ? renderLateEntry()
+             : renderPlayerRecord(modal.id);
+  if (!body) { modal = null; root.innerHTML = ''; return; }
+  root.innerHTML = `<div class="modal-backdrop" onclick="if(event.target===this)closeModal()">
+    <div class="modal">${body}</div></div>`;
+}
+
+function reviewLine(m) {
+  const a = `<span class="%A">${esc(nameOf(m.a))}</span> <span class="h">${esc(heroOf(m.a))}</span>`;
+  if (m.b === null) {
+    return a.replace('%A', 'w') + `<span class="verb">has a bye</span>`;
+  }
+  const b = `<span class="%B">${esc(nameOf(m.b))}</span> <span class="h">${esc(heroOf(m.b))}</span>`;
+  if (m.result === 'A') return a.replace('%A','w') + `<span class="verb">beat</span>` + b.replace('%B','l');
+  if (m.result === 'B') return b.replace('%B','w') + `<span class="verb">beat</span>` + a.replace('%A','l');
+  if (m.result === 'D') return a.replace('%A','d') + `<span class="verb">drew with</span>` + b.replace('%B','d');
+  return a.replace('%A','') + `<span class="verb">vs</span>` + b.replace('%B','') + ` <span class="missing">— NO RESULT</span>`;
+}
+
+function renderReview() {
+  const curIdx  = state.rounds.length - 1;
+  const current = state.rounds[curIdx];
+  const isLast  = state.rounds.length >= state.totalRounds;
+
+  // Running totals after this round, so a scorekeeper can sanity-check with players
+  const stats = computeStats(state);
+  const tally = rankPlayers(state, stats)
+    .filter(p => current.matches.some(m => m.a === p.id || m.b === p.id))
+    .map(p => `<strong>${esc(p.name)}</strong> ${stats[p.id].w}-${stats[p.id].d}-${stats[p.id].l}`)
+    .join(' &nbsp;·&nbsp; ');
+
+  const confirmBtn = isLast
+    ? `<button class="btn" onclick="finishTournament()">Confirm · Finish Tournament</button>`
+    : `<button class="btn" onclick="nextRound()">Confirm · Pair Round ${current.number + 1}</button>`;
+
+  return `
+    <h2>Review Round ${current.number}</h2>
+    <p class="sub">Read each result aloud and have the players confirm it before you continue.
+      After this, changes count as corrections and are logged.</p>
+    ${current.matches.map(m => `<div class="review-row"><span class="tno">Table ${m.table}</span><span>${reviewLine(m)}</span></div>`).join('')}
+    <div class="review-tally"><span style="color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;font-size:0.72rem;">Records after this round (W-D-L)</span><br>${tally}</div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal()">◀ Back · Fix a Result</button>
+      ${confirmBtn}
+    </div>`;
+}
+
+function renderPlayerRecord(id) {
+  const p = state.players.find(x => x.id === id);
+  if (!p) return null;
+  const stats = computeStats(state);
+  const s = stats[id];
+
+  const rows = state.rounds.map((r, ri) => {
+    const mi = r.matches.findIndex(m => m.a === id || m.b === id);
+    if (mi === -1) {
+      return `<tr><td class="dim">R${r.number}</td><td colspan="3" class="dim" style="font-style:italic;">Did not play this round</td></tr>`;
+    }
+    const m = r.matches[mi];
+    if (m.b === null) {
+      return `<tr><td class="dim">R${r.number}</td><td class="dim">T${m.table}</td>
+        <td class="dim" style="font-style:italic;">Bye</td>
+        <td><div class="rec-btns"><span class="res-btn active win" style="cursor:default;">Win · bye</span></div></td></tr>`;
+    }
+    const isA  = m.a === id;
+    const opp  = isA ? m.b : m.a;
+    const winV = isA ? 'A' : 'B';
+    const lossV = isA ? 'B' : 'A';
+    const cls = v => m.result === v ? 'active' : '';
+    return `<tr>
+      <td class="dim">R${r.number}</td>
+      <td class="dim">T${m.table}</td>
+      <td>vs <a class="plink" onclick="openPlayer('${esc(opp)}')">${esc(nameOf(opp))}</a><br><span class="hero">${esc(heroOf(opp))}</span></td>
+      <td><div class="rec-btns">
+        <button class="res-btn ${cls(winV)} win"  onclick="setResult(${ri},${mi},'${winV}')">Win</button>
+        <button class="res-btn ${cls('D')}"        onclick="setResult(${ri},${mi},'D')">Draw</button>
+        <button class="res-btn ${cls(lossV)} loss" onclick="setResult(${ri},${mi},'${lossV}')">Loss</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+
+  return `
+    <h2>${esc(p.name)}</h2>
+    <p class="sub"><span class="hero">${esc(p.hero)}</span> &nbsp;·&nbsp; ${fmtPts(s.pts)} pts &nbsp;·&nbsp; ${s.w}-${s.d}-${s.l} (W-D-L)</p>
+    <table class="rec-table">
+      <thead><tr><th>Rnd</th><th>Table</th><th>Opponent</th><th style="text-align:right;">Result for ${esc(p.name)}</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <p class="note" style="margin:1rem 0 0;">Tap Win, Draw or Loss to correct a match. The opponent's record updates to match.
+      Standings and the champion recalculate. Pairings already played don't change.</p>
+    <div class="modal-footer"><button class="btn-ghost" onclick="closeModal()">Close</button></div>`;
+}
+
+function renderLateEntry() {
+  return `
+    <h2>Add Late Player</h2>
+    <p class="sub">They join with 0 points and are paired from Round ${state.rounds.length + 1}. Their hero is locked immediately.</p>
+    ${playerFormHtml(true)}
+    <div class="modal-footer"><button class="btn-ghost" onclick="closeModal()">Cancel</button></div>`;
+}
+
+function renderLog() {
+  const log = state.log || [];
+  if (!log.length) return '';
+  const rows = log.slice().reverse().map(e => {
+    const t = new Date(e.at).toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+    if (e.type === 'rollback' || e.type === 'note') {
+      return `<div class="log-row"><span class="when">${esc(t)}</span><span style="color:var(--gold-light);">${e.type === 'note' ? '+' : '↶'} ${esc(e.text)}</span></div>`;
+    }
+    return `<div class="log-row"><span class="when">${esc(t)}</span>R${e.round} T${e.table}: <s>${esc(e.from)}</s> → <span class="to">${esc(e.to)}</span></div>`;
+  }).join('');
+  return `<div class="card">
+    <div class="section-header"><span class="section-title">Corrections &amp; Roll-Back Log</span>
+      <span class="dim" style="font-size:0.8rem;">${log.length} change${log.length !== 1 ? 's' : ''}</span></div>
+    ${rows}
+  </div>`;
+}
+
+function renderSetup() {
+  const entry = `<div class="card accent">
+    <div class="section-header">
+      <span class="section-title">Enter Drafted Players</span>
+      <span class="dim" style="font-size:0.85rem;">${confirmedRegs.length} / ${MAX_PLAYERS} players · ${poolLeft().length} heroes left in pool</span>
+    </div>
+    <p class="note">As the draft happens: when a player keeps a hero, add them below. When a hero is passed, mark it passed — it leaves the pool for good.</p>
+    <div class="sub-title">Hero Kept</div>
+    ${playerFormHtml(false)}
+    <div class="sub-title" style="margin-top:1.3rem;">Hero Passed</div>
+    ${passFormHtml()}
+  </div>`;
+
+  if (!confirmedRegs.length) {
+    return entry + `<div class="card">
+      <div class="section-title" style="margin-bottom:0.6rem;">Player Check-In</div>
+      <p class="dim">No players entered yet.</p>
+    </div>`;
+  }
+
+  const checkedCount = confirmedRegs.filter(r => !uncheckedIds.has(r.id)).length;
+  const rows = confirmedRegs.map(r => `
+    <div class="player-check">
+      <input type="checkbox" class="setup-player" id="chk-${esc(r.id)}" value="${esc(r.id)}" ${uncheckedIds.has(r.id) ? '' : 'checked'} onchange="toggleCheckIn(this)">
+      <label for="chk-${esc(r.id)}" style="flex:1;cursor:pointer;">${esc(r.name)}</label>
+      <span class="hero">${esc(r.hero)}</span>
+      <button class="btn-ghost btn-danger" style="padding:0.2rem 0.6rem;font-size:0.72rem;" onclick="removePlayer('${esc(r.id)}')">Remove</button>
+    </div>`).join('');
+
+  return entry + `<div class="card">
+    <div class="section-header">
+      <span class="section-title">Player Check-In</span>
+      <span class="dim" style="font-size:0.85rem;" id="setup-count">${checkedCount} checked in</span>
+    </div>
+    <p class="note">Untick anyone who didn't show. Remove a player to fix a wrong name or hero, then enter them again.
+      ${TOTAL_ROUNDS} rounds · Win ${fmtPts(PTS_WIN)} · Draw ${fmtPts(PTS_DRAW)} · Loss ${fmtPts(PTS_LOSS)} · Bye ${fmtPts(PTS_BYE)}</p>
+    ${rows}
+    <div style="margin-top:1.2rem;text-align:right;">
+      <button class="btn" onclick="startTournament()">Start · Pair Round 1</button>
+    </div>
+  </div>`;
+}
+
+function toggleCheckIn(el) {
+  if (el.checked) uncheckedIds.delete(el.value); else uncheckedIds.add(el.value);
+  updateSetupCount();
+}
+
+function updateSetupCount() {
+  const n = document.querySelectorAll('.setup-player:checked').length;
+  const el = document.getElementById('setup-count');
+  if (el) el.textContent = `${n} checked in`;
+}
+
+function nameOf(id) { const p = state.players.find(x => x.id === id); return p ? p.name : '?'; }
+function heroOf(id) { const p = state.players.find(x => x.id === id); return p ? p.hero : ''; }
+
+function renderMatch(m, roundIdx, matchIdx) {
+  const tableCell = `<div class="table-no">Table<strong>${m.table}</strong></div>`;
+  if (m.b === null) {
+    return `<div class="match">
+      ${tableCell}
+      <div class="side winner"><span class="pname">${esc(nameOf(m.a))}</span><span class="hero">${esc(heroOf(m.a))}</span></div>
+      <div class="bye-tag">Bye · ${fmtPts(PTS_BYE)}</div>
+      <div></div>
+    </div>`;
+  }
+  const aCls = m.result === 'A' ? 'winner' : m.result === 'B' ? 'loser' : '';
+  const bCls = m.result === 'B' ? 'winner' : m.result === 'A' ? 'loser' : '';
+  const firstName = id => esc((nameOf(id).split(' ')[0]) || nameOf(id));
+  const btn = (val, label, cls) =>
+    `<button class="res-btn ${cls || ''} ${m.result === val ? 'active' : ''}" title="${val === 'D' ? 'Draw' : esc(nameOf(val === 'A' ? m.a : m.b)) + ' wins'}" onclick="setResult(${roundIdx},${matchIdx},'${val}')">${label}</button>`;
+  const clearBtn = m.result
+    ? `<button class="res-btn" title="Clear result" onclick="clearResult(${roundIdx},${matchIdx})">✕</button>` : '';
+
+  return `<div class="match">
+    ${tableCell}
+    <div class="side ${aCls}"><a class="pname plink" onclick="openPlayer('${esc(m.a)}')">${esc(nameOf(m.a))}</a><span class="hero">${esc(heroOf(m.a))}</span></div>
+    <div class="result-btns">${btn('A', firstName(m.a) + ' wins', 'named')}${btn('D', 'Draw')}${btn('B', firstName(m.b) + ' wins', 'named')}${clearBtn}</div>
+    <div class="side right ${bCls}"><a class="pname plink" onclick="openPlayer('${esc(m.b)}')">${esc(nameOf(m.b))}</a><span class="hero">${esc(heroOf(m.b))}</span></div>
+  </div>`;
+}
+
+function renderStandings(stats, ranked, final) {
+  let prevKey = null, prevRank = 0;
+  const rows = ranked.map((p, i) => {
+    const s = stats[p.id];
+    const key = `${s.pts}|${s.buch}|${s.sb}`;
+    const rank = key === prevKey ? prevRank : i + 1;
+    prevKey = key; prevRank = rank;
+    const action = final ? '' :
+      `<button class="btn-ghost ${p.dropped ? '' : 'btn-danger'}" onclick="toggleDrop('${esc(p.id)}')">${p.dropped ? 'Return' : 'Drop'}</button>`;
+    return `<tr class="${p.dropped ? 'dropped-row' : ''}">
+      <td class="num" style="color:var(--gold);">${rank}</td>
+      <td><a class="plink" onclick="openPlayer('${esc(p.id)}')">${esc(p.name)}</a>${p.dropped ? ' <span class="dim" style="font-size:0.72rem;letter-spacing:0.1em;">DROPPED</span>' : ''}</td>
+      <td class="hero">${esc(p.hero)}</td>
+      <td class="num" style="color:var(--gold-light);font-weight:bold;">${fmtPts(s.pts)}</td>
+      <td class="num dim">${s.w}-${s.d}-${s.l}</td>
+      <td class="num dim">${fmtPts(s.buch)}</td>
+      <td class="num dim">${fmtPts(s.sb)}</td>
+      ${final ? '' : `<td style="text-align:right;">${action}</td>`}
+    </tr>`;
+  }).join('');
+
+  return `<table class="data-table">
+    <thead><tr>
+      <th class="num">#</th><th>Player</th><th>Hero</th>
+      <th class="num">Pts</th><th class="num">W-D-L</th>
+      <th class="num" title="Buchholz: sum of opponents' points">Buch</th>
+      <th class="num" title="Sonneborn-Berger: points of opponents beaten, plus half for draws">SB</th>
+      ${final ? '' : '<th></th>'}
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function renderTournament() {
+  const stats   = computeStats(state);
+  const ranked  = rankPlayers(state, stats);
+  const curIdx  = state.rounds.length - 1;
+  const current = state.rounds[curIdx];
+  const done    = allResultsIn(current);
+  const final   = state.status === 'complete';
+  const isLast  = state.rounds.length >= state.totalRounds;
+  const active  = state.players.filter(p => !p.dropped).length;
+  const pendingMatches = current.matches.filter(m => m.result === null).length;
+  const anyEntered = current.matches.some(m => m.b !== null && m.result !== null);
+
+  let html = '';
+
+  if (final) {
+    const champ = ranked[0];
+    html += `<div class="champion">
+      <div class="crown">🏆</div>
+      <h2>Tournament Champion</h2>
+      <div class="champ-name">${esc(champ.name)}</div>
+      <div class="champ-hero">${esc(champ.hero)} · ${fmtPts(stats[champ.id].pts)} pts</div>
+    </div>`;
+  }
+
+  html += `<div class="status-bar">
+    <div class="stat-card"><div class="stat-num">${final ? 'Final' : current.number + ' / ' + state.totalRounds}</div><div class="stat-label">Round</div></div>
+    <div class="stat-card"><div class="stat-num">${active}</div><div class="stat-label">Active Players</div></div>
+    <div class="stat-card"><div class="stat-num">${final ? '—' : pendingMatches}</div><div class="stat-label">Results Outstanding</div></div>
+  </div>`;
+
+  if (!final) {
+    let actionBtn;
+    if (!isLast) {
+      actionBtn = `<button class="btn" ${done ? '' : 'disabled'} onclick="openReview()">Review · Then Pair Round ${current.number + 1}</button>`;
+    } else {
+      actionBtn = `<button class="btn" ${done ? '' : 'disabled'} onclick="openReview()">Review · Then Finish</button>`;
+    }
+    html += `<div class="card accent">
+      <div class="section-header">
+        <span class="section-title">Round ${current.number} Pairings</span>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+          <button class="btn-ghost" onclick="addLatePlayers()">+ Late Players</button>
+          <button class="btn-ghost" onclick="repairRound()" title="Pair this round again from the current standings">↻ Re-pair Round ${current.number}</button>
+          <button class="btn-ghost btn-danger" onclick="undoPairing()" title="Discard this round and go back to the previous one">↶ ${curIdx === 0 ? 'Back to Check-In' : 'Back to Round ' + (current.number - 1)}</button>
+        </div>
+      </div>
+      ${current.matches.map((m, i) => renderMatch(m, curIdx, i)).join('')}
+      <div style="margin-top:1.2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
+        <span class="dim" style="font-size:0.82rem;font-style:italic;">${done ? 'All results in.' : pendingMatches + ' result' + (pendingMatches !== 1 ? 's' : '') + ' outstanding.'}</span>
+        ${actionBtn}
+      </div>
+    </div>`;
+  }
+
+  html += `<div class="card">
+    <div class="section-header"><span class="section-title">${final ? 'Final Standings' : 'Standings'}</span></div>
+    ${renderStandings(stats, ranked, final)}
+    <p class="note" style="margin:0.8rem 0 0;">Click any player's name to see their match-by-match record and correct a result.
+      Tiebreaks: Buchholz (opponents' points), then Sonneborn-Berger (points of opponents beaten, half for draws).</p>
+  </div>`;
+
+  const pastEnd = final ? state.rounds.length : curIdx;
+  if (pastEnd > 0) {
+    let past = '';
+    for (let r = pastEnd - 1; r >= 0; r--) {
+      past += `<details class="past-round"${final && r === pastEnd - 1 ? ' open' : ''}>
+        <summary>Round ${state.rounds[r].number} Results</summary>
+        <div style="text-align:right;margin:0.5rem 0 0.2rem;">
+          <button class="btn-ghost btn-danger" onclick="rollBackTo(${r})">↶ ${final && r === state.rounds.length - 1 ? 'Reopen Round ' + state.rounds[r].number : 'Roll Back to Round ' + state.rounds[r].number}</button>
+        </div>
+        ${state.rounds[r].matches.map((m, i) => renderMatch(m, r, i)).join('')}
+      </details>`;
+    }
+    html += `<div class="card">
+      <div class="section-header"><span class="section-title">${final ? 'All Rounds · Correct a Result' : 'Previous Rounds · Correct a Result'}</span></div>
+      <p class="note">Any result can be corrected, even after the tournament is finished. You'll be shown the old and new result before it saves.
+        Standings and the champion recalculate. Pairings already played stay as they are.</p>
+      ${past}
+    </div>`;
+  }
+
+  html += renderLog();
+
+  html += `<div style="text-align:right;">
+    <button class="btn-ghost btn-danger" onclick="resetTournament()">⚠ Reset Tournament</button>
+  </div>`;
+
+  return html;
+}
+
+// Refresh when the tab regains focus (picks up changes from another device)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' &&
+      document.getElementById('app-screen').style.display === 'block' && !busy) {
+    reloadAll();
+  }
+});
+
+// One login covers both director pages for this browser tab (until Log Out or the tab closes)
+try {
+  if (sessionStorage.getItem('rg_director') === '1') {
+    document.getElementById('admin-password').value = ADMIN_PASSWORD;
+    doLogin();
+    document.getElementById('admin-password').value = '';
+  }
+} catch (e) {}
+</script>
+</body>
+</html>

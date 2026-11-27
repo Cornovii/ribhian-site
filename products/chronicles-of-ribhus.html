@@ -1,0 +1,1147 @@
+<!--Chronicles of Ribhus page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Product page for Chronicles of Ribhus — High Fantasy setting. Core Heptaverse setting.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chronicles of Ribhus — Ribhian Games LLC</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+
+    :root {
+      --black:        #080402;
+      --deep:         #120c06;
+      --stone:        #1c1408;
+      --stone-mid:    #261a0a;
+      --stone-light:  #30200c;
+      --crimson:      #8c1f1f;
+      --crimson-mid:  #b03030;
+      --crimson-pale: #d46050;
+      --gold:         #c9973a;
+      --gold-bright:  #e8b84b;
+      --gold-pale:    #f0d080;
+      --parchment:    #e8dfc0;
+      --parchment-dim:#c0a878;
+      --text-body:    #d0c8a8;
+      --text-dim:     #786850;
+    }
+
+    .product-hero {
+      position: relative;
+      min-height: 65vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 3rem 0.8rem;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--black) 0%, var(--deep) 100%);
+    }
+
+    .product-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(140,31,31,0.16) 0%, transparent 65%),
+        radial-gradient(ellipse 80% 40% at 50% 90%, rgba(201,151,58,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .cor-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .product-hero-content { position: relative; z-index: 2; width: 100%; text-align: center; }
+
+    .product-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-shadow: 0 0 8px rgba(201,151,58,0.9), 0 0 22px rgba(201,151,58,0.5), 0 0 45px rgba(201,151,58,0.25);
+      background: rgba(5,3,2,0.88);
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .product-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      color: var(--gold);
+      text-shadow: 0 0 8px rgba(201,151,58,0.8), 0 0 20px rgba(201,151,58,0.4);
+      background: rgba(5,3,2,0.88);
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 2rem;
+    }
+
+    .product-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: nowrap;
+      width: 100%;
+    }
+
+    .meta-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid rgba(201,151,58,0.45);
+      background: rgba(12,8,4,0.55);
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-shadow: 0 0 8px rgba(201,151,58,0.8), 0 0 20px rgba(201,151,58,0.4);
+      flex: 1;
+      max-width: 220px;
+    }
+
+    .cor-setting-title {
+      font-family: 'Uncial Antiqua', cursive;
+      font-size: clamp(2.2rem, 5.5vw, 4rem);
+      font-weight: 400;
+      color: #e8b84b;
+      text-shadow:
+        0 0 6px rgba(232,184,75,1.0),
+        0 0 18px rgba(220,160,50,0.90),
+        0 0 40px rgba(160,30,20,0.80),
+        0 0 80px rgba(140,20,10,0.55),
+        0 0 130px rgba(120,10,5,0.30),
+        0 2px 4px rgba(0,0,0,0.98);
+      text-align: center;
+      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* Description section */
+    .desc-section {
+      padding: 5rem 3rem;
+      background: var(--deep);
+      border-top: 1px solid rgba(201,151,58,0.1);
+    }
+
+    .desc-inner {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .desc-inner p {
+      font-size: 1.12rem;
+      color: var(--text-body);
+      line-height: 1.9;
+    }
+
+    .desc-inner p + p { margin-top: 1.2rem; }
+    .desc-inner p strong { color: var(--gold-pale); }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      padding: 0.8rem 3rem;
+      background: var(--black);
+      border-bottom: 1px solid rgba(201,151,58,0.08);
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .breadcrumb a { color: var(--text-dim); }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb span { color: var(--gold); margin: 0 0.5rem; }
+
+    footer.site-footer {
+      padding: 2rem 3rem;
+      background: var(--black);
+      border-top: 1px solid rgba(201,151,58,0.12);
+      text-align: center;
+    }
+
+    .footer-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      line-height: 1.9;
+    }
+
+    .footer-text strong { color: var(--parchment); }
+
+    /* ══ CONTENT BANDS ══ */
+    .cor-band {
+      padding: 4.5rem 3rem;
+      background: var(--stone);
+      border-top: 1px solid rgba(201,151,58,0.10);
+    }
+
+    .cor-band-dark {
+      padding: 4.5rem 3rem;
+      background: var(--deep);
+      border-top: 1px solid rgba(140,31,31,0.15);
+    }
+
+    .cor-band-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: #f07050;
+      text-shadow:
+        0 0 6px rgba(240,112,80,1.0),
+        0 0 16px rgba(220,80,50,0.9),
+        0 0 35px rgba(200,50,30,0.65),
+        0 0 65px rgba(180,30,10,0.35);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--parchment);
+      margin-bottom: 0.8rem;
+      line-height: 1.2;
+    }
+
+    .section-intro {
+      font-size: 1rem;
+      color: var(--text-body);
+      line-height: 1.85;
+      max-width: 680px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ══ HERITAGE CARDS ══ */
+    .heritage-category-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #e8b84b;
+      text-shadow:
+        0 0 6px rgba(232,184,75,1.0),
+        0 0 18px rgba(201,151,58,0.85),
+        0 0 40px rgba(180,120,30,0.50);
+      margin: 2rem 0 1rem;
+      display: block;
+      border-bottom: 1px solid rgba(201,151,58,0.15);
+      padding-bottom: 0.5rem;
+    }
+
+    .heritage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .heritage-card {
+      border: 1px solid rgba(201,151,58,0.15);
+      background: rgba(18,12,6,0.85);
+      padding: 1.4rem 1.3rem;
+      position: relative;
+      transition: border-color 0.25s, background 0.25s;
+    }
+
+    .heritage-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .heritage-card:hover { border-color: rgba(201,151,58,0.35); background: rgba(30,20,8,0.9); }
+    .heritage-card:hover::before { opacity: 1; }
+
+    .heritage-card.marked-ulric {
+      border-color: rgba(140,31,31,0.25);
+      background: rgba(18,6,6,0.88);
+    }
+    .heritage-card.marked-ulric::before {
+      background: linear-gradient(90deg, transparent, var(--crimson-mid), transparent);
+    }
+
+    .heritage-icon { font-size: 1.5rem; margin-bottom: 0.6rem; display: block; }
+
+    .heritage-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-pale);
+      margin-bottom: 0.25rem;
+    }
+
+    .heritage-card.marked-ulric .heritage-name { color: var(--crimson-pale); }
+
+    .heritage-bonus {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .heritage-desc {
+      font-size: 0.88rem;
+      color: var(--text-body);
+      line-height: 1.65;
+    }
+
+    /* ══ PATH CARDS ══ */
+    .path-tradition-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #f07050;
+      text-shadow:
+        0 0 6px rgba(240,112,80,1.0),
+        0 0 16px rgba(220,80,50,0.9),
+        0 0 35px rgba(200,50,30,0.55);
+      margin: 2.5rem 0 1rem;
+      display: block;
+      border-bottom: 1px solid rgba(140,31,31,0.2);
+      padding-bottom: 0.5rem;
+    }
+
+    .paths-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .path-card {
+      border: 1px solid rgba(201,151,58,0.12);
+      background: rgba(14,10,4,0.88);
+      padding: 1.4rem;
+      position: relative;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+    }
+
+    .path-card:hover {
+      border-color: rgba(201,151,58,0.30);
+      background: rgba(26,18,6,0.95);
+      transform: translateY(-2px);
+    }
+
+    .path-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,151,58,0.22), transparent);
+    }
+
+    .path-header { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 0.5rem; }
+    .path-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+    .path-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--parchment);
+      line-height: 1.3;
+    }
+
+    .path-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--parchment-dim);
+      margin-bottom: 0.6rem;
+      line-height: 1.4;
+    }
+
+    .path-desc {
+      font-size: 0.86rem;
+      color: var(--text-body);
+      line-height: 1.65;
+      margin-bottom: 0.8rem;
+    }
+
+    .path-specs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.6rem; }
+
+    .path-spec {
+      font-family: 'Cinzel', serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(201,151,58,0.20);
+      padding: 0.18rem 0.5rem;
+      background: rgba(50,30,6,0.35);
+    }
+
+    .path-subs { margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid rgba(201,151,58,0.08); }
+
+    .path-subs-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .path-subs-list { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+
+    .path-sub {
+      font-size: 0.8rem;
+      color: var(--parchment-dim);
+      background: rgba(40,24,6,0.45);
+      border: 1px solid rgba(120,80,20,0.15);
+      padding: 0.15rem 0.45rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+    }
+
+    /* ══ RUNE STONES ══ */
+    .rune-stones-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .rune-card {
+      border: 1px solid rgba(201,151,58,0.18);
+      background: rgba(14,10,4,0.88);
+      padding: 1.5rem;
+      border-top: 2px solid var(--gold);
+      position: relative;
+    }
+
+    .rune-symbol {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.6rem;
+      filter: drop-shadow(0 0 8px rgba(201,151,58,0.5));
+    }
+
+    .rune-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-pale);
+      margin-bottom: 0.3rem;
+    }
+
+    .rune-cost {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--crimson-mid);
+      margin-bottom: 0.6rem;
+    }
+
+    .rune-desc {
+      font-size: 0.88rem;
+      color: var(--text-body);
+      line-height: 1.65;
+    }
+
+    .rune-callout {
+      background: rgba(18,12,6,0.9);
+      border: 1px solid rgba(201,151,58,0.15);
+      border-left: 3px solid var(--gold);
+      padding: 1.6rem 2rem;
+      margin-top: 2.5rem;
+      max-width: 760px;
+    }
+
+    .rune-callout-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .rune-callout p {
+      font-size: 0.95rem;
+      color: var(--text-body);
+      line-height: 1.8;
+    }
+
+    @media (max-width: 480px) {
+      .cor-band, .cor-band-dark { padding: 3rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="topbar-mount"></div>
+
+  <div class="site-wrapper">
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar-mount"></div>
+
+    <main class="main-content">
+
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>›</span>
+        <a href="heptaverse.html">The Heptaverse</a>
+        <span>›</span>
+        Chronicles of Ribhus
+      </div>
+
+      <!-- HERO -->
+      <section class="product-hero">
+        <img class="cor-hero-bg" src="../images/chronicles-of-ribhus-bg.jpg" alt="" />
+        <div class="product-hero-content">
+          <div class="product-meta">
+            <div class="meta-pill">🌍 Heptaverse Setting</div>
+            <div class="meta-pill">⚔ High Fantasy</div>
+            <div class="meta-pill">✨ High Magic</div>
+            <div class="meta-pill">🪨 Rune Stones</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DESCRIPTION -->
+      <section class="desc-section">
+        <div class="desc-inner">
+          <h2 class="cor-setting-title">Chronicles of Ribhus</h2>
+
+          <div class="divider" style="margin-top:0;">
+            <div class="divider-line"></div>
+            <div class="divider-gem"></div>
+            <div class="divider-line"></div>
+          </div>
+
+          <p>
+            The Chronicles of Ribhus is a fully realised high fantasy setting of uncommon depth —
+            a world that rewards curiosity, punishes complacency, and never mistakes spectacle
+            for substance. It occupies the same tradition as the great pillars of the genre:
+            the <strong>mythic grandeur</strong> of Tolkien's Middle-earth, the <strong>intricate
+            cosmological architecture</strong> of Jordan's Wheel of Time, the <strong>unflinching
+            political consequence</strong> of Martin's Westeros. It belongs in that company not
+            through imitation, but through the same fundamental commitment — a world that existed
+            before the story began, and will continue long after it ends.
+          </p>
+          <p>
+            Ribhus is a world of <strong>ancient powers in slow collision</strong>. Demon lords
+            of elemental primacy. Dragon paragons whose influence bends civilisations across
+            centuries. Mortal races who worship, resist, or attempt to bargain with forces that
+            were old when their languages were young. A world where morality is complicated,
+            history is contested, and the most dangerous entities are the ones absolutely certain
+            of their righteousness.
+          </p>
+          <p>
+            At the heart of the setting lies the <strong>Heptaverse</strong> — a cosmological
+            framework of seven primal elemental forces that shapes everything from the weather
+            systems of continents to the bloodlines of divine creatures to the theological
+            disputes of ancient cults. Every faction, every creature, every piece of history
+            in the Chronicles is intelligible only in relation to those seven forces. Every
+            spell cast is a theological statement. Every adventure is a thread in a tapestry
+            that extends in every direction — and pulling it carefully matters.
+          </p>
+          <p>
+            This is a world built on the <strong>Ribhian Games 2d10 system</strong> — a ruleset
+            designed alongside the setting, not bolted onto it. The mechanics reflect the world's
+            nature. The world breathes life into the mechanics. They speak the same language,
+            and that language is Ribhus.
+          </p>
+
+          <div class="divider">
+            <div class="divider-line"></div>
+            <div class="divider-gem"></div>
+            <div class="divider-line"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ══ HERITAGES ══ -->
+      <div class="cor-band">
+        <div class="cor-band-inner">
+          <span class="section-eyebrow">Who You Are</span>
+          <h2 class="section-title">The Children of Ribhus</h2>
+          <p class="section-intro">The world of Ribhus cradles many peoples, each shaped by their ancestral lands, cosmic heritage, and the flow of the seven currents through their bloodlines. Five broad categories define the races of the setting — each with its own relationship to power, history, and fate.</p>
+
+          <!-- Elder Races -->
+          <span class="heritage-category-label">⚒ Elder Races — Ancient peoples of deep memory</span>
+          <div class="heritage-grid">
+            <div class="heritage-card">
+              <span class="heritage-icon">⛰</span>
+              <div class="heritage-name">Mountain Dwarf</div>
+              <div class="heritage-bonus">+2 Stamina · +1 Might</div>
+              <div class="heritage-desc">Endurance and ancient memory run deep in mountain dwarf bloodlines. Masters of stone, war, and the slow patience of geological time.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">🏔</span>
+              <div class="heritage-name">Hill Dwarf</div>
+              <div class="heritage-bonus">+2 Stamina · +1 Sagacity</div>
+              <div class="heritage-desc">Craft masters and diplomats who built their civilisations in the gentler highlands. Renowned merchants and skilled artisans across the known world.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">✨</span>
+              <div class="heritage-name">High Elf</div>
+              <div class="heritage-bonus">+2 Intellect · +1 Agility · +5 Infamy</div>
+              <div class="heritage-desc">Arcane affinity and extraordinary longevity define the high elves. Their mastery of magic is unmatched — as is their reputation for inscrutability.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">🌿</span>
+              <div class="heritage-name">Wood Elf</div>
+              <div class="heritage-bonus">+2 Agility · +1 Sagacity · +10 Infamy</div>
+              <div class="heritage-desc">Natural connection and uncanny stealth mark the wood elves. They move through the world's wild places as if born from them — because, in a sense, they were.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">🍄</span>
+              <div class="heritage-name">Forest Gnome</div>
+              <div class="heritage-bonus">+2 Intellect · +1 Agility</div>
+              <div class="heritage-desc">Magical talent runs strong in forest gnome communities, concentrated in small, tightly-knit settlements hidden in ancient woodland. Curious, clever, and frequently underestimated.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">⚙</span>
+              <div class="heritage-name">Ledge Gnome</div>
+              <div class="heritage-bonus">+2 Intellect · +1 Magnetism · +5 Fame · +5 Infamy</div>
+              <div class="heritage-desc">Innovation and trickery in equal measure. Ledge gnomes have built a reputation as the most inventive — and least predictable — artisans in the civilised world.</div>
+            </div>
+          </div>
+
+          <!-- Cosmic-Touched -->
+          <span class="heritage-category-label">🌟 Cosmic-Touched — Bloodlines shaped by divine forces</span>
+          <div class="heritage-grid">
+            <div class="heritage-card">
+              <span class="heritage-icon">☀</span>
+              <div class="heritage-name">Lightborn</div>
+              <div class="heritage-bonus">+2 Karma · +1 Magnetism · +5 Fame</div>
+              <div class="heritage-desc">Celestial heritage flows through Lightborn veins, granting a radiance that marks them as touched by divine power. Their presence inspires — and occasionally unsettles.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">🌑</span>
+              <div class="heritage-name">Darkbrood</div>
+              <div class="heritage-bonus">+2 Magnetism · +1 Might · +5 Infamy</div>
+              <div class="heritage-desc">Shadow essence runs through the Darkbrood, granting Darkvision and an affinity for the spaces between light. Misunderstood more often than they are feared — though both are common.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">🐉</span>
+              <div class="heritage-name">Wyrmkin</div>
+              <div class="heritage-bonus">+2 Might · +1 Karma · +5 Fame</div>
+              <div class="heritage-desc">Draconic blood is not metaphor for the Wyrmkin — it is literal inheritance. A breath weapon, scaled skin, and the weight of draconic ancestry define every interaction they have with the world.</div>
+            </div>
+          </div>
+
+          <!-- Primal -->
+          <span class="heritage-category-label">🐾 Primal — Born from the world's wild essence</span>
+          <div class="heritage-grid">
+            <div class="heritage-card">
+              <span class="heritage-icon">🌳</span>
+              <div class="heritage-name">Elderkin</div>
+              <div class="heritage-bonus">+2 Might · +1 Sagacity · +5 Infamy</div>
+              <div class="heritage-desc">Natural guardians of ancient places, the Elderkin carry size and primal strength uncommon among mortals. Their connection to old growth forests and wild places runs deeper than language.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">🐱</span>
+              <div class="heritage-name">Felidar</div>
+              <div class="heritage-bonus">+2 Agility · +1 Magnetism · +5 Fame</div>
+              <div class="heritage-desc">Feline grace and predatory instinct define the Felidar. Agile, perceptive, and fiercely independent, they navigate both wilderness and society on entirely their own terms.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">🦅</span>
+              <div class="heritage-name">Skyborn</div>
+              <div class="heritage-bonus">+2 Agility · +1 Intellect · +5 Fame</div>
+              <div class="heritage-desc">Air affinity and the gift of flight set the Skyborn apart from every other race. They experience the world from above — literally and philosophically.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">🗻</span>
+              <div class="heritage-name">Titansblood</div>
+              <div class="heritage-bonus">+2 Might · +1 Stamina</div>
+              <div class="heritage-desc">Giant strength and stone-like resilience are the inheritance of Titansblood lineages. The earth itself seems to acknowledge their passage. Civilisations make treaties with them before they make enemies.</div>
+            </div>
+          </div>
+
+          <!-- Crafted -->
+          <span class="heritage-category-label">🏛 Crafted — Shaped by civilisation and choice</span>
+          <div class="heritage-grid">
+            <div class="heritage-card">
+              <span class="heritage-icon">👤</span>
+              <div class="heritage-name">Human</div>
+              <div class="heritage-bonus">+1 to Any Three Currents · Varies by culture</div>
+              <div class="heritage-desc">Adaptability and versatility are humanity's inheritance. No single talent defines them — which means no single limitation does either. Humans shape the world precisely because the world has not finished shaping them.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">🐇</span>
+              <div class="heritage-name">Burrow Weefolk</div>
+              <div class="heritage-bonus">+2 Agility · +1 Stamina</div>
+              <div class="heritage-desc">Small in stature and fierce in community, the Burrow Weefolk carry an almost supernaturally good fortune through adversity. Their luck is not accidental — it is cultivated over generations.</div>
+            </div>
+            <div class="heritage-card">
+              <span class="heritage-icon">🌵</span>
+              <div class="heritage-name">Mesa Weefolk</div>
+              <div class="heritage-bonus">+2 Agility · +1 Magnetism · +10 Infamy</div>
+              <div class="heritage-desc">Nomadic and fiercely independent, Mesa Weefolk carry both magical tradition and a reputation for aggression that their enemies have generally earned. They do not forgive easily — and they remember everything.</div>
+            </div>
+          </div>
+
+          <!-- Marked -->
+          <span class="heritage-category-label">🩸 The Marked — Ulric Tribes, cursed by divine consequence</span>
+          <div class="heritage-grid">
+            <div class="heritage-card marked-ulric">
+              <span class="heritage-icon">🦗</span>
+              <div class="heritage-name">Carob · Locust</div>
+              <div class="heritage-bonus">+2 Agility · +1 Stamina</div>
+              <div class="heritage-desc">Chitinous skin, legs that bend like insects. Swift Jumper and terrain mastery in the savannah. Bearing the curse's social weight with the stubbornness of their totem.</div>
+            </div>
+            <div class="heritage-card marked-ulric">
+              <span class="heritage-icon">🐟</span>
+              <div class="heritage-name">Daysat · Stingray</div>
+              <div class="heritage-bonus">+2 Stamina · +1 Agility</div>
+              <div class="heritage-desc">Narrow tail, flat face, pectoral flaps. Aquatic Adaptability and a Stingray Defense that punishes those foolish enough to underestimate them in water.</div>
+            </div>
+            <div class="heritage-card marked-ulric">
+              <span class="heritage-icon">🦔</span>
+              <div class="heritage-name">Espin · Porcupine</div>
+              <div class="heritage-bonus">+2 Stamina · +1 Agility</div>
+              <div class="heritage-desc">Spiked hair, elongated face, bristled body hair. Quill Defense punishes melee attackers. Masters of forest terrain and the art of making others deeply regret their choices.</div>
+            </div>
+            <div class="heritage-card marked-ulric">
+              <span class="heritage-icon">🦌</span>
+              <div class="heritage-name">Melam · Impala</div>
+              <div class="heritage-bonus">+2 Agility · +1 Perception</div>
+              <div class="heritage-desc">Long horns, deer eyes, spotted or striped skin. Extraordinary speed and the Impala Leap. Ancient enemies of the Mesa Weefolk — a rivalry neither tribe has forgotten.</div>
+            </div>
+            <div class="heritage-card marked-ulric">
+              <span class="heritage-icon">🐏</span>
+              <div class="heritage-name">Oream · Ram</div>
+              <div class="heritage-bonus">+2 Might · +1 Stamina</div>
+              <div class="heritage-desc">Ram's horns, goat-like face, hooves. Ram's Charge is exactly what it sounds like — and 20 feet of momentum behind it is exactly as dangerous as it sounds.</div>
+            </div>
+            <div class="heritage-card marked-ulric">
+              <span class="heritage-icon">🐦</span>
+              <div class="heritage-name">Pica · Magpie</div>
+              <div class="heritage-bonus">+2 Intellect · +1 Agility</div>
+              <div class="heritage-desc">Bird-like eyes, feathers at the neck, a beak-like nose. Mystic Affinity, Mimicry, and Gliding Wings. The most magically inclined of the Ulric tribes — and the most unsettling to encounter.</div>
+            </div>
+            <div class="heritage-card marked-ulric">
+              <span class="heritage-icon">🐺</span>
+              <div class="heritage-name">Shagal · Jackal</div>
+              <div class="heritage-bonus">+2 Agility · +1 Might</div>
+              <div class="heritage-desc">Jackal face, pitched voice, long canines, an unpleasant smell that enemies learn to respect. Pack Tactics and Predatory Nature make the Shagal devastating when operating as a unit.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PATHS OF POWER ══ -->
+      <div class="cor-band-dark">
+        <div class="cor-band-inner">
+          <span class="section-eyebrow">Who You Become</span>
+          <h2 class="section-title">The Paths of Power</h2>
+          <p class="section-intro">All beings of Ribhus draw strength from three wellsprings — the Physical, the Mental, and the Karmic. Fifteen paths channel these forces, each a distinct tradition of power with its own philosophy, demands, and expression.</p>
+
+          <!-- Martial -->
+          <span class="path-tradition-label">⚔ The Martial Path — Masters of the Physical Currents</span>
+          <div class="paths-grid">
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">🩸</span>
+                <div class="path-name">Bloodletter</div>
+              </div>
+              <div class="path-tagline">Heir to ancient tribal traditions of battle frenzy</div>
+              <div class="path-desc">Where Warriors master discipline, Bloodletters master surrender — to the current of rage, to the bloodline's ancient call, to the primal fury that predates civilisation. They are terrifying in combat precisely because something older than tactics is driving them.</div>
+              <div class="path-specs">
+                <span class="path-spec">Might 12+</span>
+                <span class="path-spec">Stamina 12+</span>
+                <span class="path-spec">Vitality d12</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Notable Paths</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Blood Frenzy</span>
+                  <span class="path-sub">Primal Elements</span>
+                  <span class="path-sub">Spirit Caller</span>
+                  <span class="path-sub">Primal Witch</span>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">⚔</span>
+                <div class="path-name">Warrior</div>
+              </div>
+              <div class="path-tagline">Master of arms, tactics, and the disciplines of war</div>
+              <div class="path-desc">The Warrior is the pure expression of martial excellence — study, discipline, and the patient accumulation of technique. Every weapon, every battlefield, every enemy is a problem with a solution, and Warriors dedicate their lives to finding it.</div>
+              <div class="path-specs">
+                <span class="path-spec">Two Physical 12+</span>
+                <span class="path-spec">Vitality d10</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Notable Paths</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Arena Veteran</span>
+                  <span class="path-sub">War Savant</span>
+                  <span class="path-sub">Arcane Warrior</span>
+                  <span class="path-sub">Tactical Commander</span>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">🛡</span>
+                <div class="path-name">Templar</div>
+              </div>
+              <div class="path-tagline">Divine warrior sworn to uphold the will of the gods</div>
+              <div class="path-desc">The Templar binds martial prowess to divine mandate. They do not merely fight — they adjudicate, execute, and embody the will of their deity in the physical world. Every blow is a theological argument. Every victory is a sermon.</div>
+              <div class="path-specs">
+                <span class="path-spec">Might 12+</span>
+                <span class="path-spec">Karma 12+</span>
+                <span class="path-spec">Vitality d10</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Paths</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Warrior Path</span>
+                  <span class="path-sub">Shepherd Path</span>
+                  <span class="path-sub">Seeker Path</span>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">🏹</span>
+                <div class="path-name">Warden</div>
+              </div>
+              <div class="path-tagline">Guardian of the wilderness, master of survival and the hunt</div>
+              <div class="path-desc">The wilderness is not a backdrop for the Warden — it is home, ally, and the source of all power. Wardens read the land the way scholars read texts, and they are equally lethal in either capacity.</div>
+              <div class="path-specs">
+                <span class="path-spec">Agility 12+</span>
+                <span class="path-spec">Stamina 12+</span>
+                <span class="path-spec">Vitality d10</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Notable Traditions</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Beast Master</span>
+                  <span class="path-sub">Elonid Warden</span>
+                  <span class="path-sub">Wyld Walker</span>
+                  <span class="path-sub">Shadow Stalker</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mentalist -->
+          <span class="path-tradition-label">📖 The Mentalist Path — Masters of the Mental Currents</span>
+          <div class="paths-grid">
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">🔮</span>
+                <div class="path-name">Magus</div>
+              </div>
+              <div class="path-tagline">Scholar of arcane sciences and practitioner of studied magic</div>
+              <div class="path-desc">Magic is a science for the Magus — precise, repeatable, and subject to the same rigorous analysis as any other natural force. They are the most intellectually demanding path, and the most intellectually rewarding.</div>
+              <div class="path-specs">
+                <span class="path-spec">Intellect 13+</span>
+                <span class="path-spec">Vitality d6</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Schools</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Wards</span>
+                  <span class="path-sub">Foresight</span>
+                  <span class="path-sub">Gems</span>
+                  <span class="path-sub">Dark Arts</span>
+                  <span class="path-sub">Temporal Reflection</span>
+                  <span class="path-sub">The Void</span>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">🎭</span>
+                <div class="path-name">Scoundrel</div>
+              </div>
+              <div class="path-tagline">Master of subtlety, deception, and shadow arts</div>
+              <div class="path-desc">The Scoundrel operates in the spaces others pretend do not exist — in shadows, behind false faces, through the gaps in every guard's attention. Information is their primary weapon. Everything else is just a delivery mechanism.</div>
+              <div class="path-specs">
+                <span class="path-spec">Agility 12+</span>
+                <span class="path-spec">Intellect 12+</span>
+                <span class="path-spec">Vitality d8</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Notable Guilds</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Order of Shadows</span>
+                  <span class="path-sub">Circle of Coins</span>
+                  <span class="path-sub">Grove Sentinels</span>
+                  <span class="path-sub">Courtly Shadows</span>
+                  <span class="path-sub">Storm Raiders</span>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">✨</span>
+                <div class="path-name">Spellbinder</div>
+              </div>
+              <div class="path-tagline">Wielder of innate magic flowing through bloodline and soul</div>
+              <div class="path-desc">Where the Magus studies, the Spellbinder simply is. Their magic is not learned but inherited — a font of power flowing from bloodline and soul that requires no books, only the courage to let it through.</div>
+              <div class="path-specs">
+                <span class="path-spec">Magnetism 12+</span>
+                <span class="path-spec">Karma 12+</span>
+                <span class="path-spec">Vitality d6</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Bloodlines</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Astral Conduit</span>
+                  <span class="path-sub">Primal Elementalist</span>
+                  <span class="path-sub">Shadow Weaver</span>
+                  <span class="path-sub">Temporal Matrix</span>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">⛪</span>
+                <div class="path-name">Ecclesiastic</div>
+              </div>
+              <div class="path-tagline">Conduit of divine power, servant of the gods</div>
+              <div class="path-desc">The Ecclesiastic channels divine will into the mortal world. Whether they fight, heal, or seek hidden knowledge depends entirely on the deity they serve — and the gods of Ribhus have very different ideas about what they need from their servants.</div>
+              <div class="path-specs">
+                <span class="path-spec">Two Mental 12+</span>
+                <span class="path-spec">Karma 12+</span>
+                <span class="path-spec">Vitality d8</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Paths</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Warrior Path</span>
+                  <span class="path-sub">Shepherd Path</span>
+                  <span class="path-sub">Seeker Path</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Karmic -->
+          <span class="path-tradition-label">☯ The Karmic Path — Masters of the Cosmic Current</span>
+          <div class="paths-grid">
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">🥋</span>
+                <div class="path-name">Ascetic</div>
+              </div>
+              <div class="path-tagline">Master of inner discipline, harmony of body and spirit</div>
+              <div class="path-desc">The Ascetic has turned inward and found something vast. Through discipline, deprivation, and the patient cultivation of inner harmony, they channel ki — a force that bridges the physical and cosmic in ways no external power source can replicate.</div>
+              <div class="path-specs">
+                <span class="path-spec">Agility 12+</span>
+                <span class="path-spec">Karma 12+</span>
+                <span class="path-spec">Vitality d8</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Traditions</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Secular Ascetics</span>
+                  <span class="path-sub">Divine Ascetics</span>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">🌿</span>
+                <div class="path-name">Druid</div>
+              </div>
+              <div class="path-tagline">Keeper of ancient natural traditions and primal forces</div>
+              <div class="path-desc">The Druid's power is the world's power — borrowed, channelled, returned. Wild Shape is their most dramatic expression, but the depth of their connection to natural cycles makes them uniquely capable of understanding forces that predate civilisation.</div>
+              <div class="path-specs">
+                <span class="path-spec">Sagacity 12+</span>
+                <span class="path-spec">Karma 12+</span>
+                <span class="path-spec">Vitality d8</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Circles</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Reverie</span>
+                  <span class="path-sub">The Prime</span>
+                  <span class="path-sub">The Void</span>
+                  <span class="path-sub">Wildfire</span>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">📜</span>
+                <div class="path-name">Pactmage</div>
+              </div>
+              <div class="path-tagline">Wielder of magic granted through supernatural contracts</div>
+              <div class="path-desc">A Pactmage does not discover power — they negotiate for it. Every ability is the result of a contract with something older and stranger than mortal understanding. The terms are always worth reading carefully.</div>
+              <div class="path-specs">
+                <span class="path-spec">Magnetism 12+</span>
+                <span class="path-spec">Karma 13+</span>
+                <span class="path-spec">Vitality d8</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Pacts</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Pact of Edges</span>
+                  <span class="path-sub">Pact of Shackles</span>
+                  <span class="path-sub">Pact of the Dawn</span>
+                  <span class="path-sub">Pact of the Grey Tower</span>
+                  <span class="path-sub">Pact of the Scales</span>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">👁</span>
+                <div class="path-name">Shaman</div>
+              </div>
+              <div class="path-tagline">Speaker for spirits, mediator between worlds</div>
+              <div class="path-desc">The Shaman stands at the threshold between the living world and the spirit world — and has learned to hold the door open. They are intermediaries, negotiators, and occasionally very reluctant warriors against things that should not have been let through.</div>
+              <div class="path-specs">
+                <span class="path-spec">Sagacity 12+</span>
+                <span class="path-spec">Karma 14+</span>
+                <span class="path-spec">Vitality d8</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Paths</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Celestial Vision</span>
+                  <span class="path-sub">Glorious Nova</span>
+                  <span class="path-sub">Wondrous Nebula</span>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-header">
+                <span class="path-icon">💀</span>
+                <div class="path-name">Witchdoctor</div>
+              </div>
+              <div class="path-tagline">Channeler of elder powers through ritual and communion</div>
+              <div class="path-desc">The Witchdoctor traffics in forces that other paths politely refuse to acknowledge. Ritual, sacrifice, and direct communion with elder powers grants abilities that are difficult to categorise and deeply uncomfortable to witness. Their reputation precedes them — usually at speed.</div>
+              <div class="path-specs">
+                <span class="path-spec">Intellect 12+</span>
+                <span class="path-spec">Karma 13+</span>
+                <span class="path-spec">Vitality d8</span>
+              </div>
+              <div class="path-subs">
+                <div class="path-subs-label">Bonds</div>
+                <div class="path-subs-list">
+                  <span class="path-sub">Bond of Alchemy</span>
+                  <span class="path-sub">Bond of Invocation</span>
+                  <span class="path-sub">Bond of Spiritualism</span>
+                  <span class="path-sub">Bond of Thaumaturgy</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ RUNE STONES ══ -->
+      <div class="cor-band">
+        <div class="cor-band-inner">
+          <span class="section-eyebrow">The Fortune Pool</span>
+          <h2 class="section-title">Rune Stones of Ribhus</h2>
+          <p class="section-intro">In Chronicles of Ribhus, the Fortune Pool takes physical form as Rune Stones — ancient carved tokens that channel the seven karmic currents of the world. Each stone carries a specific power that can be invoked when fate demands it.</p>
+
+          <div class="rune-callout">
+            <div class="rune-callout-title">⬡ How Rune Stones Work</div>
+            <p>Characters begin each scene with a number of Rune Stones determined by their Path. Stones are drawn, held, and spent — each one a reservoir of karmic potential. Rolling doubles on any 2d10 check restores 1 Rune Stone to your pool regardless of success or failure, and triggers an Oracle draw. Mystical Paths — Clergy, Shamans — access more stones and deeper manifestation abilities. Mundane Paths like Warriors access fewer but still benefit from their foundational effects.</p>
+          </div>
+
+          <div class="rune-stones-grid">
+            <div class="rune-card">
+              <span class="rune-symbol">ᚠ</span>
+              <div class="rune-name">Fehu · Wealth</div>
+              <div class="rune-cost">1 Rune Stone</div>
+              <div class="rune-desc">The rune of material fortune and flowing resources. Spend to add +3 to any roll after seeing the result, or to reroll one d10 from any check.</div>
+            </div>
+            <div class="rune-card">
+              <span class="rune-symbol">ᚢ</span>
+              <div class="rune-name">Uruz · Strength</div>
+              <div class="rune-cost">1 Rune Stone</div>
+              <div class="rune-desc">The rune of raw physical force and untamed vitality. Spend to add your Karma modifier to healing received, or to automatically succeed on a mortality check.</div>
+            </div>
+            <div class="rune-card">
+              <span class="rune-symbol">ᚦ</span>
+              <div class="rune-name">Thurisaz · Thorn</div>
+              <div class="rune-cost">2 Rune Stones</div>
+              <div class="rune-desc">The rune of directed force and breaking barriers. Spend to grant an ally advantage on their next action, or to force a re-roll on an enemy's attack against you.</div>
+            </div>
+            <div class="rune-card">
+              <span class="rune-symbol">ᚨ</span>
+              <div class="rune-name">Ansuz · Signals</div>
+              <div class="rune-cost">2 Rune Stones</div>
+              <div class="rune-desc">The rune of divine communication and revealed truth. Spend to ask the Oracle one question that must be answered honestly, or to remove one curse or magical compulsion.</div>
+            </div>
+            <div class="rune-card">
+              <span class="rune-symbol">ᚱ</span>
+              <div class="rune-name">Raidho · Journey</div>
+              <div class="rune-cost">2 Rune Stones</div>
+              <div class="rune-desc">The rune of movement, travel, and the right path. Spend to immediately disengage from combat without provoking opportunity attacks, or to automatically succeed on a navigation or tracking check.</div>
+            </div>
+            <div class="rune-card">
+              <span class="rune-symbol">ᚲ</span>
+              <div class="rune-name">Kenaz · Torch</div>
+              <div class="rune-cost">1 Rune Stone</div>
+              <div class="rune-desc">The rune of illumination, craft, and revealed knowledge. Spend to gain perfect recall of any information your character has encountered, or to see through magical darkness or illusion for one round.</div>
+            </div>
+            <div class="rune-card">
+              <span class="rune-symbol">ᚷ</span>
+              <div class="rune-name">Gebo · Gift</div>
+              <div class="rune-cost">3 Rune Stones</div>
+              <div class="rune-desc">The rune of exchange, sacrifice, and binding oath. Spend to forge a mystical contract that neither party can break without karmic consequence, or to transfer Rune Stones directly to an ally.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+        <p class="footer-text">
+          &copy; 2025 <strong>Ribhian Games LLC</strong> &nbsp;·&nbsp;
+          <strong>Chronicles of Ribhus</strong> is a Heptaverse Setting &nbsp;·&nbsp;
+          Powered by the <strong>Ribhian Games LLC 2d10 Game System</strong>
+        </p>
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="../js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,862 @@
+<!--Events Editor page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Sign-in protected editor for the public events page. Events and sessions are stored in the Supabase
+tables "events" and "event_sessions"; only logins listed in "event_admins" can change them (enforced by
+Supabase, not by this page). Features: search past and upcoming events, edit, copy as new event, repeat an
+event across several dates, saved venues, register-link on/off, publish/draft, live card preview, and
+"Add to Google Calendar". Cards are drawn by event-render.js, the same code the public page uses.
+NOT linked publicly — access by direct URL only.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Events Editor | Ribhian Games</title>
+  <link rel="icon" href="../images/knotted Hex_V3.png" type="image/png" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="event-cards.css" />
+  <style>
+    body { padding: 0 !important; }
+    body::before { display: none; }
+    * { box-sizing: border-box; }
+    :root { --line: rgba(201,151,58,0.18); --panel: #1a1714; --field: #120f0c; --ok: #6fbf73; --bad: #ff6a4d; }
+
+    /* ── Sign-in ── */
+    #login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
+    .login-card { width: 100%; max-width: 400px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 2.2rem 2rem; text-align: center; }
+    .login-card h1 { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1.15rem; letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 0.3rem; }
+    .login-card p.sub { color: var(--text-dim); font-size: 0.95rem; margin: 0 0 1.6rem; }
+    .login-card input { margin-bottom: 0.8rem; }
+    .login-msg { color: var(--bad); font-size: 0.92rem; margin-top: 0.9rem; min-height: 1.2em; }
+
+    /* ── Shared controls ── */
+    input, select, textarea {
+      width: 100%; background: var(--field); border: 1px solid var(--line); border-radius: 4px; color: var(--ash);
+      font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.02rem; padding: 0.5rem 0.65rem; outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--gold); }
+    textarea { min-height: 7rem; resize: vertical; line-height: 1.45; }
+    input[type=checkbox], input[type=radio] { width: auto; flex: none; accent-color: var(--gold); transform: scale(1.15); }
+    label.f { display: block; font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); margin: 0 0 0.3rem; }
+    .hint { color: var(--text-dim); font-size: 0.85rem; font-style: italic; margin-top: 0.25rem; }
+    .btn, .btn-ghost {
+      font-family: 'Cinzel', serif; font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 0.6rem 1rem; border-radius: 4px; cursor: pointer; white-space: nowrap;
+    }
+    .btn { background: linear-gradient(135deg, var(--gold), var(--gold-bright)); color: #140f08; border: none; font-weight: 700; }
+    .btn:hover { filter: brightness(1.08); }
+    .btn-ghost { background: transparent; color: var(--ash); border: 1px solid var(--line); }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold-bright); }
+    .btn-danger { color: var(--bad); border-color: rgba(255,106,77,0.35); }
+    .btn-danger:hover { color: var(--bad); border-color: var(--bad); background: rgba(255,106,77,0.08); }
+    .btn:disabled, .btn-ghost:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── App layout ── */
+    #app { display: none; }
+    .bar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+      background: #0f0d0b; border-bottom: 1px solid var(--line); padding: 0.8rem 1.4rem; }
+    .bar h1 { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1rem; letter-spacing: 0.14em; text-transform: uppercase; margin: 0; }
+    .bar .who { color: var(--text-dim); font-size: 0.9rem; margin-left: auto; }
+    .layout { display: grid; grid-template-columns: 340px 1fr; min-height: calc(100vh - 56px); }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+    /* list */
+    .list-pane { border-right: 1px solid var(--line); background: #13100d; padding: 1rem; display: flex; flex-direction: column; gap: 0.7rem; }
+    @media (min-width: 901px) { .list-pane { position: sticky; top: 56px; height: calc(100vh - 56px); overflow: hidden; } }
+    .tabs { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+    .tab { flex: 1; text-align: center; font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.45rem 0.2rem; border: 1px solid var(--line); border-radius: 4px; color: var(--text-dim); cursor: pointer; background: none; }
+    .tab.on { color: var(--gold-bright); border-color: var(--gold); background: rgba(201,151,58,0.1); }
+    .ev-list { overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 0.35rem; padding-right: 0.2rem; }
+    .ev-item { text-align: left; background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--line); border-radius: 4px;
+      padding: 0.55rem 0.7rem; cursor: pointer; color: var(--ash); font-family: inherit; }
+    .ev-item:hover { border-color: rgba(201,151,58,0.45); }
+    .ev-item.sel { border-color: var(--gold); border-left-color: var(--gold); background: rgba(201,151,58,0.09); }
+    .ev-item .d { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.1em; color: var(--gold); }
+    .ev-item .n { font-size: 1.02rem; font-weight: 600; color: var(--parchment); margin: 0.1rem 0; }
+    .ev-item .v { font-size: 0.86rem; color: var(--text-dim); }
+    .chip { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.12rem 0.4rem; border-radius: 3px; margin-left: 0.3rem; vertical-align: middle; border: 1px solid; }
+    .chip.draft { color: #e0b85a; border-color: rgba(224,184,90,0.5); }
+    .chip.nolink { color: var(--text-dim); border-color: rgba(255,255,255,0.15); }
+    .chip.past { color: var(--text-dim); border-color: rgba(255,255,255,0.12); }
+    .empty-list { color: var(--text-dim); font-style: italic; text-align: center; padding: 1.5rem 0; }
+
+    /* editor */
+    .edit-pane { padding: 1.4rem 1.6rem 6rem; max-width: 1100px; width: 100%; }
+    .placeholder { color: var(--text-dim); font-style: italic; text-align: center; margin-top: 18vh; font-size: 1.1rem; }
+    .sec { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 1.2rem 1.3rem; margin-bottom: 1.2rem; }
+    .sec > h2 { font-family: 'Cinzel', serif; color: var(--gold); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 1rem; }
+    .grid { display: grid; gap: 0.9rem; }
+    .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: 1fr 1fr 1fr; } .g4 { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 700px) { .g2, .g3, .g4 { grid-template-columns: 1fr; } }
+    .span2 { grid-column: span 2; } @media (max-width: 700px) { .span2 { grid-column: auto; } }
+    .switch { display: flex; align-items: center; gap: 0.55rem; color: var(--ash); font-size: 1rem; cursor: pointer; }
+    .switch small { color: var(--text-dim); font-style: italic; }
+
+    .sess { border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 5px; padding: 1rem; margin-bottom: 0.9rem; background: #15120f; }
+    .sess-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+    .sess-head .num { font-family: 'Cinzel', serif; font-size: 0.66rem; letter-spacing: 0.14em; color: var(--gold); text-transform: uppercase; margin-right: auto; }
+    .meta-row { display: grid; grid-template-columns: 170px 1fr auto; gap: 0.5rem; margin-bottom: 0.45rem; }
+    @media (max-width: 700px) { .meta-row { grid-template-columns: 1fr 1fr auto; } }
+    .icon-btn { background: none; border: 1px solid var(--line); color: var(--text-dim); border-radius: 4px; cursor: pointer; padding: 0 0.6rem; font-size: 1rem; }
+    .icon-btn:hover { color: var(--bad); border-color: var(--bad); }
+
+    .preview-wrap { background: var(--black); border: 1px dashed var(--line); border-radius: 6px; padding: 1.2rem; }
+    .preview-wrap .event-card { margin-bottom: 0; }
+
+    .actions { position: fixed; bottom: 0; right: 0; left: 340px; z-index: 25; display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center;
+      background: rgba(15,13,11,0.96); border-top: 1px solid var(--line); padding: 0.75rem 1.6rem; }
+    @media (max-width: 900px) { .actions { left: 0; } }
+    .actions .state { margin-left: auto; font-size: 0.9rem; color: var(--text-dim); font-style: italic; }
+    .actions .state.dirty { color: #e0b85a; }
+
+    /* modal */
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 60; display: flex; align-items: flex-start; justify-content: center; padding: 5vh 1rem; overflow-y: auto; }
+    .modal { background: var(--panel); border: 1px solid var(--gold); border-radius: 6px; width: 100%; max-width: 760px; padding: 1.5rem; }
+    .modal h2 { font-family: 'Cinzel', serif; color: var(--gold); font-size: 0.9rem; letter-spacing: 0.15em; text-transform: uppercase; margin: 0 0 0.4rem; }
+    .modal .sub { color: var(--text-dim); margin: 0 0 1.1rem; }
+    .rep-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .rep-table th { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); text-align: left; padding: 0.4rem; border-bottom: 1px solid var(--line); }
+    .rep-table td { padding: 0.35rem 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+    .rep-table td.wd { color: var(--text-dim); font-size: 0.9rem; white-space: nowrap; }
+    .modal-foot { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.2rem; flex-wrap: wrap; }
+
+    #toast { position: fixed; bottom: 4.6rem; right: 1.4rem; z-index: 90; max-width: 420px; background: var(--panel); border: 1px solid var(--line);
+      border-radius: 5px; padding: 0.75rem 1rem; color: var(--ash); opacity: 0; transform: translateY(8px); transition: 0.25s; pointer-events: none; }
+    #toast.show { opacity: 1; transform: none; }
+    #toast.ok { border-color: var(--ok); color: var(--ok); } #toast.bad { border-color: var(--bad); color: var(--bad); }
+  </style>
+</head>
+<body>
+
+<!-- ── Sign-in ── -->
+<div id="login">
+  <form class="login-card" onsubmit="event.preventDefault(); doSignIn();">
+    <h1>Events Editor</h1>
+    <p class="sub">Ribhian Games · sign in with your Supabase editor login</p>
+    <input type="email" id="li-email" placeholder="Email" autocomplete="username" required />
+    <input type="password" id="li-pass" placeholder="Password" autocomplete="current-password" required />
+    <button class="btn" style="width:100%;padding:0.8rem;" id="li-btn">Sign In</button>
+    <div class="login-msg" id="li-msg"></div>
+  </form>
+</div>
+
+<!-- ── App ── -->
+<div id="app">
+  <div class="bar">
+    <h1>Events Editor</h1>
+    <a class="btn-ghost" href="events.html" target="_blank" rel="noopener" style="text-decoration:none;">View Public Page ↗</a>
+    <span class="who" id="who"></span>
+    <button class="btn-ghost" onclick="signOut()">Sign Out</button>
+  </div>
+  <div class="layout">
+    <aside class="list-pane">
+      <button class="btn" onclick="newEvent()">+ New Event</button>
+      <input type="search" id="q" placeholder="Search name, venue, year, session…" oninput="renderList()" />
+      <div class="tabs" id="tabs">
+        <button class="tab on" data-f="upcoming" onclick="setFilter(this)">Upcoming</button>
+        <button class="tab" data-f="past" onclick="setFilter(this)">Past</button>
+        <button class="tab" data-f="drafts" onclick="setFilter(this)">Drafts</button>
+        <button class="tab" data-f="all" onclick="setFilter(this)">All</button>
+      </div>
+      <div class="ev-list" id="ev-list"></div>
+    </aside>
+    <main class="edit-pane" id="edit-pane">
+      <p class="placeholder">Select an event on the left, or press <strong>+ New Event</strong>.<br>
+        To repeat a past event, open it and use <strong>Copy as New</strong> or <strong>Repeat…</strong></p>
+    </main>
+  </div>
+  <div class="actions" id="actions" style="display:none;">
+    <button class="btn" id="btn-save" onclick="save()">Save</button>
+    <button class="btn-ghost" onclick="copyAsNew()" title="Open a copy of this event with all its sessions, ready for a new date">Copy as New</button>
+    <button class="btn-ghost" id="btn-repeat" onclick="openRepeat()" title="Create several dated copies of this event at once">Repeat…</button>
+    <button class="btn-ghost" onclick="addToGoogle()" title="Open Google Calendar with this event filled in">+ Google Calendar</button>
+    <button class="btn-ghost btn-danger" id="btn-del" onclick="deleteEvent()">Delete</button>
+    <span class="state" id="state"></span>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast"></div>
+
+<datalist id="dl-names"></datalist>
+<datalist id="dl-tags"></datalist>
+<datalist id="dl-meta"></datalist>
+
+<script src="event-render.js"></script>
+<script>
+const SUPABASE_URL = 'https://kjjycuynetkappoedefb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_FbfOymRGuKGdMDyeEPZNTA_Qrrd9OSR';
+const RE = window.RibhianEvents;
+const esc = RE.esc;
+const TOD = ['Morning', 'Afternoon', 'Evening', 'All Day'];
+const META_LABELS = ['System', 'Players', 'Duration', 'Level', 'Format', 'Host'];
+
+let session = null;      // { access_token, refresh_token, expires_at, email }
+let events = [];         // all events, each with event_sessions[]
+let cur = null;          // the event being edited (a working copy)
+let curIsNew = false;
+let dirty = false;
+let filter = 'upcoming';
+let busy = false;
+
+// ════════════════════════════════════════════════════════════════════════
+// Sign-in (Supabase Auth). Access is enforced by Supabase, not by this page.
+// ════════════════════════════════════════════════════════════════════════
+function storeSession(j) {
+  session = { access_token: j.access_token, refresh_token: j.refresh_token,
+              expires_at: Math.floor(Date.now() / 1000) + (j.expires_in || 3600), email: j.user ? j.user.email : session && session.email };
+  try { sessionStorage.setItem('rg_events_session', JSON.stringify(session)); } catch (e) {}
+}
+
+async function doSignIn() {
+  const email = document.getElementById('li-email').value.trim();
+  const pass  = document.getElementById('li-pass').value;
+  const msg = document.getElementById('li-msg'), btn = document.getElementById('li-btn');
+  msg.textContent = ''; btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST', headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error_description || j.msg || j.message || 'Sign-in failed.');
+    storeSession(j);
+    document.getElementById('li-pass').value = '';
+    await enterApp();
+  } catch (e) {
+    msg.textContent = /invalid/i.test(e.message) ? 'Email or password not recognised.' : e.message;
+  }
+  btn.disabled = false; btn.textContent = 'Sign In';
+}
+
+async function accessToken() {
+  if (!session) throw new Error('Not signed in');
+  if (session.expires_at - 60 < Date.now() / 1000) {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+      method: 'POST', headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: session.refresh_token })
+    });
+    if (!r.ok) { signOut(true); throw new Error('Your sign-in expired. Please sign in again.'); }
+    storeSession(await r.json());
+  }
+  return session.access_token;
+}
+
+async function api(path, opts = {}) {
+  const token = await accessToken();
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...opts,
+    headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(opts.headers || {}) }
+  });
+  if (!r.ok) {
+    const j = await r.json().catch(() => ({}));
+    const m = j.message || j.hint || ('Error ' + r.status);
+    throw new Error(/row-level security|permission denied/i.test(m) ? 'Supabase refused the change: this login is not an events editor.' : m);
+  }
+  return r.status === 204 ? null : r.json().catch(() => null);
+}
+
+async function enterApp() {
+  const me = await api('event_admins?select=user_id');
+  if (!me || !me.length) {
+    signOut(true);
+    document.getElementById('li-msg').textContent = 'Signed in, but this login is not set up as an events editor.';
+    return;
+  }
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('who').textContent = session.email || '';
+  await loadEvents();
+}
+
+async function signOut(silent) {
+  if (!silent && dirty && !confirm('You have unsaved changes. Sign out anyway?')) return;
+  try {
+    if (session) await fetch(`${SUPABASE_URL}/auth/v1/logout`, { method: 'POST', headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` } });
+  } catch (e) {}
+  session = null; dirty = false; cur = null;
+  try { sessionStorage.removeItem('rg_events_session'); } catch (e) {}
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login').style.display = 'flex';
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// Data
+// ════════════════════════════════════════════════════════════════════════
+async function loadEvents() {
+  events = await api('events?select=*,event_sessions(*)&order=start_date.desc');
+  events.forEach(ev => ev.event_sessions.forEach(s => {
+    s.start_time = s.start_time ? s.start_time.slice(0, 5) : null;
+    s.end_time = s.end_time ? s.end_time.slice(0, 5) : null;
+    s.meta = Array.isArray(s.meta) ? s.meta : [];
+  }));
+  fillDatalists();
+  renderList();
+}
+
+function savedVenues() {
+  const map = new Map();
+  events.forEach(e => {
+    const v = (e.venue || '').trim(), a = (e.address || '').trim();
+    if (!v && !a) return;
+    const k = (v + '|' + a).toLowerCase();
+    const x = map.get(k) || { venue: v, address: a, n: 0, last: '' };
+    x.n++; if (e.start_date > x.last) x.last = e.start_date;
+    map.set(k, x);
+  });
+  return [...map.values()].sort((x, y) => y.n - x.n || (y.last > x.last ? 1 : -1));
+}
+
+function fillDatalists() {
+  const uniq = a => [...new Set(a.map(x => String(x || '').trim()).filter(Boolean))].sort();
+  const all = events.flatMap(e => e.event_sessions);
+  document.getElementById('dl-names').innerHTML = uniq(events.map(e => e.name)).map(v => `<option value="${esc(v)}">`).join('');
+  document.getElementById('dl-tags').innerHTML = uniq(all.map(s => s.tag_text)).map(v => `<option value="${esc(v)}">`).join('');
+  document.getElementById('dl-meta').innerHTML = uniq([...META_LABELS, ...all.flatMap(s => s.meta.map(m => m.label))]).map(v => `<option value="${esc(v)}">`).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// Event list
+// ════════════════════════════════════════════════════════════════════════
+const todayISO = () => RE.toISO(new Date());
+
+function setFilter(el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t === el));
+  filter = el.dataset.f; renderList();
+}
+
+function renderList() {
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  const t = todayISO();
+  let list = events.filter(e =>
+    filter === 'all' ? true : filter === 'drafts' ? !e.published :
+    filter === 'upcoming' ? (e.end_date || e.start_date) >= t : (e.end_date || e.start_date) < t);
+  if (q) list = list.filter(e => [e.name, e.venue, e.address, e.start_date.slice(0, 4), ...e.event_sessions.map(s => s.title)]
+                                   .join(' ').toLowerCase().includes(q));
+  list = RE.sortEvents(list, filter !== 'upcoming');
+  const el = document.getElementById('ev-list');
+  if (!list.length) { el.innerHTML = `<p class="empty-list">${q ? 'No events match.' : filter === 'upcoming' ? 'No upcoming events yet.' : 'Nothing here.'}</p>`; return; }
+  el.innerHTML = list.map(e => {
+    const d = RE.parseDate(e.start_date);
+    const date = `${RE.DAYS[d.getDay()]} ${RE.MONTHS[d.getMonth()]} ${d.getDate()}${e.end_date !== e.start_date ? '–' + RE.parseDate(e.end_date).getDate() : ''}, ${d.getFullYear()}`;
+    const chips = (!e.published ? '<span class="chip draft">Draft</span>' : '') +
+                  (e.show_button === false ? '<span class="chip nolink">No button</span>' : !e.link_active ? '<span class="chip nolink">Link off</span>' : '') +
+                  ((e.end_date || e.start_date) < t && filter !== 'past' ? '<span class="chip past">Past</span>' : '');
+    return `<button class="ev-item ${cur && !curIsNew && cur.id === e.id ? 'sel' : ''}" onclick="openEvent('${e.id}')">
+      <div class="d">${esc(date)}${chips}</div>
+      <div class="n">${esc(e.name)}</div>
+      <div class="v">${esc([e.venue, e.address].filter(Boolean).join(' · ') || '—')}</div>
+    </button>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// Open / new / copy
+// ════════════════════════════════════════════════════════════════════════
+const clone = o => JSON.parse(JSON.stringify(o));
+const newId = () => crypto.randomUUID();
+
+function confirmDiscard() { return !dirty || confirm('Discard your unsaved changes to this event?'); }
+
+function openEvent(id) {
+  if (busy || !confirmDiscard()) return;
+  cur = clone(events.find(e => e.id === id));
+  curIsNew = false; setDirty(false); renderEditor();
+}
+
+function newEvent() {
+  if (busy || !confirmDiscard()) return;
+  const t = todayISO();
+  cur = { id: newId(), name: '', start_date: t, end_date: t, venue: '', address: '', card_style: 'auto',
+          register_url: '', register_label: 'Register', link_active: false, show_button: true, published: true, anchor: null,
+          event_sessions: [] };
+  addSession(true);
+  curIsNew = true; setDirty(true); renderEditor();
+  setTimeout(() => document.getElementById('f-name').focus(), 50);
+}
+
+function copyAsNew() {
+  if (!cur || busy) return;
+  if (dirty && !curIsNew && !confirm('Copy the event as it is on screen, including your unsaved changes?')) return;
+  const c = clone(cur);
+  c.id = newId(); c.anchor = null;
+  c.event_sessions.forEach(s => { s.id = newId(); s.event_id = c.id; });
+  cur = c; curIsNew = true; setDirty(true); renderEditor();
+  toast('Copy opened as a new event. Change the date (sessions move with it), then Save.', 'ok');
+  setTimeout(() => document.getElementById('f-start').focus(), 50);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// Editor
+// ════════════════════════════════════════════════════════════════════════
+function setDirty(v) {
+  dirty = v;
+  const st = document.getElementById('state');
+  if (st) { st.textContent = curIsNew ? 'New event · not saved yet' : v ? 'Unsaved changes' : 'All changes saved'; st.classList.toggle('dirty', v || curIsNew); }
+}
+
+function eventDays() {
+  const out = [];
+  if (!cur.start_date || !cur.end_date) return out;
+  for (let d = RE.parseDate(cur.start_date), e = RE.parseDate(cur.end_date); d <= e && out.length < 14; d.setDate(d.getDate() + 1)) out.push(RE.toISO(d));
+  return out;
+}
+
+function renderEditor() {
+  document.getElementById('actions').style.display = 'flex';
+  document.getElementById('btn-del').style.display = curIsNew ? 'none' : '';
+  document.getElementById('btn-repeat').disabled = curIsNew;
+  const venues = savedVenues();
+  const vIdx = venues.findIndex(v => v.venue === cur.venue && v.address === cur.address);
+  const cardOpts = [['auto', 'Automatic (from session colours)'], ...Object.entries(RE.CARD_STYLES)];
+
+  document.getElementById('edit-pane').innerHTML = `
+    <section class="sec">
+      <h2>${curIsNew ? 'New Event' : 'Event'}</h2>
+      <div class="grid g4">
+        <div class="span2"><label class="f" for="f-name">Event name</label>
+          <input id="f-name" list="dl-names" value="${esc(cur.name)}" oninput="setField('name', this.value)" placeholder="e.g. BHS Gaming Club" /></div>
+        <div><label class="f" for="f-start">Start date</label>
+          <input type="date" id="f-start" value="${esc(cur.start_date)}" onchange="changeStart(this.value)" /></div>
+        <div><label class="f" for="f-end">End date</label>
+          <input type="date" id="f-end" value="${esc(cur.end_date)}" onchange="changeEnd(this.value)" /></div>
+      </div>
+      <div class="hint">Changing the start date moves the whole event, including every session's day.</div>
+    </section>
+
+    <section class="sec">
+      <h2>Location</h2>
+      <div class="grid g2">
+        <div class="span2"><label class="f" for="f-venue-pick">Saved venues</label>
+          <select id="f-venue-pick" onchange="pickVenue(this.value)">
+            <option value="">— Pick a saved venue, or type a new one below —</option>
+            ${venues.map((v, i) => `<option value="${i}" ${i === vIdx ? 'selected' : ''}>${esc(v.venue || '(no name)')}${v.address ? ' — ' + esc(v.address) : ''}  (${v.n}×)</option>`).join('')}
+          </select></div>
+        <div><label class="f" for="f-venue">Venue name</label>
+          <input id="f-venue" value="${esc(cur.venue)}" oninput="setField('venue', this.value, true)" placeholder="e.g. Bristol Historical Society" /></div>
+        <div><label class="f" for="f-address">Address</label>
+          <input id="f-address" value="${esc(cur.address)}" oninput="setField('address', this.value, true)" placeholder="e.g. 98 Summer St, Bristol, CT 06010" /></div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h2>Registration &amp; Visibility</h2>
+      <label class="f">Registration button</label>
+      <div class="grid g3" style="margin-bottom:1rem;">
+        <label class="switch"><input type="radio" name="btnmode" ${btnMode() === 'active' ? 'checked' : ''} onchange="setBtnMode('active')">
+          Active link <small>— live button</small></label>
+        <label class="switch"><input type="radio" name="btnmode" ${btnMode() === 'off' ? 'checked' : ''} onchange="setBtnMode('off')">
+          Greyed out <small>— “Coming Soon”</small></label>
+        <label class="switch"><input type="radio" name="btnmode" ${btnMode() === 'none' ? 'checked' : ''} onchange="setBtnMode('none')">
+          No button</label>
+      </div>
+      <div class="grid g3" ${btnMode() === 'none' ? 'style="display:none;"' : ''}>
+        <div class="span2"><label class="f" for="f-url">Registration / event site link</label>
+          <input id="f-url" value="${esc(cur.register_url || '')}" oninput="setField('register_url', this.value)" placeholder="https://…  (or tel:+1… / mailto:…)" />
+          <div class="hint">You can fill this in early and keep the button greyed out until registration opens. After the event, the button switches to “Event Concluded” by itself.</div></div>
+        <div><label class="f" for="f-label">Button text</label>
+          <input id="f-label" value="${esc(cur.register_label || 'Register')}" oninput="setField('register_label', this.value)" /></div>
+      </div>
+      <div class="grid g2" style="margin-top:1rem;">
+        <label class="switch"><input type="checkbox" ${cur.published ? 'checked' : ''} onchange="setField('published', this.checked)">
+          Published <small>— untick to keep as a hidden draft</small></label>
+      </div>
+      <div class="grid g2" style="margin-top:1rem;">
+        <div><label class="f" for="f-card">Card colour stripe</label>
+          <select id="f-card" onchange="setField('card_style', this.value)">
+            ${cardOpts.map(([k, l]) => `<option value="${k}" ${cur.card_style === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}
+          </select></div>
+        <div><label class="f" for="f-anchor">Link name (optional)</label>
+          <input id="f-anchor" value="${esc(cur.anchor || '')}" oninput="setField('anchor', this.value.trim() || null)" placeholder="e.g. dire-consequences" />
+          <div class="hint">Lets other pages link straight to this card: events.html#link-name</div></div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h2>Sessions (${cur.event_sessions.length})</h2>
+      <div id="sessions">${renderSessions()}</div>
+      <button class="btn-ghost" onclick="addSession()">+ Add Session</button>
+      <span class="hint" style="margin-left:0.6rem;">Sessions are shown in date, then time order automatically.</span>
+    </section>
+
+    <section class="sec">
+      <h2>Preview — as it will appear on the events page</h2>
+      <div class="preview-wrap" id="preview"></div>
+    </section>`;
+  renderPreview(); renderList(); setDirty(dirty);
+}
+
+function renderSessions() {
+  if (!cur.event_sessions.length) return '<p class="hint" style="margin-bottom:0.8rem;">No sessions yet.</p>';
+  const days = eventDays(), multi = days.length > 1;
+  return RE.sortSessions(cur.event_sessions, cur).map((s, n) => {
+    const i = cur.event_sessions.indexOf(s);
+    return `<div class="sess" style="border-left-color:${tagColour(s.tag_style)}">
+      <div class="sess-head">
+        <span class="num">Session ${n + 1}</span>
+        <button class="btn-ghost" onclick="dupSession(${i})">Duplicate</button>
+        <button class="btn-ghost btn-danger" onclick="removeSession(${i})">Remove</button>
+      </div>
+      <div class="grid g4">
+        <div class="span2"><label class="f">Title</label>
+          <input value="${esc(s.title)}" oninput="setSess(${i}, 'title', this.value)" placeholder="e.g. A Book, A Candle and a Kobold" /></div>
+        <div><label class="f">Day</label>
+          <select onchange="setSess(${i}, 'session_date', this.value, true)" ${multi ? '' : 'disabled'}>
+            ${days.map(d => { const x = RE.parseDate(d); return `<option value="${d}" ${s.session_date === d ? 'selected' : ''}>${RE.DAYS[x.getDay()]} ${RE.MONTHS[x.getMonth()]} ${x.getDate()}</option>`; }).join('')}
+          </select></div>
+        <div><label class="f">Part of day <small style="text-transform:none;letter-spacing:0;">(if no clock time)</small></label>
+          <select onchange="setSess(${i}, 'time_of_day', this.value || null, true)">
+            <option value="">—</option>${TOD.map(t => `<option ${s.time_of_day === t ? 'selected' : ''}>${t}</option>`).join('')}
+          </select></div>
+        <div><label class="f">Start time</label>
+          <input type="time" value="${esc(s.start_time || '')}" onchange="setSess(${i}, 'start_time', this.value || null, true)" /></div>
+        <div><label class="f">End time</label>
+          <input type="time" value="${esc(s.end_time || '')}" onchange="setSess(${i}, 'end_time', this.value || null)" /></div>
+        <div><label class="f">Tag colour</label>
+          <select onchange="setSess(${i}, 'tag_style', this.value, true)">
+            ${Object.entries(RE.TAG_STYLES).map(([k, l]) => `<option value="${k}" ${s.tag_style === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}
+          </select></div>
+        <div><label class="f">Tag text</label>
+          <input list="dl-tags" value="${esc(s.tag_text)}" oninput="setSess(${i}, 'tag_text', this.value)" placeholder="e.g. Chronicles of Ribhus · Heptaverse 2d10" /></div>
+      </div>
+      <label class="f" style="margin-top:0.9rem;">Details line <small style="text-transform:none;letter-spacing:0;">(leave the label blank for a plain note, e.g. "Beginners Welcome")</small></label>
+      ${(s.meta || []).map((m, k) => `<div class="meta-row">
+          <input list="dl-meta" value="${esc(m.label)}" placeholder="Label" oninput="setMeta(${i}, ${k}, 'label', this.value)" />
+          <input value="${esc(m.value)}" placeholder="Value" oninput="setMeta(${i}, ${k}, 'value', this.value)" />
+          <button class="icon-btn" title="Remove" onclick="removeMeta(${i}, ${k})">✕</button></div>`).join('')}
+      <button class="btn-ghost" style="margin-bottom:0.9rem;" onclick="addMeta(${i})">+ Detail</button>
+      <div class="grid">
+        <div><label class="f">Description <small style="text-transform:none;letter-spacing:0;">(blank line between paragraphs)</small></label>
+          <textarea oninput="setSess(${i}, 'blurb', this.value)">${esc(s.blurb || '')}</textarea></div>
+        <div><label class="f">Small print <small style="text-transform:none;letter-spacing:0;">(e.g. "Pre-generated characters provided.")</small></label>
+          <textarea style="min-height:3.2rem;" oninput="setSess(${i}, 'notes', this.value || null)">${esc(s.notes || '')}</textarea></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tagColour(style) {
+  return ({ fantasy: '#c9973a', cyberpunk: '#00bcd4', weirdwest: '#cd853f', tendrils: '#9c7bb5', bloodstone: '#5c9e6a',
+            core: '#c87d2a', aswi: '#c43b1a', velvet: '#a84455', truegame: '#5b8dd9', community: '#8bc34a' })[style] || '#c9973a';
+}
+
+function autoCardStyle(ev) {
+  const styles = [...new Set(ev.event_sessions.map(s => s.tag_style))];
+  return styles.length === 1 && RE.CARD_STYLES[styles[0]] ? styles[0] : 'multi';
+}
+
+function renderPreview() {
+  const ev = clone(cur);
+  if (ev.card_style === 'auto') ev.card_style = autoCardStyle(ev);
+  if (!ev.name) ev.name = '(Event name)';
+  document.getElementById('preview').innerHTML = RE.renderCard(ev);
+}
+
+// Field setters. rerender = true when the change affects the form layout or the venue picker.
+function setField(k, v, venueTyped) {
+  cur[k] = v; setDirty(true);
+  if (venueTyped) {   // typing a venue clears the "saved venue" pick unless it still matches
+    const venues = savedVenues(), i = venues.findIndex(x => x.venue === cur.venue && x.address === cur.address);
+    document.getElementById('f-venue-pick').value = i >= 0 ? String(i) : '';
+  }
+  renderPreview();
+}
+
+function btnMode() { return cur.show_button === false ? 'none' : cur.link_active ? 'active' : 'off'; }
+function setBtnMode(m) {
+  cur.show_button = m !== 'none';
+  cur.link_active = m === 'active';
+  setDirty(true); renderEditor();
+}
+
+function pickVenue(i) {
+  if (i === '') return;
+  const v = savedVenues()[+i];
+  cur.venue = v.venue; cur.address = v.address;
+  document.getElementById('f-venue').value = v.venue;
+  document.getElementById('f-address').value = v.address;
+  setDirty(true); renderPreview();
+}
+
+function shiftISO(iso, days) { const d = RE.parseDate(iso); d.setDate(d.getDate() + days); return RE.toISO(d); }
+function daysBetween(a, b) { return Math.round((RE.parseDate(b) - RE.parseDate(a)) / 86400000); }
+
+function changeStart(v) {
+  if (!v) return;
+  const delta = cur.start_date ? daysBetween(cur.start_date, v) : 0;
+  cur.start_date = v;
+  cur.end_date = cur.end_date ? shiftISO(cur.end_date, delta) : v;
+  if (cur.end_date < v) cur.end_date = v;
+  cur.event_sessions.forEach(s => { s.session_date = s.session_date ? shiftISO(s.session_date, delta) : v; });
+  setDirty(true); renderEditor();
+  if (delta) toast(`Event moved ${Math.abs(delta)} day${Math.abs(delta) !== 1 ? 's' : ''} ${delta > 0 ? 'later' : 'earlier'}; sessions moved with it.`, 'ok');
+}
+
+function changeEnd(v) {
+  if (!v) return;
+  if (v < cur.start_date) { toast('The end date can’t be before the start date.', 'bad'); document.getElementById('f-end').value = cur.end_date; return; }
+  cur.end_date = v;
+  cur.event_sessions.forEach(s => { if (!s.session_date || s.session_date > v) s.session_date = v; });
+  setDirty(true); renderEditor();
+}
+
+function addSession(silent) {
+  const last = cur.event_sessions[cur.event_sessions.length - 1];
+  cur.event_sessions.push({
+    id: newId(), event_id: cur.id, session_date: cur.start_date, start_time: null, end_time: null, time_of_day: null,
+    title: '', tag_style: last ? last.tag_style : 'fantasy', tag_text: '', meta: [], blurb: '', notes: null,
+    sort_order: cur.event_sessions.length
+  });
+  if (!silent) { setDirty(true); renderEditor(); }
+}
+function dupSession(i) {
+  const c = clone(cur.event_sessions[i]); c.id = newId(); c.sort_order = cur.event_sessions.length;
+  cur.event_sessions.push(c); setDirty(true); renderEditor();
+}
+function removeSession(i) {
+  const s = cur.event_sessions[i];
+  if ((s.title || s.blurb) && !confirm(`Remove the session "${s.title || 'untitled'}"?`)) return;
+  cur.event_sessions.splice(i, 1); setDirty(true); renderEditor();
+}
+function setSess(i, k, v, rerender) {
+  cur.event_sessions[i][k] = v; setDirty(true);
+  if (rerender) renderEditor(); else renderPreview();
+}
+function addMeta(i) { cur.event_sessions[i].meta.push({ label: '', value: '' }); setDirty(true); renderEditor(); }
+function setMeta(i, k, f, v) { cur.event_sessions[i].meta[k][f] = v; setDirty(true); renderPreview(); }
+function removeMeta(i, k) { cur.event_sessions[i].meta.splice(k, 1); setDirty(true); renderEditor(); }
+
+// ════════════════════════════════════════════════════════════════════════
+// Save / delete
+// ════════════════════════════════════════════════════════════════════════
+function validate(ev) {
+  if (!String(ev.name || '').trim()) return 'Give the event a name.';
+  if (!ev.start_date) return 'Set a start date.';
+  if (ev.end_date < ev.start_date) return 'The end date can’t be before the start date.';
+  if (ev.show_button !== false && ev.link_active && !RE.safeUrl(ev.register_url)) return 'The button is set to Active link, but the link is missing or doesn’t start with https://, tel: or mailto:';
+  for (const [n, s] of RE.sortSessions(ev.event_sessions, ev).entries()) {
+    if (!String(s.title || '').trim()) return `Session ${n + 1} needs a title (or remove it).`;
+    if (s.session_date && (s.session_date < ev.start_date || s.session_date > ev.end_date)) return `Session ${n + 1} is on a day outside the event dates.`;
+    if (s.start_time && s.end_time && s.end_time <= s.start_time) return `Session ${n + 1}: the end time is before the start time.`;
+  }
+  return null;
+}
+
+function eventRow(ev) {
+  return {
+    id: ev.id, name: ev.name.trim(), start_date: ev.start_date, end_date: ev.end_date,
+    venue: (ev.venue || '').trim(), address: (ev.address || '').trim(),
+    card_style: ev.card_style === 'auto' ? autoCardStyle(ev) : ev.card_style,
+    register_url: (ev.register_url || '').trim() || null, register_label: (ev.register_label || '').trim() || 'Register',
+    link_active: ev.show_button !== false && !!ev.link_active, show_button: ev.show_button !== false, published: !!ev.published, anchor: ev.anchor ? String(ev.anchor).trim() : null
+  };
+}
+
+function sessionRows(ev) {
+  return RE.sortSessions(ev.event_sessions, ev).map((s, k) => ({
+    id: s.id, event_id: ev.id, session_date: s.session_date || ev.start_date,
+    start_time: s.start_time || null, end_time: s.end_time || null, time_of_day: s.start_time ? null : (s.time_of_day || null),
+    title: s.title.trim(), tag_style: s.tag_style || 'community', tag_text: (s.tag_text || '').trim(),
+    meta: (s.meta || []).map(m => ({ label: String(m.label || '').trim(), value: String(m.value || '').trim() })).filter(m => m.value),
+    blurb: (s.blurb || '').trim(), notes: (s.notes || '').trim() || null, sort_order: k
+  }));
+}
+
+async function writeEvent(ev, isNew) {
+  const row = eventRow(ev);
+  if (isNew) await api('events', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify(row) });
+  else       await api(`events?id=eq.${row.id}`, { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: JSON.stringify(row) });
+  const rows = sessionRows(ev);
+  // remove sessions that were deleted in the editor
+  await api(`event_sessions?event_id=eq.${row.id}` + (rows.length ? `&id=not.in.(${rows.map(r => r.id).join(',')})` : ''),
+            { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
+  if (rows.length) await api('event_sessions?on_conflict=id', {
+    method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(rows) });
+}
+
+async function save() {
+  if (busy || !cur) return;
+  const problem = validate(cur);
+  if (problem) { toast(problem, 'bad'); return; }
+  busy = true; const btn = document.getElementById('btn-save'); btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    await writeEvent(cur, curIsNew);
+    const id = cur.id, wasNew = curIsNew;
+    await loadEvents();
+    cur = clone(events.find(e => e.id === id)); curIsNew = false; setDirty(false); renderEditor();
+    toast(wasNew ? 'Event created.' : 'Saved. The public page shows it on the next visit.', 'ok');
+  } catch (e) { toast(e.message, 'bad'); }
+  busy = false; btn.disabled = false; btn.textContent = 'Save';
+}
+
+async function deleteEvent() {
+  if (busy || !cur || curIsNew) return;
+  const d = RE.parseDate(cur.start_date);
+  if (!confirm(`Delete "${cur.name}" on ${RE.MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}?\n\nThis removes the event and all its sessions permanently. ` +
+               `To hide it without deleting, untick "Published" instead.`)) return;
+  busy = true;
+  try {
+    await api(`events?id=eq.${cur.id}`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
+    cur = null; setDirty(false); await loadEvents();
+    document.getElementById('edit-pane').innerHTML = '<p class="placeholder">Event deleted.</p>';
+    document.getElementById('actions').style.display = 'none';
+    toast('Event deleted.', 'ok');
+  } catch (e) { toast(e.message, 'bad'); }
+  busy = false;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// Repeat: several dated copies at once (each becomes its own editable event)
+// ════════════════════════════════════════════════════════════════════════
+let rep = null;
+const ORD = ['1st', '2nd', '3rd', '4th', 'Last'];
+
+function nthWeekday(year, month, nth, wd) {     // nth 0..3 = 1st..4th, 4 = last; month may run past 11 (rolls into next year)
+  const first = new Date(year, month, 1), m = first.getMonth();
+  if (nth === 4) { const d = new Date(first.getFullYear(), m + 1, 0); while (d.getDay() !== wd) d.setDate(d.getDate() - 1); return d; }
+  const d = new Date(first); while (d.getDay() !== wd) d.setDate(d.getDate() + 1);
+  d.setDate(d.getDate() + 7 * nth); return d.getMonth() === m ? d : null;
+}
+
+function openRepeat() {
+  if (!cur || curIsNew) return;
+  if (dirty) { toast('Save your changes first, then repeat.', 'bad'); return; }
+  const s = RE.parseDate(cur.start_date);
+  const nth = s.getDate() > 28 ? 4 : Math.floor((s.getDate() - 1) / 7);
+  rep = { mode: 'monthly', nth, wd: s.getDay(), weeks: 1, count: 6, rows: [] };
+  genRepeat(); renderRepeat();
+}
+
+function genRepeat() {
+  const src = RE.parseDate(cur.start_date), rows = [];
+  if (rep.mode === 'monthly') {
+    for (let k = 1; rows.length < rep.count && k < 60; k++) {
+      const d = nthWeekday(src.getFullYear(), src.getMonth() + k, rep.nth, rep.wd);
+      if (d && d > src) rows.push(RE.toISO(d));
+    }
+  } else {
+    for (let k = 1; k <= rep.count; k++) { const d = new Date(src); d.setDate(d.getDate() + 7 * rep.weeks * k); rows.push(RE.toISO(d)); }
+  }
+  const vi = savedVenues().findIndex(v => v.venue === cur.venue && v.address === cur.address);
+  rep.rows = rows.map(d => ({ on: true, date: d, venue: vi >= 0 ? String(vi) : 'same' }));
+}
+
+function renderRepeat() {
+  const venues = savedVenues(), wdNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const n = rep.rows.filter(r => r.on).length;
+  document.getElementById('modal-root').innerHTML = `<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">
+    <h2>Repeat “${esc(cur.name)}”</h2>
+    <p class="sub">Creates separate copies with all ${cur.event_sessions.length} session${cur.event_sessions.length !== 1 ? 's' : ''}. Each copy is its own event, so you can still edit any one date later.</p>
+    <div class="grid g4">
+      <div><label class="f">Pattern</label>
+        <select onchange="rep.mode=this.value; genRepeat(); renderRepeat();">
+          <option value="monthly" ${rep.mode === 'monthly' ? 'selected' : ''}>Same day each month</option>
+          <option value="weekly" ${rep.mode === 'weekly' ? 'selected' : ''}>Every few weeks</option></select></div>
+      ${rep.mode === 'monthly' ? `
+      <div><label class="f">Which</label>
+        <select onchange="rep.nth=+this.value; genRepeat(); renderRepeat();">${ORD.map((o, k) => `<option value="${k}" ${rep.nth === k ? 'selected' : ''}>${o}</option>`).join('')}</select></div>
+      <div><label class="f">Day</label>
+        <select onchange="rep.wd=+this.value; genRepeat(); renderRepeat();">${wdNames.map((w, k) => `<option value="${k}" ${rep.wd === k ? 'selected' : ''}>${w}</option>`).join('')}</select></div>`
+      : `<div class="span2"><label class="f">Every</label>
+        <select onchange="rep.weeks=+this.value; genRepeat(); renderRepeat();">${[1, 2, 3, 4, 6, 8].map(w => `<option value="${w}" ${rep.weeks === w ? 'selected' : ''}>${w} week${w > 1 ? 's' : ''}</option>`).join('')}</select></div>`}
+      <div><label class="f">How many</label>
+        <select onchange="rep.count=+this.value; genRepeat(); renderRepeat();">${[1, 2, 3, 4, 5, 6, 8, 10, 12].map(c => `<option ${rep.count === c ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+    </div>
+    <table class="rep-table">
+      <tr><th></th><th>Date</th><th></th><th>Venue</th></tr>
+      ${rep.rows.map((r, k) => { const d = RE.parseDate(r.date); return `<tr>
+        <td><input type="checkbox" ${r.on ? 'checked' : ''} onchange="rep.rows[${k}].on=this.checked; renderRepeat();"></td>
+        <td><input type="date" value="${r.date}" onchange="rep.rows[${k}].date=this.value; renderRepeat();"></td>
+        <td class="wd">${RE.DAYS[d.getDay()]}</td>
+        <td><select onchange="rep.rows[${k}].venue=this.value;">
+          ${venues.map((v, i) => `<option value="${i}" ${r.venue === String(i) ? 'selected' : ''}>${esc(v.venue || v.address)}${v.venue && v.address ? ' — ' + esc(v.address) : ''}</option>`).join('')}
+        </select></td></tr>`; }).join('')}
+    </table>
+    <p class="hint">Untick a date to skip it, or change any date or venue (for example a Saturday moved for a conflict, or a month at Worthwhile Reads).</p>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn" ${n ? '' : 'disabled'} onclick="createRepeats()">Create ${n} Event${n !== 1 ? 's' : ''}</button>
+    </div></div></div>`;
+}
+
+function closeModal() { document.getElementById('modal-root').innerHTML = ''; rep = null; }
+
+async function createRepeats() {
+  if (busy) return;
+  const venues = savedVenues(), chosen = rep.rows.filter(r => r.on && r.date);
+  const clash = chosen.filter(r => events.some(e => e.name === cur.name && e.start_date === r.date));
+  if (clash.length && !confirm(`"${cur.name}" already exists on ${clash.map(r => r.date).join(', ')}. Create ${clash.length > 1 ? 'those' : 'that'} anyway?`)) return;
+  busy = true;
+  try {
+    const newEvents = [], newSessions = [];
+    for (const r of chosen) {
+      const delta = daysBetween(cur.start_date, r.date);
+      const ev = clone(cur); ev.id = newId(); ev.anchor = null;
+      ev.start_date = r.date; ev.end_date = shiftISO(cur.end_date, delta);
+      const v = venues[+r.venue]; if (v) { ev.venue = v.venue; ev.address = v.address; }
+      ev.event_sessions.forEach(s => { s.id = newId(); s.event_id = ev.id; s.session_date = shiftISO(s.session_date || cur.start_date, delta); });
+      newEvents.push(eventRow(ev)); newSessions.push(...sessionRows(ev));
+    }
+    await api('events', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify(newEvents) });
+    if (newSessions.length) await api('event_sessions', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify(newSessions) });
+    closeModal(); await loadEvents(); renderEditor();
+    toast(`Created ${newEvents.length} event${newEvents.length !== 1 ? 's' : ''}. Find them under Upcoming to adjust any one.`, 'ok');
+  } catch (e) { toast(e.message, 'bad'); }
+  busy = false;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// Google Calendar: opens a pre-filled "new event" page; you press Save there.
+// ════════════════════════════════════════════════════════════════════════
+function addToGoogle() {
+  if (!cur) return;
+  const ev = cur, sess = RE.sortSessions(ev.event_sessions, ev);
+  const timed = sess.filter(s => s.start_time);
+  const compact = iso => iso.replace(/-/g, '');
+  let dates;
+  if (!timed.length || ev.end_date !== ev.start_date) {
+    dates = compact(ev.start_date) + '/' + compact(shiftISO(ev.end_date, 1));          // all-day (end is exclusive)
+  } else {
+    const st = timed.map(s => s.start_time).sort()[0];
+    const en = timed.map(s => s.end_time || s.start_time).sort().slice(-1)[0];
+    dates = compact(ev.start_date) + 'T' + st.replace(':', '') + '00/' + compact(ev.start_date) + 'T' + en.replace(':', '') + '00';
+  }
+  const lines = sess.map(s => {
+    const label = RE.sessionLabel(s, ev).replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&');
+    return (label ? label + ' — ' : '') + s.title;
+  });
+  const url = RE.safeUrl(ev.register_url);
+  const details = [...lines, url ? '\nEvent link: ' + url : '',
+    '\nAdded from the Ribhian Games events editor · heroesofribhus.com/events/events.html'].filter(Boolean).join('\n');
+  const q = new URLSearchParams({ action: 'TEMPLATE', text: ev.name || 'Event', dates, details,
+    location: [ev.venue, ev.address].filter(Boolean).join(', '), ctz: 'America/New_York' });
+  window.open('https://calendar.google.com/calendar/render?' + q.toString(), '_blank', 'noopener');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+function toast(msg, kind) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'show ' + (kind || '');
+  clearTimeout(toast._t); toast._t = setTimeout(() => { t.className = ''; }, 4200);
+}
+
+window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's' && cur) { e.preventDefault(); save(); }
+  if (e.key === 'Escape' && rep) closeModal();
+});
+
+// Resume a sign-in from earlier in this browser tab
+(async () => {
+  try {
+    const s = JSON.parse(sessionStorage.getItem('rg_events_session') || 'null');
+    if (s && s.refresh_token) { session = s; await enterApp(); }
+  } catch (e) { session = null; }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,763 @@
+<!--Heroes of Ribhus Legacy page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Product page for Heroes of Ribhus: Legacy — the organized play campaign running on D&D 5E 2014 under OGL 1.0.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heroes of Ribhus: Legacy — Ribhian Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=MedievalSharp&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:       #14110c;
+      --deep:        #1c1812;
+      --stone:       #28221a;
+      --stone-mid:   #342c22;
+      --gold:        #c4923a;
+      --gold-bright: #d4a848;
+      --gold-pale:   #e8c878;
+      --crimson:     #8c2020;
+      --crimson-mid: #b03535;
+      --ember:       #c4703a;
+      --ember-lt:    #d8905a;
+      --slate:       #6a7888;
+      --sandstone:   #a4865e;
+      --ash:         #d6cfc0;
+      --text-body:   #c3ac8e;
+      --text-dim:    #817768;
+    }
+
+    body {
+      background-color: var(--black);
+      color: var(--text-body);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .product-hero {
+      position: relative;
+      min-height: 65vh;
+      background: var(--black);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 3rem 0.8rem;
+    }
+
+    .hor-hero-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 30%;
+      pointer-events: none; z-index: 0;
+    }
+
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom,
+        rgba(6,8,10,0.10) 0%,
+        rgba(6,8,10,0.20) 40%,
+        rgba(6,8,10,0.82) 72%,
+        rgba(6,8,10,0.97) 100%);
+      pointer-events: none;
+    }
+
+    .product-hero-content {
+      position: relative; z-index: 2;
+      width: 100%; display: flex;
+      align-items: center; justify-content: center;
+      gap: 0.8rem; flex-wrap: wrap;
+    }
+
+    .meta-pill {
+      padding: 0.45rem 1.1rem;
+      border: 1px solid rgba(201,151,58,0.45);
+      background: rgba(6,8,10,0.70);
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem; letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-bright);
+      text-shadow: 0 0 8px rgba(232,184,75,0.7);
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      padding: 0.8rem 3rem;
+      background: var(--black);
+      border-bottom: 1px solid rgba(201,151,58,0.08);
+      font-family: 'Cinzel', serif; font-size: 0.62rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
+    }
+    .breadcrumb a { color: var(--text-dim); }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb span { color: var(--gold); margin: 0 0.5rem; }
+
+    /* ── SECTION EYEBROW ── */
+    .section-eyebrow {
+      font-family: 'Cinzel', serif; font-size: 0.6rem;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--sandstone); display: block; margin-bottom: 0.6rem;
+      text-shadow:
+        0 0 6px rgba(164,134,94,1.0),
+        0 0 18px rgba(164,134,94,0.75),
+        0 0 38px rgba(129,119,104,0.45);
+    }
+
+    /* ── BANDS ── */
+    .hor-band { padding: 4.5rem 3rem; background: var(--stone); border-top: 1px solid rgba(201,151,58,0.08); }
+    .hor-band-dark { padding: 4.5rem 3rem; background: var(--deep); border-top: 1px solid rgba(201,151,58,0.10); }
+    .hor-band-inner { max-width: 1080px; margin: 0 auto; }
+
+    /* ── SETTING TITLE ── */
+    .hor-setting-title {
+      font-family: 'MedievalSharp', serif;
+      font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+      font-weight: 400; color: var(--ash);
+      letter-spacing: 0.10em;
+      white-space: nowrap;
+      text-shadow:
+        -1px -1px 0 rgba(255,255,255,0.18),
+        2px 2px 0 rgba(30,22,14,0.95),
+        3px 3px 4px rgba(0,0,0,0.85);
+      text-align: left; margin-bottom: 2rem; line-height: 1.2;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.3rem, 2.8vw, 2rem);
+      font-weight: 700; color: var(--ash);
+      line-height: 1.2; margin-bottom: 1.5rem;
+    }
+
+    /* ── DESCRIPTION ── */
+    .desc-section {
+      padding: 5rem 3rem;
+      background: var(--deep);
+      border-top: 1px solid rgba(201,151,58,0.10);
+    }
+    .desc-inner { max-width: 1080px; margin: 0 auto; }
+    .desc-inner p {
+      font-size: 1.05rem; color: var(--text-body);
+      line-height: 1.9; margin-bottom: 1.2rem; max-width: 820px;
+    }
+    .desc-inner p strong { color: var(--gold-bright); }
+
+    .ogl-badge {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      border: 1px solid rgba(201,151,58,0.30);
+      background: rgba(6,8,10,0.60);
+      padding: 0.5rem 1.2rem; margin-top: 1.5rem;
+      font-family: 'Cinzel', serif; font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); text-shadow: 0 0 8px rgba(201,151,58,0.6);
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 2.5rem 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(201,151,58,0.3), transparent); }
+    .divider-gem { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+
+    /* ── HERITAGE CARDS ── */
+    .heritage-group-label {
+      font-family: 'Cinzel', serif; font-size: 0.55rem;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold-bright);
+      text-shadow: 0 0 8px rgba(232,184,75,0.7);
+      display: block; margin: 2rem 0 1rem;
+      border-bottom: 1px solid rgba(201,151,58,0.18);
+      padding-bottom: 0.5rem;
+    }
+
+    .heritage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem; margin-top: 0.8rem;
+    }
+
+    .heritage-card {
+      border: 1px solid rgba(201,151,58,0.14);
+      background: rgba(6,8,10,0.85);
+      padding: 1.2rem 1.4rem; position: relative;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .heritage-card:hover { border-color: rgba(201,151,58,0.35); background: rgba(15,18,25,0.95); }
+    .heritage-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,151,58,0.35), transparent);
+    }
+    .heritage-card.ulric { border-color: rgba(180,60,20,0.20); background: rgba(12,8,6,0.88); }
+    .heritage-card.ulric::before { background: linear-gradient(90deg, transparent, var(--ember), transparent); }
+
+    .heritage-name {
+      font-family: 'Cinzel', serif; font-size: 0.78rem;
+      font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold-bright); margin-bottom: 0.25rem;
+    }
+    .heritage-card.ulric .heritage-name { color: var(--ember-lt); }
+    .heritage-subtitle {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 0.88rem; color: var(--text-dim); margin-bottom: 0.6rem;
+    }
+    .heritage-trait {
+      margin-top: 0.7rem; padding-top: 0.7rem;
+      border-top: 1px solid rgba(201,151,58,0.10);
+      font-size: 0.82rem; color: var(--gold-pale);
+    }
+
+    /* ── PATHS ── */
+    .paths-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem; margin-top: 1rem;
+    }
+
+    .path-tradition-label {
+      font-family: 'Cinzel', serif; font-size: 0.58rem;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold-bright);
+      text-shadow: 0 0 8px rgba(232,184,75,0.7);
+      display: block; margin: 2.5rem 0 1rem;
+      border-bottom: 1px solid rgba(201,151,58,0.18);
+      padding-bottom: 0.5rem;
+    }
+
+    .path-card {
+      border: 1px solid rgba(201,151,58,0.15);
+      background: rgba(6,8,10,0.88);
+      padding: 1.4rem; position: relative;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+    }
+    .path-card:hover {
+      border-color: rgba(201,151,58,0.38);
+      background: rgba(18,22,30,0.95);
+      transform: translateY(-2px);
+    }
+    .path-card::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,151,58,0.20), transparent);
+    }
+    .path-name {
+      font-family: 'Cinzel', serif; font-size: 0.8rem;
+      font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ash); line-height: 1.3;
+    }
+    .path-tagline {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 0.9rem; color: var(--text-dim);
+      margin-bottom: 0.6rem; line-height: 1.4;
+    }
+    .path-desc { font-size: 0.85rem; color: var(--text-body); line-height: 1.65; }
+    .path-subclasses {
+      margin-top: 0.7rem; padding-top: 0.6rem;
+      border-top: 1px solid rgba(201,151,58,0.10);
+      font-size: 0.78rem; color: var(--gold-pale); font-style: italic;
+    }
+    .path-subclasses strong {
+      font-style: normal; font-family: 'Cinzel', serif;
+      font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); display: block; margin-bottom: 0.3rem;
+    }
+
+    /* ── REPUTATION ── */
+    .rep-feature {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2.5rem; margin-top: 2rem;
+    }
+    @media (max-width: 750px) { .rep-feature { grid-template-columns: 1fr; } }
+
+    .rep-text p { font-size: 0.95rem; color: var(--text-body); line-height: 1.85; margin-bottom: 1rem; }
+    .rep-text p strong { color: var(--gold-bright); }
+
+    .rep-thresholds { display: flex; flex-direction: column; gap: 0.6rem; }
+    .rep-threshold {
+      background: var(--black); border: 1px solid rgba(201,151,58,0.12);
+      border-left: 3px solid var(--gold); padding: 0.7rem 1rem;
+      display: flex; align-items: baseline; gap: 1rem;
+    }
+    .rep-score {
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.12em; color: var(--gold); min-width: 55px;
+    }
+    .rep-label {
+      font-family: 'Cinzel', serif; font-size: 0.7rem;
+      font-weight: 700; color: var(--ash); min-width: 130px;
+    }
+    .rep-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.4; }
+
+    .fame-infamy-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; margin-top: 2rem;
+    }
+    @media (max-width: 600px) { .fame-infamy-grid { grid-template-columns: 1fr; } }
+
+    .fi-card {
+      background: var(--black); border: 1px solid rgba(201,151,58,0.12);
+      padding: 1.4rem;
+    }
+    .fi-card.fame { border-top: 2px solid var(--gold); }
+    .fi-card.infamy { border-top: 2px solid var(--crimson-mid); }
+    .fi-title {
+      font-family: 'Cinzel', serif; font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .fi-card.fame .fi-title { color: var(--gold-bright); text-shadow: 0 0 8px rgba(232,184,75,0.6); }
+    .fi-card.infamy .fi-title { color: var(--crimson-mid); text-shadow: 0 0 8px rgba(176,48,48,0.6); }
+    .fi-desc { font-size: 0.85rem; color: var(--text-body); line-height: 1.65; }
+
+    /* ── CAMPAIGN INFO ── */
+    .campaign-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem; margin-top: 2rem;
+    }
+    .campaign-panel {
+      background: rgba(6,8,10,0.88);
+      border: 1px solid rgba(201,151,58,0.14);
+      border-left: 3px solid var(--ember);
+      padding: 1.4rem;
+    }
+    .campaign-panel h3 {
+      font-family: 'Cinzel', serif; font-size: 0.72rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.7rem;
+    }
+    .campaign-panel p { font-size: 0.88rem; color: var(--text-body); line-height: 1.65; }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      background: var(--deep); border-top: 1px solid rgba(201,151,58,0.10);
+      padding: 2.5rem 3rem; text-align: center;
+    }
+    .footer-brand {
+      font-family: 'Cinzel Decorative', serif; font-size: 0.75rem;
+      letter-spacing: 0.3em; color: var(--gold); margin-bottom: 0.4rem;
+    }
+    .footer-tagline { font-size: 0.8rem; color: var(--text-dim); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .hor-band, .hor-band-dark, .desc-section { padding: 3rem 1.4rem; }
+      .breadcrumb { padding: 0.8rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="topbar-mount"></div>
+<div class="site-wrapper">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar-mount"></div>
+
+  <main class="main-content">
+
+    <!-- ══ HERO ══ -->
+    <section class="product-hero">
+      <img class="hor-hero-bg" src="../images/heroes-of-ribhus-legacy-bg.jpg" alt="" />
+      <div class="hero-overlay"></div>
+      <div class="product-hero-content">
+        <div class="meta-pill">⚔ High Fantasy</div>
+        <div class="meta-pill">📜 D&amp;D 5E (2014) Variant</div>
+        <div class="meta-pill">🏛 OGL 1.0</div>
+        <div class="meta-pill">🌐 Organized Play</div>
+      </div>
+    </section>
+
+    <!-- ══ BREADCRUMB ══ -->
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a>
+      <span>›</span>
+      Heroes of Ribhus: Legacy
+    </div>
+
+    <!-- ══ DESCRIPTION ══ -->
+    <section class="desc-section">
+      <div class="desc-inner">
+        <span class="section-eyebrow">Thirty Years in the Making</span>
+        <h2 class="hor-setting-title">Heroes of Ribhus: Legacy</h2>
+
+        <p>Heroes of Ribhus: Legacy is the original Ribhus organized play campaign — a high fantasy setting that has been running at conventions and home tables for over thirty years. It is set in the same world as Chronicles of Ribhus but <strong>235 years in the past</strong>, during the formative age when the great powers of Ribhus were still being forged and the world's fate was genuinely unwritten.</p>
+
+        <p>This is where the Ribhus story begins. The lore you encounter in Chronicles of Ribhus — the fallen kingdoms, the ancient wars, the legendary heroes — all of it has its roots in the events that players are shaping right now in Legacy. Play here and you are writing the history that the future remembers.</p>
+
+        <p>Heroes of Ribhus: Legacy runs on <strong>D&amp;D 5th Edition (2014) Variant</strong> under the Open Game License 1.0, with extensive campaign-specific expansions including unique classes, modified races, regional skill sets, new feats, and the <strong>Reputation mechanic</strong> — a system tracking your Fame and Infamy across the world of Ribhus and shaping how every faction, city, and NPC responds to your presence.</p>
+
+        <div class="ogl-badge">
+          ⚖ Licensed under Open Game License 1.0 &nbsp;·&nbsp; Requires D&amp;D 5E (2014) Player's Handbook
+        </div>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <div class="divider-gem"></div>
+          <div class="divider-line"></div>
+        </div>
+
+        <p>The campaign is designed for organized play — structured events at conventions and game days where multiple tables run simultaneously, characters are persistent across events, and the actions of players collectively shape the ongoing storyline of the world. Time Units track your character's advancement between events. Reputation follows you everywhere you go.</p>
+      </div>
+    </section>
+
+    <!-- ══ CAMPAIGN STRUCTURE ══ -->
+    <div class="hor-band">
+      <div class="hor-band-inner">
+        <span class="section-eyebrow">The Campaign</span>
+        <h2 class="section-title">How It Works</h2>
+        <div class="campaign-grid">
+          <div class="campaign-panel">
+            <h3>Organized &amp; Home Play</h3>
+            <p>Heroes of Ribhus Legacy is built for both convention organized play and home campaign use. Characters are persistent across events — your decisions, your reputation, and your history follow you from table to table, venue to venue, and session to session.</p>
+          </div>
+          <div class="campaign-panel">
+            <h3>Time Units</h3>
+            <p>Earned Time Units (ETU) are awarded for each event, averaging 6 per event. Every 3 ETU grants 1 Available Time Unit (ATU) for item creation, feat acquisition, and organizational membership between adventures.</p>
+          </div>
+          <div class="campaign-panel">
+            <h3>The Setting</h3>
+            <p>The world of Ribhus — 235 years before the events of Chronicles of Ribhus. The great cities are rising, the ancient powers are active, and the history that Chronicles references as legend is happening now at your table.</p>
+          </div>
+          <div class="campaign-panel">
+            <h3>D&amp;D 5E Foundation</h3>
+            <p>Built on the 2014 D&amp;D 5th Edition ruleset under OGL 1.0, with campaign-specific expansions. Unique classes, modified races, regional skill sets, and new feats sit alongside the familiar 5E framework.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ HERITAGES ══ -->
+    <div class="hor-band-dark">
+      <div class="hor-band-inner">
+        <span class="section-eyebrow">Who You Are</span>
+        <h2 class="section-title">The Children of Ribhus</h2>
+        <p style="font-size:0.95rem; color:var(--text-dim); font-style:italic; margin-bottom:0.5rem;">Only races in the Ribhus Campaign Setting are permitted. Some have fixed Home Regions — consult your regional background before selecting.</p>
+
+        <span class="heritage-group-label">The Elder Races</span>
+        <div class="heritage-grid">
+          <div class="heritage-card">
+            <div class="heritage-name">Mountain Dwarf</div>
+            <div class="heritage-subtitle">Slow to anger. Fierce fighters. Masters of stone and metal.</div>
+            <div class="heritage-trait">Home: Dracospline &amp; Krys Mountains, Ironguard · Languages: Common, Dwarven, Home Region</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Hill Dwarf</div>
+            <div class="heritage-subtitle">Exiled after the fall of Stroiciavar. More worldly than their mountain kin.</div>
+            <div class="heritage-trait">+1 Con, −1 Cha · Favored: Fighter or Cleric · Home: Mountain Foothills</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">High Elf</div>
+            <div class="heritage-subtitle">Arrogant, aloof, and convinced of their own superiority. Largely correct.</div>
+            <div class="heritage-trait">Infamy +5 · Home: Belegar, Eagle Peaks, Far West forests · Languages: Common, Elven, Fey</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Wood Elf</div>
+            <div class="heritage-subtitle">Deeply withdrawn from other races. Their forests are their cathedrals.</div>
+            <div class="heritage-trait">+2 Dex, −1 Con, −1 Cha · Infamy +10 · Favored: Ranger</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Forest Gnome</div>
+            <div class="heritage-subtitle">Gentle, industrious, and merry. They find balance between work and celebration.</div>
+            <div class="heritage-trait">Home: Xerxes, Forstyd, Central Ribhus · Languages: Common, Gnomish, Burrowing Animals</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Ledge Gnome</div>
+            <div class="heritage-subtitle">Inquisitive, inventive, and a little unpredictable. Excellent scavengers.</div>
+            <div class="heritage-trait">+2 Dex, −2 Wis, −1 Cha · Fame +5 · Infamy +5 · Favored: Rogue</div>
+          </div>
+        </div>
+
+        <span class="heritage-group-label">Other Races</span>
+        <div class="heritage-grid">
+          <div class="heritage-card">
+            <div class="heritage-name">Half-Elf</div>
+            <div class="heritage-subtitle">Embracing their human side — because elven culture has turned its back on them.</div>
+            <div class="heritage-trait">Home: Any · Languages: Common, Elvish, Home Region</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Half-Orc</div>
+            <div class="heritage-subtitle">Common in the Free Cities. Shunned in Forstyd. Openly persecuted in Xerxes.</div>
+            <div class="heritage-trait">Infamy +10 · Home: Any · Languages: Common, Orcish, Home Region</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Burrow Halfling</div>
+            <div class="heritage-subtitle">Family life and peaceful co-existence. And an inexplicable weakness for Pralines.</div>
+            <div class="heritage-trait">Home: Any non-metropolitan · Languages: Common, Halfling, Home Region</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Mesa Halfling</div>
+            <div class="heritage-subtitle">Nomadic savannah folk. More aggressive than their burrow cousins. Rivalry with Impalas.</div>
+            <div class="heritage-trait">+1 Dex, −2 Wis, +1 Cha · Infamy +10 · Favored: Rogue or Sorcerer</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Dragonborn</div>
+            <div class="heritage-subtitle">Clannish and fickle. Rarely seen far from their clans without institutional reason.</div>
+            <div class="heritage-trait">Fame +5 · Home: Corresponds to Draconic bloodline · Languages: Common, Draconic</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Tiefling</div>
+            <div class="heritage-subtitle">Far more common than anyone would prefer. Found in most organizations in populous cities.</div>
+            <div class="heritage-trait">+2 Cha, −1 Con, +2 Int · Fame +5 · Favored: Rogue or Sorcerer</div>
+          </div>
+        </div>
+
+        <span class="heritage-group-label">Humans — The Many Peoples of Ribhus</span>
+        <div class="heritage-grid">
+          <div class="heritage-card">
+            <div class="heritage-name">Xerxians</div>
+            <div class="heritage-subtitle">Angular features, green or blue eyes. A proud and martial culture.</div>
+            <div class="heritage-trait">Languages: Common, Xerxian</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Forstydians</div>
+            <div class="heritage-subtitle">Big-boned and solid. Dark hair. The most reliably stoic folk in Ribhus.</div>
+            <div class="heritage-trait">Languages: Common, Forstydian</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Free Cities</div>
+            <div class="heritage-subtitle">Pandolyn sailors, Randolyn revelers, Ironguard defenders — three cities, one rivalry.</div>
+            <div class="heritage-trait">Languages: Common, Free City Common, Dwarven</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Rhimsteadians</div>
+            <div class="heritage-subtitle">The largest city in the land. Profit equals survival. Friendly if you're useful.</div>
+            <div class="heritage-trait">Languages: Common, Rhimstead</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Kyrinn</div>
+            <div class="heritage-subtitle">Smaller, tougher. Descended from Rhimsteadians and Forstydians mingled with swamp natives.</div>
+            <div class="heritage-trait">Languages: Common, Kyrinn</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Delmarians</div>
+            <div class="heritage-subtitle">Tall, swarthy, regimented. The Grey Tower shapes everything in Delmar — including its people.</div>
+            <div class="heritage-trait">Rep +1 · Infamy +10 · Languages: Common, Delmarian</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Deep South Tribal</div>
+            <div class="heritage-subtitle">Indigenous folk of the deep south. Large, dark-skinned, and deeply connected to their land.</div>
+            <div class="heritage-trait">Languages: Common, Tribal</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Sevest / Central Ribhus</div>
+            <div class="heritage-subtitle">Descended from nomadic stock. Great love of travel. Cautiously trusting.</div>
+            <div class="heritage-trait">Languages: Common, Sevest</div>
+          </div>
+          <div class="heritage-card">
+            <div class="heritage-name">Far North / Far West / Wild Country</div>
+            <div class="heritage-subtitle">Clan-based, untrusting of outsiders, shaped by unforgiving environments.</div>
+            <div class="heritage-trait">Languages: Common, Tribal (Wild Country: Tribal only)</div>
+          </div>
+        </div>
+
+        <span class="heritage-group-label" style="color:var(--ember-lt); text-shadow: 0 0 8px rgba(240,112,80,0.8);">The Ulrics — The Seven Cursed Tribes</span>
+        <p style="font-size:0.9rem; color:var(--text-dim); font-style:italic; margin-bottom:1rem;">Once the honored guardians of the Akashir Stones. Cursed by Triglav after the War of the Seven. Each tribe bears the physical traits of their totem animal. All Ulrics carry a −2 penalty to Charisma checks with non-Ulrics and cannot become Shamans. They may not be taken at 1st level.</p>
+        <div class="heritage-grid">
+          <div class="heritage-card ulric"><div class="heritage-name">Carob (Locust)</div><div class="heritage-subtitle">Most militaristic of the Seven. Disciplined and fierce from childhood.</div><div class="heritage-trait">+2 Dex, −1 Cha, −1 Con · Favored: Fighter</div></div>
+          <div class="heritage-card ulric"><div class="heritage-name">Daysat (Stingray)</div><div class="heritage-subtitle">Mysterious and reclusive. Prefer the ocean above all other environments.</div><div class="heritage-trait">+2 Dex, −1 Con, −1 Str · Favored: Druid</div></div>
+          <div class="heritage-card ulric"><div class="heritage-name">Espin (Porcupine)</div><div class="heritage-subtitle">Cautious and protective. Among the most hospitable of the Lost Tribes.</div><div class="heritage-trait">+1 Str, −1 Cha, +1 Con, −1 Dex · Favored: Ranger</div></div>
+          <div class="heritage-card ulric"><div class="heritage-name">Melam (Impala)</div><div class="heritage-subtitle">Constantly moving. Wary of strangers. Rivals of the Mesa Halflings.</div><div class="heritage-trait">+2 Dex, +1 Cha, −1 Con, −2 Str · Favored: Sorcerer</div></div>
+          <div class="heritage-card ulric"><div class="heritage-name">Oream (Ram)</div><div class="heritage-subtitle">The most populous tribe. Attuned to the nine elements from childhood.</div><div class="heritage-trait">+1 Dex, −1 Cha, −1 Int, +1 Str · Favored: Druid</div></div>
+          <div class="heritage-card ulric"><div class="heritage-name">Pica (Magpie)</div><div class="heritage-subtitle">The great magic wielders of the Seven. Superstitious, ritualistic, mysterious.</div><div class="heritage-trait">+1 Dex, +1 Cha, −1 Con, −1 Str · Favored: Druid</div></div>
+          <div class="heritage-card ulric"><div class="heritage-name">Shagal (Jackal)</div><div class="heritage-subtitle">The most aggressive tribe. They blame the others and take it out on everyone.</div><div class="heritage-trait">−1 Dex, −1 Cha, +1 Con, +1 Str · Favored: Barbarian</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PATHS ══ -->
+    <div class="hor-band">
+      <div class="hor-band-inner">
+        <span class="section-eyebrow">Who You Become</span>
+        <h2 class="section-title">Classes of Ribhus</h2>
+        <p style="font-size:0.95rem; color:var(--text-dim); font-style:italic; margin-bottom:0.5rem;">Each class is built on 5E foundations with Ribhus-specific modifications. Subclasses reflect the organizations, traditions, and regional powers of the campaign world.</p>
+
+        <span class="path-tradition-label">⚔ The Martial Classes</span>
+        <div class="paths-grid">
+
+          <div class="path-card">
+            <div class="path-name">Barbarian</div>
+            <div class="path-tagline">Warriors shaped by their ancestral land.</div>
+            <div class="path-desc">Six Regional Paths define each barbarian's origin and abilities — Northern, Southern, Jungle, Seafaring, Forest, and Urban. Starting Reputation: Fame +5, Infamy +5.</div>
+            <div class="path-subclasses"><strong>Subclasses</strong>Path of the Blood Frenzy · Path of the Primal Elements · Path of the Spirit Caller · Path of the Primal Witch</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Fighter</div>
+            <div class="path-tagline">Inheritors of ancient martial traditions.</div>
+            <div class="path-desc">From the stalwart Frost Wardens of the north to the blade-dancers of the Sundance Academy, fighters combine martial excellence with centuries of tactical tradition.</div>
+            <div class="path-subclasses"><strong>Subclasses</strong>Arena Veteran · Battle Master · Blade Weavers · Cavaliers · Eldritch Knight · Monster Hunter · Tactical Commander</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Ranger</div>
+            <div class="path-tagline">Shadowy protectors of the wild and the road.</div>
+            <div class="path-desc">Aloof and self-sufficient, rangers stalk across mountain, plain, and fen. Their aloof nature breeds suspicion in some — and deep gratitude in those they protect.</div>
+            <div class="path-subclasses"><strong>Subclasses</strong>Beast Master · Elonid Ranger · Fey Wanderer · Gloom Stalker · Kyrinn Ranger · Realm Walker · Renkerz Ranger</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Paladin</div>
+            <div class="path-tagline">Sworn to a god, not an alignment.</div>
+            <div class="path-desc">Paladins in Ribhus attach themselves to a specific temple and deity — their power derived from devotion, not from lawfulness. Domain features mirror their cleric brethren.</div>
+            <div class="path-subclasses"><strong>Subclasses</strong>Orders from all temples in the Quickstart deity list</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Monk</div>
+            <div class="path-tagline">Masters of the Nine Clans or the sacred temples.</div>
+            <div class="path-desc">Sacred animal spirits taught the first mystics their secrets, founding the Nine Clans of Secular Monks. Ecclesiastical monks serve specific temples and their divine domains.</div>
+            <div class="path-subclasses"><strong>Secular Clans</strong>Dragon · Crane · Jaguar · Mantis · Phoenix · Scorpion · Snake · Tiger · Unicorn<br><strong>Ecclesiastical</strong>Cornovites · Fomorians · Sylandrians · Triglavians</div>
+          </div>
+
+        </div>
+
+        <span class="path-tradition-label">✦ The Arcane &amp; Divine Classes</span>
+        <div class="paths-grid">
+
+          <div class="path-card">
+            <div class="path-name">Cleric</div>
+            <div class="path-tagline">The primary vessel of divine will in Ribhus.</div>
+            <div class="path-desc">Each deity offers three Paths — Warrior, Shepherd, and Seeker. Domain spells and features are determined by the deity's portfolio. Starting Reputation: Fame +5, Infamy +0.</div>
+            <div class="path-subclasses"><strong>The Three Paths</strong>The Warrior Path · The Shepherd Path · The Seeker Path</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Druid</div>
+            <div class="path-tagline">Keepers of ancient natural traditions.</div>
+            <div class="path-desc">Druids commune with spirits in secluded groves and maintain ancient stone circles. Their deep connection with nature grants power that predates the gods themselves.</div>
+            <div class="path-subclasses"><strong>Subclasses</strong>Circle of Dreams · Circle of the Land · Circle of the Void · Circle of Wildfire</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Bard</div>
+            <div class="path-tagline">Keepers of ancient song traditions.</div>
+            <div class="path-desc">Bards wield magic through preserved melodies and rhythms. They master Song Schools alongside their College — from battle chants to whispered secrets to spirit songs.</div>
+            <div class="path-subclasses"><strong>Colleges</strong>College of Blades · College of Laureates &amp; Lore · College of Mysteries · College Peregrine</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Sorcerer</div>
+            <div class="path-tagline">Masters of primal and cosmic magic.</div>
+            <div class="path-desc">Sorcerers channel raw elemental and cosmic forces through their very being, developing innate gifts through rigorous training and meditation rather than accident of birth.</div>
+            <div class="path-subclasses"><strong>Fonts</strong>Astral Conduit · Primal Elementalist · Shadow Weaver · Temporal Matrix</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Wizard</div>
+            <div class="path-tagline">Members of a proud tradition of magical scholarship.</div>
+            <div class="path-desc">Wizards belong to established organizations whose fierce rivalries coexist with a shared understanding that advancing magical knowledge serves all. Each school has an opposing school.</div>
+            <div class="path-subclasses"><strong>Schools</strong>Abjuration · Conjuration · Divination · Enchantment · Evocation · Gems · Illusion · Necromancy · Temporal Reflection · Transmutation · The Void</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Warlock</div>
+            <div class="path-tagline">Masters of essence magic bound to ancient powers.</div>
+            <div class="path-desc">Warlocks manipulate the fundamental energies of existence through pacts written in life force itself. Unlike other spellcasters, their power comes at a price that compounds.</div>
+            <div class="path-subclasses"><strong>Pacts</strong>Pact of the Blade · Pact of the Chain · Pact of the Dawn · Pact of the Grey Tower · Pact of the Scales</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Shaman</div>
+            <div class="path-tagline">Harvesters of primordial forces. Fifteen tribal traditions.</div>
+            <div class="path-desc">Shamans hail from the rural regions — far west, mesas, and deserts. Divided into fifteen tribes, each corresponding to a sacred animal. Ulrics cannot become Shamans.</div>
+            <div class="path-subclasses"><strong>Paths</strong>Path of the Celestial Vision · Path of the Glorious Nova · Path of the Wondrous Nebula</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Witchdoctor</div>
+            <div class="path-tagline">Exploiters of superstition and latent psychic energy.</div>
+            <div class="path-desc">Witchdoctors tap into the collective unconscious of creatures across the multiverse, manifesting their desires through ritual, strange ingredients, and primordial forces.</div>
+            <div class="path-subclasses"><strong>Bonds</strong>Bond of Alchemy · Bond of Invocation · Bond of Spiritualism · Bond of Thaumaturgy</div>
+          </div>
+
+          <div class="path-card">
+            <div class="path-name">Rogue</div>
+            <div class="path-tagline">Masters of subtlety following ancient guild traditions.</div>
+            <div class="path-desc">Each guild in Ribhus preserves centuries of technique — from temple infiltrators to storm raiders, from death's hand assassins to guild masters of commercial magic.</div>
+            <div class="path-subclasses"><strong>Subclasses</strong>Arcane Trickster · Death's Hand · Bounty Hunter · Guild Masters · Scout · Shadow Dancer · Thief</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ REPUTATION ══ -->
+    <div class="hor-band-dark">
+      <div class="hor-band-inner">
+        <span class="section-eyebrow">The Signature Mechanic</span>
+        <h2 class="section-title">Reputation — Fame &amp; Infamy</h2>
+
+        <div class="rep-feature">
+          <div class="rep-text">
+            <p>Reputation is the Heroes of Ribhus campaign's central social mechanic. Every character maintains a <strong>Fame score</strong> and an <strong>Infamy score</strong> — two separate measures of how the world knows you. For every 10 points of Fame and/or Infamy you accumulate, your Reputation increases by +1.</p>
+            <p>Reputation is a two-edged sword. The same score that gets you a discount at the merchant's table will also make a bounty hunter's day when they recognize your face. The higher your Reputation, the wider it spreads — and the harder it becomes to go anywhere unnoticed.</p>
+            <p><strong>Race, class, and actions</strong> all contribute to your starting scores. Extraordinary acts of heroism generate Fame. Acts of darkness and violence generate Infamy. Everyday actions generate nothing — only deeds worth remembering move the needle.</p>
+          </div>
+
+          <div class="rep-thresholds">
+            <div class="rep-threshold">
+              <div class="rep-score">0–3</div>
+              <div class="rep-label">Unknown</div>
+              <div class="rep-desc">The world has not yet heard your name. You move freely, unnoticed — which is both a shelter and a limitation. No doors open on reputation alone.</div>
+            </div>
+            <div class="rep-threshold">
+              <div class="rep-score">4–6</div>
+              <div class="rep-label">Local Hero</div>
+              <div class="rep-desc">Word of your deeds has spread within a region. Innkeepers offer a free round. Merchants shave their prices. The wrong people are starting to hear your name too.</div>
+            </div>
+            <div class="rep-threshold">
+              <div class="rep-score">7–9</div>
+              <div class="rep-label">Famous / Infamous</div>
+              <div class="rep-desc">Your name crosses city lines. Noble houses grant audiences. Guild factors seek introductions. Rivals across the region have marked you as someone worth watching — or removing.</div>
+            </div>
+            <div class="rep-threshold">
+              <div class="rep-score">10–13</div>
+              <div class="rep-label">Well-Known</div>
+              <div class="rep-desc">Strangers recognise you on the road. Stories about you are already half-legend and half-invention. Those stories have a way of making both your life easier and significantly more dangerous.</div>
+            </div>
+            <div class="rep-threshold">
+              <div class="rep-score">14–17</div>
+              <div class="rep-label">Renowned</div>
+              <div class="rep-desc">The great powers of Ribhus know your face. You are welcomed at the highest tables — and hunted by the darkest corners. Privacy is a luxury you can no longer afford.</div>
+            </div>
+            <div class="rep-threshold">
+              <div class="rep-score">18–20</div>
+              <div class="rep-label">Legendary</div>
+              <div class="rep-desc">Your deeds are already being written into the history that Chronicles of Ribhus will one day call legend. The world bends around your presence. So do its most powerful enemies.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fame-infamy-grid">
+          <div class="fi-card fame">
+            <div class="fi-title">⭐ Fame</div>
+            <div class="fi-desc">Earned through completing heroic quests, public performances, acts of charity, service to temples, and service to the nobility. Fame opens doors in high society, earns better prices from merchants, and generates favorable treatment from authorities.</div>
+          </div>
+          <div class="fi-card infamy">
+            <div class="fi-title">💀 Infamy</div>
+            <div class="fi-desc">Earned through criminal activities, violent solutions, dark pacts, intimidating displays, and association with feared groups. Infamy makes commoners avoid you, authorities suspicious — but some criminals offer assistance, and Intimidation checks carry natural weight.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FOOTER ══ -->
+    <footer class="page-footer">
+      <div class="footer-brand">Ribhian Games LLC</div>
+      <div class="footer-tagline">Heroes of Ribhus: Legacy · D&amp;D 5E (2014) Variant · Open Game License 1.0 · Standalone Setting · Not Part of the Heptaverse</div>
+    </footer>
+
+  </main>
+</div><!-- /site-wrapper -->
+<script src="../js/site.js"></script>
+</body>
+</html>

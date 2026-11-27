@@ -1,0 +1,726 @@
+<!--Unmatched Tournament Admin page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Password-protected admin console for the Dire Consequences Unmatched Tournament. Manage registrations, view status, delete records, add day-of walk-in players (no email required). NOT linked publicly — access by direct URL only.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tournament Admin | Ribhian Games</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:      #0a0a0a;
+      --deep:       #111111;
+      --surface:    #1a1a1a;
+      --card:       #1f1f1f;
+      --border:     rgba(201,151,58,0.18);
+      --gold:       #c9973a;
+      --gold-light: #e0b85a;
+      --text:       #e8e0d0;
+      --text-dim:   rgba(232,224,208,0.55);
+      --red:        #cc2200;
+      --red-bright: #ff2200;
+      --green:      #4caf50;
+      --radius:     6px;
+    }
+    body { background:var(--black); color:var(--text); font-family:'Georgia',serif; min-height:100vh; }
+
+    /* ── Login Screen ── */
+    #login-screen {
+      display:flex; align-items:center; justify-content:center;
+      min-height:100vh; padding:2rem;
+    }
+    .login-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:2.5rem 2rem;
+      width:100%; max-width:380px; text-align:center;
+    }
+    .login-card h1 {
+      font-size:1.1rem; letter-spacing:0.1em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:0.4rem;
+    }
+    .login-card p { font-size:0.85rem; color:var(--text-dim); margin-bottom:1.8rem; }
+    .login-card input {
+      width:100%; background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); color:var(--text); font-family:'Georgia',serif;
+      font-size:0.95rem; padding:0.7rem 1rem; outline:none; margin-bottom:1rem;
+      text-align:center; letter-spacing:0.1em;
+    }
+    .login-card input:focus { border-color:var(--gold); }
+    .login-btn {
+      width:100%; padding:0.75rem;
+      background:linear-gradient(135deg,var(--gold),var(--gold-light));
+      border:none; border-radius:var(--radius); color:var(--black);
+      font-family:'Georgia',serif; font-size:0.9rem; font-weight:bold;
+      letter-spacing:0.1em; text-transform:uppercase; cursor:pointer;
+    }
+    .login-btn:hover { opacity:0.88; }
+    .login-error {
+      margin-top:1rem; font-size:0.85rem; color:#ff6644;
+      display:none;
+    }
+
+    /* ── Admin Dashboard ── */
+    #admin-screen { display:none; }
+
+    .page-header {
+      background:var(--deep); border-bottom:1px solid var(--border);
+      padding:1.2rem 2rem; display:flex; align-items:center; gap:1rem;
+    }
+    .page-header h1 {
+      font-size:1.1rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold);
+    }
+    .page-header p { font-size:0.82rem; color:var(--text-dim); margin-top:0.15rem; }
+    .logout-btn {
+      margin-left:auto; background:transparent; border:1px solid var(--border);
+      color:var(--text-dim); font-family:'Georgia',serif; font-size:0.8rem;
+      padding:0.4rem 0.9rem; border-radius:var(--radius); cursor:pointer;
+    }
+    .logout-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+    .page-main { max-width:900px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+
+    /* Stats Bar */
+    .stats-bar {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:2rem;
+    }
+    .stat-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:1.2rem 1.5rem; text-align:center;
+    }
+    .stat-card .stat-num { font-size:2rem; color:var(--gold); line-height:1; }
+    .stat-card .stat-label {
+      font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase;
+      color:var(--text-dim); margin-top:0.4rem;
+    }
+
+    /* Capacity bar */
+    .capacity-wrap {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:1rem 1.5rem; margin-bottom:2rem;
+      display:flex; align-items:center; gap:1rem;
+    }
+    .cap-label { font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); white-space:nowrap; }
+    .cap-bar { flex:1; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; }
+    .cap-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:4px; transition:width 0.4s; }
+    .cap-count { font-size:0.9rem; color:var(--gold); font-family:monospace; white-space:nowrap; }
+
+    /* Walk-in form */
+    .walkin-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-left:4px solid var(--gold);
+      border-radius:var(--radius); padding:1.4rem 1.5rem; margin-bottom:2rem;
+    }
+    .walkin-card p.walkin-note {
+      font-size:0.82rem; color:var(--text-dim); font-style:italic; margin-bottom:1rem;
+    }
+    .walkin-grid {
+      display:grid; grid-template-columns:1fr 1fr 1.4fr auto; gap:0.8rem; align-items:end;
+    }
+    @media (max-width:700px) { .walkin-grid { grid-template-columns:1fr 1fr; } }
+    .walkin-group { display:flex; flex-direction:column; gap:0.35rem; }
+    .walkin-group label {
+      font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim);
+    }
+    .walkin-group input, .walkin-group select {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); color:var(--text);
+      font-family:'Georgia',serif; font-size:0.9rem;
+      padding:0.55rem 0.75rem; outline:none; width:100%;
+    }
+    .walkin-group input:focus, .walkin-group select:focus { border-color:var(--gold); }
+    .walkin-group select option:disabled { color:#666; }
+    .walkin-btn {
+      padding:0.6rem 1.1rem;
+      background:linear-gradient(135deg,var(--gold),var(--gold-light));
+      border:none; border-radius:var(--radius); color:var(--black);
+      font-family:'Georgia',serif; font-size:0.82rem; font-weight:bold;
+      letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; white-space:nowrap;
+    }
+    .walkin-btn:hover { opacity:0.88; }
+    .walkin-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+    /* Section header */
+    .section-header {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:1rem;
+    }
+    .section-title {
+      font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold);
+    }
+    .refresh-btn {
+      background:transparent; border:1px solid var(--border); color:var(--text-dim);
+      font-family:'Georgia',serif; font-size:0.78rem; padding:0.3rem 0.8rem;
+      border-radius:var(--radius); cursor:pointer;
+    }
+    .refresh-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+    /* Registrations Table */
+    .reg-table {
+      width:100%; border-collapse:collapse; font-size:0.88rem;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); overflow:hidden;
+    }
+    .reg-table thead th {
+      background:var(--deep); font-size:0.7rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--gold); text-align:left;
+      padding:0.7rem 1rem; border-bottom:1px solid var(--border);
+    }
+    .reg-table tbody tr { border-bottom:1px solid rgba(255,255,255,0.04); }
+    .reg-table tbody tr:last-child { border-bottom:none; }
+    .reg-table tbody tr:hover { background:rgba(201,151,58,0.04); }
+    .reg-table td { padding:0.65rem 1rem; vertical-align:middle; }
+    .reg-table td:last-child { text-align:right; }
+
+    .hero-cell { color:var(--gold-light); font-style:italic; }
+    .date-cell { color:var(--text-dim); font-size:0.8rem; font-family:monospace; }
+
+    .delete-btn {
+      background:transparent; border:1px solid rgba(204,34,0,0.4);
+      color:#ff6644; font-family:'Georgia',serif; font-size:0.75rem;
+      padding:0.3rem 0.7rem; border-radius:var(--radius); cursor:pointer;
+      transition:background 0.15s, border-color 0.15s;
+    }
+    .delete-btn:hover { background:rgba(204,34,0,0.15); border-color:var(--red-bright); }
+
+    .empty-state {
+      text-align:center; padding:3rem; color:var(--text-dim); font-style:italic;
+    }
+
+    /* Toast */
+    #toast {
+      position:fixed; bottom:2rem; right:2rem;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:0.8rem 1.2rem;
+      font-size:0.88rem; color:var(--text);
+      opacity:0; transform:translateY(10px);
+      transition:opacity 0.3s, transform 0.3s;
+      pointer-events:none; z-index:999;
+    }
+    #toast.show { opacity:1; transform:translateY(0); }
+    #toast.success { border-color:var(--green); color:var(--green); }
+    #toast.error { border-color:var(--red-bright); color:#ff6644; }
+  </style>
+</head>
+<body>
+
+<!-- ── Login Screen ── -->
+<div id="login-screen">
+  <div class="login-card">
+    <h1>Tournament Admin</h1>
+    <p>Ribhian Games · Unmatched Tournament</p>
+    <div style="position:relative;margin-bottom:1rem;">
+      <input type="password" id="admin-password" placeholder="Admin password"
+        onkeydown="if(event.key==='Enter')doLogin()"
+        style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:Georgia,serif;font-size:0.95rem;padding:0.7rem 2.8rem 0.7rem 1rem;outline:none;text-align:left;letter-spacing:0.1em;" />
+      <button onclick="togglePassword()" tabindex="-1"
+        style="position:absolute;right:0.7rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:1rem;padding:0;" id="toggle-pw">👁</button>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Enter</button>
+    <p class="login-error" id="login-error">Incorrect password.</p>
+    <p id="lockout-msg" style="display:none;margin-top:0.8rem;font-size:0.82rem;color:#ff6644;">Too many failed attempts. Try again in 5 minutes.</p>
+  </div>
+</div>
+
+<!-- ── Admin Dashboard ── -->
+<div id="admin-screen">
+  <header class="page-header">
+    <div>
+      <h1>Tournament Admin</h1>
+      <p>Dire Consequences · November 7, 2026 · Unmatched</p>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">Log Out</button>
+  </header>
+
+  <main class="page-main">
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-registered">—</div>
+        <div class="stat-label">Registered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-remaining">—</div>
+        <div class="stat-label">Spots Remaining</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-heroes">—</div>
+        <div class="stat-label">Heroes Available</div>
+      </div>
+    </div>
+
+    <!-- Capacity -->
+    <div class="capacity-wrap">
+      <span class="cap-label">Capacity</span>
+      <div class="cap-bar"><div class="cap-fill" id="cap-fill" style="width:0%"></div></div>
+      <span class="cap-count" id="cap-count">0 / 16</span>
+    </div>
+
+    <!-- Walk-in -->
+    <div class="walkin-card">
+      <div class="section-title" style="margin-bottom:0.4rem;">Add Walk-In Player</div>
+      <p class="walkin-note">Day-of entry. No email or verification. Player is confirmed immediately and the hero is locked.</p>
+      <div class="walkin-grid">
+        <div class="walkin-group">
+          <label for="walkin-first">First Name</label>
+          <input type="text" id="walkin-first" placeholder="First name" autocomplete="off" />
+        </div>
+        <div class="walkin-group">
+          <label for="walkin-last">Last Name</label>
+          <input type="text" id="walkin-last" placeholder="Optional" autocomplete="off" />
+        </div>
+        <div class="walkin-group">
+          <label for="walkin-hero">Hero</label>
+          <select id="walkin-hero">
+            <option value="">— Select hero —</option>
+          </select>
+        </div>
+        <button class="walkin-btn" id="walkin-btn" onclick="addWalkIn()">Add Player</button>
+      </div>
+    </div>
+
+    <!-- Registrations -->
+    <div class="section-header">
+      <span class="section-title">Registrations</span>
+      <div style="display:flex;gap:0.6rem;">
+        <button class="refresh-btn" onclick="purgeExpired()" style="border-color:rgba(204,34,0,0.4);color:#ff6644;">⚠ Purge Expired</button>
+        <button class="refresh-btn" onclick="loadRegistrations()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <table class="reg-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Hero</th>
+          <th>Status</th>
+          <th>Registered</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="reg-tbody">
+        <tr><td colspan="7" class="empty-state">Loading…</td></tr>
+      </tbody>
+    </table>
+
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://kjjycuynetkappoedefb.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_FbfOymRGuKGdMDyeEPZNTA_Qrrd9OSR';
+const MAX_PLAYERS  = 16;
+const EXPIRY_MINS  = 10;
+
+// ── Hero roster (must match register.html) ────────────────────────────────
+const HEROES = [
+  { name: 'Abe Sapien',                 set: 'Hellboy' },
+  { name: 'Achilles',                   set: 'Battle of Legends, Vol. 2' },
+  { name: 'Alice',                      set: 'Battle of Legends, Vol. 1' },
+  { name: 'Ancient Leshen',             set: 'The Witcher: Steel & Silver' },
+  { name: 'Angel',                      set: 'Buffy the Vampire Slayer' },
+  { name: 'Annie Christmas',            set: 'Adventures: Tales to Amaze' },
+  { name: 'Baba Yaga',                  set: 'Hellboy' },
+  { name: 'Beowulf',                    set: 'Little Red Riding Hood vs. Beowulf' },
+  { name: 'Bigfoot',                    set: 'Robin Hood vs. Bigfoot' },
+  { name: 'Black Panther',              set: 'Marvel: For King and Country' },
+  { name: 'Black Widow',                set: 'Marvel: For King and Country' },
+  { name: 'Blackbeard',                 set: 'Battle of Legends, Vol. 3' },
+  { name: 'Bloody Mary',                set: 'Battle of Legends, Vol. 2' },
+  { name: 'Bruce Lee',                  set: 'Muhammad Ali vs. Bruce Lee' },
+  { name: 'Buffy',                      set: 'Buffy the Vampire Slayer' },
+  { name: 'Bullseye',                   set: "Marvel: Hell's Kitchen" },
+  { name: 'Chupacabra',                 set: 'Battle of Legends, Vol. 3' },
+  { name: 'Ciri',                       set: 'The Witcher: Steel & Silver' },
+  { name: 'Cloak & Dagger',             set: 'Marvel: Teen Spirit' },
+  { name: 'Count Dracula',              set: 'Cobble & Fog' },
+  { name: 'Daredevil',                  set: "Marvel: Hell's Kitchen" },
+  { name: 'Deadpool',                   set: 'Deadpool (Promo)' },
+  { name: 'Doctor Strange',             set: 'Marvel: Brains and Brawn' },
+  { name: 'Donatello',                  set: 'Adventures: TMNT' },
+  { name: 'Dr. Ellie Sattler',          set: 'Jurassic Park: Ellie Sattler vs. T. Rex' },
+  { name: 'Dr. Jekyll & Mr. Hyde',      set: 'Cobble & Fog' },
+  { name: 'Dr. Jill Trent',             set: 'Adventures: Tales to Amaze' },
+  { name: 'Elektra',                    set: "Marvel: Hell's Kitchen" },
+  { name: 'Eredin',                     set: 'The Witcher: Realms Fall' },
+  { name: 'George Washington',          set: 'Stars and Stripes' },
+  { name: 'Geralt of Rivia',            set: 'The Witcher: Steel & Silver' },
+  { name: 'Ghost Rider',                set: 'Marvel: Redemption Row' },
+  { name: 'Golden Bat',                 set: 'Adventures: Tales to Amaze' },
+  { name: 'Hamlet',                     set: 'Slings and Arrows' },
+  { name: 'Harry Houdini',              set: 'Houdini vs. The Genie' },
+  { name: 'Hellboy',                    set: 'Hellboy' },
+  { name: 'John Henry',                 set: 'Stars and Stripes' },
+  { name: 'King Arthur',                set: 'Battle of Legends, Vol. 1' },
+  { name: 'Krang',                      set: 'TMNT: Shredder vs. Krang' },
+  { name: 'Leonardo',                   set: 'Adventures: TMNT' },
+  { name: 'Little Red Riding Hood',     set: 'Little Red Riding Hood vs. Beowulf' },
+  { name: 'Liz Sherman',                set: 'Hellboy' },
+  { name: 'Loki',                       set: 'Battle of Legends, Vol. 3' },
+  { name: 'Luke Cage',                  set: 'Marvel: Redemption Row' },
+  { name: 'Medusa',                     set: 'Battle of Legends, Vol. 1' },
+  { name: 'Michelangelo',               set: 'Adventures: TMNT' },
+  { name: 'Moon Knight',                set: 'Marvel: Redemption Row' },
+  { name: 'Ms. Marvel',                 set: 'Marvel: Teen Spirit' },
+  { name: 'Muhammad Ali',               set: 'Muhammad Ali vs. Bruce Lee' },
+  { name: 'Nikola Tesla',               set: 'Adventures: Tales to Amaze' },
+  { name: 'Oda Nobunaga',               set: "Sun's Origin" },
+  { name: 'Pandora',                    set: 'Battle of Legends, Vol. 3' },
+  { name: 'Philippa',                   set: 'The Witcher: Realms Fall' },
+  { name: 'Raphael',                    set: 'Adventures: TMNT' },
+  { name: 'Robert Muldoon',             set: 'Jurassic Park: InGen vs. Raptors' },
+  { name: 'Robin Hood',                 set: 'Robin Hood vs. Bigfoot' },
+  { name: 'Rosie the Riveter',          set: 'Stars and Stripes' },
+  { name: 'She-Hulk',                   set: 'Marvel: Brains and Brawn' },
+  { name: 'Sherlock Holmes',            set: 'Cobble & Fog' },
+  { name: 'Shredder',                   set: 'TMNT: Shredder vs. Krang' },
+  { name: 'Sinbad',                     set: 'Battle of Legends, Vol. 1' },
+  { name: 'Spider-Man',                 set: 'Marvel: Brains and Brawn' },
+  { name: 'Spike (Buffy)',              set: 'Buffy the Vampire Slayer' },
+  { name: 'Squirrel Girl',              set: 'Marvel: Teen Spirit' },
+  { name: 'Sun Wukong',                 set: 'Battle of Legends, Vol. 2' },
+  { name: 'T. Rex',                     set: 'Jurassic Park: Ellie Sattler vs. T. Rex' },
+  { name: 'The Genie',                  set: 'Houdini vs. The Genie' },
+  { name: 'The Invisible Man',          set: 'Cobble & Fog' },
+  { name: 'The Wayward Sisters',        set: 'Slings and Arrows' },
+  { name: 'Titania',                    set: 'Slings and Arrows' },
+  { name: 'Tomoe Gozen',                set: "Sun's Origin" },
+  { name: 'Velociraptors',              set: 'Jurassic Park: InGen vs. Raptors' },
+  { name: 'William Shakespeare',        set: 'Slings and Arrows' },
+  { name: 'Willow',                     set: 'Buffy the Vampire Slayer' },
+  { name: 'Winter Soldier',             set: 'Marvel: For King and Country' },
+  { name: 'Wyatt Earp & Doc Holliday',  set: 'Stars and Stripes' },
+  { name: 'Yennefer & Triss',           set: 'The Witcher: Realms Fall' },
+  { name: 'Yennenga',                   set: 'Battle of Legends, Vol. 2' },
+];
+
+// ── Simple password (change this to something only you know) ──────────────
+const ADMIN_PASSWORD = 'RibhianAdmin2026!';
+
+// ── State ─────────────────────────────────────────────────────────────────
+let takenHeroes   = new Set();
+let pendingHeroes = new Set();
+let activeCount   = 0;
+
+// ── Login ─────────────────────────────────────────────────────────────────
+let failedAttempts = 0;
+let lockedUntil = null;
+
+function togglePassword() {
+  const input = document.getElementById('admin-password');
+  const btn = document.getElementById('toggle-pw');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
+function doLogin() {
+  // Check lockout
+  if (lockedUntil && new Date() < lockedUntil) {
+    document.getElementById('lockout-msg').style.display = 'block';
+    document.getElementById('login-error').style.display = 'none';
+    return;
+  }
+
+  const pw = document.getElementById('admin-password').value;
+  if (pw === ADMIN_PASSWORD) {
+    failedAttempts = 0;
+    lockedUntil = null;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-screen').style.display = 'block';
+    loadRegistrations();
+  } else {
+    failedAttempts++;
+    document.getElementById('admin-password').value = '';
+    if (failedAttempts >= 5) {
+      lockedUntil = new Date(Date.now() + 5 * 60 * 1000);
+      document.getElementById('login-error').style.display = 'none';
+      document.getElementById('lockout-msg').style.display = 'block';
+    } else {
+      document.getElementById('login-error').textContent =
+        `Incorrect password. ${5 - failedAttempts} attempt${5 - failedAttempts !== 1 ? 's' : ''} remaining.`;
+      document.getElementById('login-error').style.display = 'block';
+      document.getElementById('lockout-msg').style.display = 'none';
+    }
+  }
+}
+
+function doLogout() {
+  document.getElementById('admin-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-password').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// ── Fetch ─────────────────────────────────────────────────────────────────
+async function supabaseFetch(path, options = {}) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    }
+  });
+  return res;
+}
+
+// ── Walk-in hero dropdown ─────────────────────────────────────────────────
+function renderHeroSelect() {
+  const sel = document.getElementById('walkin-hero');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— Select hero —</option>';
+
+  HEROES.forEach(({ name, set }) => {
+    const taken   = takenHeroes.has(name);
+    const pending = pendingHeroes.has(name);
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name + ' — ' + set + (taken ? '  [SELECTED]' : pending ? '  [PENDING]' : '');
+    if (taken || pending) opt.disabled = true;
+    sel.appendChild(opt);
+  });
+
+  // Keep the current choice if it is still available
+  if (current && !takenHeroes.has(current) && !pendingHeroes.has(current)) {
+    sel.value = current;
+  }
+}
+
+// ── Load registrations ────────────────────────────────────────────────────
+async function loadRegistrations() {
+  const tbody = document.getElementById('reg-tbody');
+  tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Loading…</td></tr>';
+
+  try {
+    const res = await supabaseFetch('unmatched_registrations?select=*&order=created_at.asc');
+    if (!res.ok) throw new Error('bad response');
+    const data = await res.json();
+
+    const now = new Date();
+    takenHeroes   = new Set();
+    pendingHeroes = new Set();
+    data.forEach(r => {
+      const age = (now - new Date(r.created_at)) / 60000;
+      if (r.confirmed) takenHeroes.add(r.hero_selected);
+      else if (age < EXPIRY_MINS) pendingHeroes.add(r.hero_selected);
+    });
+
+    const confirmed = takenHeroes.size;
+    const pending   = pendingHeroes.size;
+    const total     = confirmed + pending;
+    activeCount     = total;
+    const remaining = MAX_PLAYERS - total;
+    const heroesAvailable = HEROES.length - total;
+
+    document.getElementById('stat-registered').textContent = `${confirmed} confirmed / ${pending} pending`;
+    document.getElementById('stat-remaining').textContent = Math.max(0, remaining);
+    document.getElementById('stat-heroes').textContent = Math.max(0, heroesAvailable);
+
+    const pct = Math.min(100, Math.round((total / MAX_PLAYERS) * 100));
+    document.getElementById('cap-fill').style.width = pct + '%';
+    document.getElementById('cap-count').textContent = `${total} / ${MAX_PLAYERS}`;
+
+    renderHeroSelect();
+
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No registrations yet.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = '';
+    data.forEach((reg, idx) => {
+      const date = new Date(reg.created_at);
+      const minutesOld = (now - date) / 60000;
+      const dateStr = date.toLocaleDateString('en-US', { month:'short', day:'numeric' })
+                    + ' ' + date.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+
+      const isConfirmed = reg.confirmed;
+      const isPending   = !reg.confirmed && minutesOld <= EXPIRY_MINS;
+      const isExpired   = !reg.confirmed && minutesOld > EXPIRY_MINS;
+      const isWalkIn    = !reg.email;
+
+      const statusLabel = isConfirmed
+        ? '<span style="color:#4caf50;font-size:0.75rem;font-weight:bold;letter-spacing:0.1em;">&#10003; CONFIRMED</span>'
+        : isPending
+          ? '<span style="color:#e0b85a;font-size:0.75rem;font-weight:bold;letter-spacing:0.1em;">&#9203; PENDING</span>'
+          : '<span style="color:#ff6644;font-size:0.75rem;font-weight:bold;letter-spacing:0.1em;">&#9888; EXPIRED</span>';
+
+      const emailCell = isWalkIn
+        ? '<span style="color:var(--gold);font-size:0.72rem;font-weight:bold;letter-spacing:0.12em;">WALK-IN</span>'
+        : esc(reg.email);
+
+      const fullName = ((reg.first_name || '') + ' ' + (reg.last_name || '')).trim();
+
+      const tr = document.createElement('tr');
+      tr.id = 'row-' + reg.id;
+      if (isExpired) tr.style.opacity = '0.45';
+      tr.innerHTML =
+        '<td style="color:var(--text-dim);">' + (idx + 1) + '</td>' +
+        '<td>' + esc(fullName) + '</td>' +
+        '<td style="color:var(--text-dim);font-size:0.82rem;">' + emailCell + '</td>' +
+        '<td class="hero-cell">' + esc(reg.hero_selected) + '</td>' +
+        '<td>' + statusLabel + '</td>' +
+        '<td class="date-cell">' + dateStr + '</td>' +
+        '<td><button class="delete-btn">Delete</button></td>';
+      tr.querySelector('.delete-btn').addEventListener('click', () =>
+        deleteRegistration(reg.id, fullName, reg.hero_selected));
+      tbody.appendChild(tr);
+    });
+  } catch(e) {
+    console.error(e);
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-state" style="color:#ff6644;">Failed to load. Check console.</td></tr>';
+  }
+}
+
+// ── Add walk-in ───────────────────────────────────────────────────────────
+async function addWalkIn() {
+  const firstName = document.getElementById('walkin-first').value.trim();
+  const lastName  = document.getElementById('walkin-last').value.trim();
+  const hero      = document.getElementById('walkin-hero').value;
+  const btn       = document.getElementById('walkin-btn');
+
+  if (!firstName) { showToast('First name is required.', 'error'); return; }
+  if (!hero)      { showToast('Select a hero.', 'error'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Adding…';
+
+  // Fresh check against the live table before writing
+  await loadRegistrations();
+
+  if (takenHeroes.has(hero) || pendingHeroes.has(hero)) {
+    showToast(`${hero} was just taken. Choose another hero.`, 'error');
+    btn.disabled = false; btn.textContent = 'Add Player';
+    return;
+  }
+
+  if (activeCount >= MAX_PLAYERS) {
+    if (!confirm(`Tournament is at capacity (${activeCount} / ${MAX_PLAYERS}).\n\nAdd ${firstName} anyway?`)) {
+      btn.disabled = false; btn.textContent = 'Add Player';
+      return;
+    }
+  }
+
+  const nowIso = new Date().toISOString();
+
+  try {
+    const res = await supabaseFetch('unmatched_registrations', {
+      method: 'POST',
+      headers: { 'Prefer': 'return=representation' },
+      body: JSON.stringify({
+        first_name: firstName,
+        last_name: lastName,
+        email: null,
+        hero_selected: hero,
+        confirmed: true,
+        confirmed_at: nowIso,
+        token: crypto.randomUUID()
+      })
+    });
+
+    if (res.ok || res.status === 201) {
+      showToast(`${firstName} added with ${hero}.`, 'success');
+      document.getElementById('walkin-first').value = '';
+      document.getElementById('walkin-last').value = '';
+      document.getElementById('walkin-hero').value = '';
+      loadRegistrations();
+    } else {
+      const err = await res.json().catch(() => ({}));
+      console.error('Walk-in insert failed:', err);
+      const msg = err.code === '23502'
+        ? 'Database requires email. Run the walk-in SQL update in Supabase.'
+        : err.code === '23505'
+          ? 'Duplicate entry rejected by the database.'
+          : err.code === '42501'
+            ? 'Blocked by row-level security. Check the INSERT policy.'
+            : 'Add failed. Check console.';
+      showToast(msg, 'error');
+    }
+  } catch(e) {
+    console.error(e);
+    showToast('Network error.', 'error');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Add Player';
+}
+
+document.getElementById('walkin-first').addEventListener('keydown', e => { if (e.key === 'Enter') addWalkIn(); });
+document.getElementById('walkin-last').addEventListener('keydown', e => { if (e.key === 'Enter') addWalkIn(); });
+
+// ── Delete ────────────────────────────────────────────────────────────────
+async function deleteRegistration(id, name, hero) {
+  if (!confirm(`Delete registration for ${name} (${hero})?\n\nThis will free up their hero slot.`)) return;
+
+  try {
+    const res = await supabaseFetch(`unmatched_registrations?id=eq.${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers: { 'Prefer': 'return=minimal' }
+    });
+
+    if (res.ok || res.status === 204) {
+      showToast(`${name} removed. ${hero} is now available.`, 'success');
+      loadRegistrations();
+    } else {
+      showToast('Delete failed. Please try again.', 'error');
+    }
+  } catch(e) {
+    showToast('Network error.', 'error');
+  }
+}
+
+// ── Purge expired ─────────────────────────────────────────────────────────
+async function purgeExpired() {
+  if (!confirm(`Delete all unverified registrations older than ${EXPIRY_MINS} minutes? Their heroes will be freed.`)) return;
+  const cutoff = new Date(Date.now() - EXPIRY_MINS * 60 * 1000).toISOString();
+  try {
+    const res = await supabaseFetch(
+      `unmatched_registrations?confirmed=eq.false&created_at=lt.${encodeURIComponent(cutoff)}`,
+      { method: 'DELETE', headers: { 'Prefer': 'return=representation' } }
+    );
+    const data = await res.json().catch(() => []);
+    const count = Array.isArray(data) ? data.length : 0;
+    showToast(`Purged ${count} expired registration${count !== 1 ? 's' : ''}.`, 'success');
+    loadRegistrations();
+  } catch(e) {
+    showToast('Purge failed.', 'error');
+  }
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `show ${type}`;
+  setTimeout(() => { t.className = ''; }, 3500);
+}
+
+// Auto-refresh every 60 seconds when logged in
+setInterval(() => {
+  if (document.getElementById('admin-screen').style.display === 'block') {
+    loadRegistrations();
+  }
+}, 60000);
+</script>
+</body>
+</html>

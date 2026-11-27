@@ -1,0 +1,267 @@
+<!--Announcements page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Studio news and event reports. Add new posts at the top of the feed in reverse chronological order.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Announcements — Ribhian Games LLC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:      #080604;
+      --deep:       #100c06;
+      --stone:      #1a1408;
+      --gold:       #c9973a;
+      --gold-bright:#e8b84b;
+      --gold-pale:  #f0d898;
+      --crimson:    #8c1a1a;
+      --ash:        #d8d0b8;
+      --text-body:  #c8b070;
+      --text-dim:   #706050;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--text-body);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    /* ── PAGE HEADER ── */
+    .announce-header {
+      padding: 4rem 3rem 3rem;
+      background: var(--deep);
+      border-bottom: 1px solid rgba(201,151,58,0.12);
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .announce-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--gold-bright);
+      text-shadow: 0 0 8px rgba(232,184,75,0.6),
+                   0 0 20px rgba(201,151,58,0.4);
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    .announce-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--ash);
+      letter-spacing: 0.04em;
+      line-height: 1.15;
+    }
+
+    .announce-subtitle {
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--text-dim);
+      margin-top: 0.6rem;
+    }
+
+    /* ── FEED ── */
+    .announce-feed {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 3rem 6rem;
+    }
+
+    /* ── SINGLE POST ── */
+    .post {
+      margin-bottom: 4.5rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid rgba(201,151,58,0.10);
+    }
+
+    .post:last-child {
+      border-bottom: none;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .post-date {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .post-rule {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(201,151,58,0.3), transparent);
+    }
+
+    .post-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      color: var(--ash);
+      margin-bottom: 1.2rem;
+      line-height: 1.3;
+      letter-spacing: 0.02em;
+    }
+
+    .post-body p {
+      font-size: 1rem;
+      color: var(--text-body);
+      line-height: 1.9;
+      margin-bottom: 1.1rem;
+      max-width: 720px;
+    }
+
+    .post-body p strong {
+      color: var(--gold-pale);
+      font-weight: 600;
+    }
+
+    .post-body p em {
+      color: var(--ash);
+    }
+
+    /* ── POST IMAGE ── */
+    .post-image {
+      margin: 1.8rem 0;
+    }
+
+    .post-image img {
+      max-width: 100%;
+      display: block;
+      border: 1px solid rgba(201,151,58,0.15);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+    }
+
+    .post-image-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin: 1.8rem 0;
+    }
+
+    .post-image-row img {
+      width: 100%;
+      display: block;
+      border: 1px solid rgba(201,151,58,0.15);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+    }
+
+    /* ── EMPTY STATE ── */
+    .announce-empty {
+      text-align: center;
+      padding: 5rem 2rem;
+      color: var(--text-dim);
+    }
+
+    .announce-empty-icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 1rem;
+      opacity: 0.4;
+    }
+
+    .announce-empty p {
+      font-style: italic;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 700px) {
+      .announce-header,
+      .announce-feed { padding-left: 1.5rem; padding-right: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="topbar-mount"></div>
+<div class="site-wrapper">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar-mount"></div>
+
+  <main class="main-content">
+
+    <div class="announce-header">
+      <span class="announce-eyebrow">Ribhian Games LLC</span>
+      <h1 class="announce-title">Announcements</h1>
+      <p class="announce-subtitle">News, updates, and dispatches from the studio.</p>
+    </div>
+
+    <div class="announce-feed">
+
+      <!-- ═══════════════════════════════════════════
+           POSTS APPEAR HERE IN REVERSE CHRONOLOGICAL
+           ORDER. MOST RECENT AT THE TOP.
+           ADD NEW POSTS ABOVE OLDER ONES.
+           ═══════════════════════════════════════════ -->
+
+      <!-- POST: March 23, 2026 — DIRE CONSEQUENCES -->
+      <article class="post">
+        <div class="post-meta">
+          <span class="post-date">March 23, 2026</span>
+          <div class="post-rule"></div>
+        </div>
+        <h2 class="post-title">Event Submissions Now Open — Dire Consequences Gaming Convention</h2>
+        <div class="post-body">
+          <p>The record shows the following: event submissions for <strong>Dire Consequences Gaming Convention</strong> are now open. The process has begun. The window is available. The appropriate parties are advised to act accordingly.</p>
+          <p>Three things worth noting. First, Ribhian Games will be present. Second, the sessions will be worth submitting for. Third, the opportunity to secure your slot at the table is, as of this notation, active.</p>
+          <p>Full event details are available on the <strong><a href="../events/events.html" style="color:var(--gold);text-decoration:none;">Events Page</a></strong>. Navigate there. Read the documentation. The convention takes place in November. The preparation begins now.</p>
+        </div>
+      </article>
+
+      <!-- POST: March 23, 2026 — SPRING FORTH -->
+      <article class="post">
+        <div class="post-meta">
+          <span class="post-date">March 23, 2026</span>
+          <div class="post-rule"></div>
+        </div>
+        <h2 class="post-title">Spring Forth Gaming Convention — Field Report, Submitted with Enthusiasm</h2>
+        <div class="post-body">
+          <p>This past weekend, a contingent of Ribhian Games descended upon the Spring Forth Gaming Convention with materials, dice, and what observers later described as <em>an unreasonable degree of energy</em>. The operation proceeded as follows: games were run, players were seated, and a good time was had by all. The documentation supports no alternative conclusion.</p>
+          <p>The sessions generated the customary volume of laughter, strategic disagreement, and that particular silence that falls over a table when something genuinely unexpected occurs in the narrative. Three separate tables. One shared world. The results, as always, exceeded the projections.</p>
+          <p>We extend formal gratitude to everyone who sat down, rolled dice, and trusted us with a few hours of their weekend. You are the reason the work is worth doing. The record reflects this.</p>
+
+          <div class="post-image-row">
+            <img src="/announcements/spring-forth-1.jpg" alt="Spring Forth Gaming Convention" />
+            <img src="/announcements/spring-forth-2.jpg" alt="Spring Forth Gaming Convention" />
+          </div>
+          <div class="post-image-row">
+            <img src="/announcements/spring-forth-3.jpg" alt="Spring Forth Gaming Convention" />
+            <img src="/announcements/spring-forth-4.jpg" alt="Spring Forth Gaming Convention" />
+          </div>
+
+          <p>In additional news of note: the Ribhian Games website has been updated today with a <strong><a href="../gallery.html" style="color:var(--gold);text-decoration:none;">Gallery</a></strong> — seventy-eight works spanning characters, creatures, locations, and cover art from across the product line. Navigate to the topbar. The entry is clearly marked. What you find there is worth the thirty seconds it takes to look.</p>
+        </div>
+      </article>
+
+      <div class="announce-empty" style="display:none;">
+        <span class="announce-empty-icon">📜</span>
+        <p>The first dispatch is on its way.</p>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/site.js"></script>
+</body>
+</html>

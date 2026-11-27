@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ser Merrik Blackwater · The Hand Resolute</title>
+<style>
+  :root{
+    --steel:#3F4A59; --steel-2:#55606F; --gold:#9C7A3C; --gold-l:#F4EBDA;
+    --bg:#F4F5F7; --card:#FFFFFF; --line:#D4D9E0; --alt:#EEF1F4; --ink:#1F252D; --muted:#5D6774;
+    --good:#2F7A4F; --bad:#A33B3B; --cold:#2F6E9C;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.4}
+  header{background:var(--steel);color:#fff;border-bottom:4px solid var(--gold);padding:14px 18px 10px}
+  header h1{margin:0;font-size:24px;letter-spacing:.5px}
+  header .sub{color:#E6D7B8;font-style:italic;margin:2px 0 8px}
+  header .cls{font-size:13px;color:#D8DDE4;margin-bottom:10px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:4px 9px;font-size:13px}
+  .chip b{color:#fff;font-size:15px;margin-left:3px}
+  .chip.boost{background:rgba(156,122,60,.45);border-color:#E6D7B8}
+  nav{display:flex;gap:4px;background:#fff;border-bottom:1px solid var(--line);padding:0 12px;position:sticky;top:0;z-index:5;flex-wrap:wrap}
+  nav button{background:none;border:none;border-bottom:3px solid transparent;padding:12px 14px;font-size:15px;font-weight:bold;color:var(--muted);cursor:pointer}
+  nav button[aria-selected="true"]{color:var(--steel);border-bottom-color:var(--gold)}
+  nav .spacer{flex:1}
+  nav .util{font-size:13px;font-weight:normal;color:var(--steel)}
+  main{max-width:1200px;margin:0 auto;padding:16px}
+  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px}
+  .card.wide{grid-column:1/-1}
+  .card h2{margin:0 0 10px;font-size:17px;color:var(--steel);border-bottom:2px solid var(--gold);padding-bottom:5px}
+  .card h3{margin:12px 0 6px;font-size:14px;color:var(--gold)}
+  .muted{color:var(--muted);font-size:13px}
+  button.btn{background:var(--steel);color:#fff;border:none;border-radius:6px;padding:7px 11px;font-size:14px;cursor:pointer}
+  button.btn:hover{background:var(--steel-2)}
+  button.btn.gold{background:var(--gold)}
+  button.btn.light{background:var(--alt);color:var(--steel);border:1px solid var(--line)}
+  button.btn.red{background:var(--bad)}
+  button.btn.green{background:var(--good)}
+  button.btn.small{padding:4px 8px;font-size:12.5px}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  input[type=number],input[type=text],select{padding:7px 8px;border:1px solid var(--line);border-radius:6px;font-size:15px;background:#fff}
+  input[type=number]{width:80px}
+  select.small{padding:4px 6px;font-size:13px}
+  .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0}
+  /* live state */
+  .stat.sav{grid-column:span 2}
+  .svrow{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-top:3px}
+  .sv{text-align:center;background:#fff;border:1px solid var(--line);border-radius:5px;padding:2px 0}
+  .sv span{display:block;font-size:10.5px;color:var(--muted);letter-spacing:.04em}
+  .sv b{display:block;font-size:17px;color:var(--steel)}
+  .sv em{display:block;font-size:9.5px;color:var(--muted);font-style:normal}
+  .sv{position:relative} .sv.upd{background:#E8F1EA} .sv .upt{position:absolute;top:1px;right:3px;font-size:9px;color:#2E6B3F;font-style:normal}
+  .chg{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 10px} .chg span{background:#E8F1EA;border:1px solid #9CC3A6;color:#2E6B3F;border-radius:12px;padding:2px 9px;font-size:12.5px} .chg span b{color:#1F4D2C}
+  .chg.next span{background:#fff;border-color:var(--line);color:var(--steel)} .chg.next span b{color:var(--steel)}
+  .sv.pr{border-color:var(--gold)} .sv.pr span{color:var(--gold);font-weight:bold}
+  @media (max-width:600px){ .stat.sav{grid-column:1/-1} }
+  .live{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:10px}
+  .stat{background:var(--alt);border-radius:6px;padding:8px 10px;border:1px solid var(--line)}
+  .stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .stat .v{font-size:22px;font-weight:bold;color:var(--steel)}
+  .stat .x{font-size:12.5px;color:var(--gold);font-weight:bold}
+  .stat.down{background:#F6E6E6;border-color:#C98C8C}
+  .stat.up{border-color:var(--gold);background:var(--gold-l)}
+  .fxlist{display:flex;flex-direction:column;gap:6px}
+  .fx{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;border:1px solid var(--line);border-left:4px solid var(--steel);border-radius:6px;padding:7px 9px;background:#fff}
+  .fx.conc{border-left-color:var(--gold)}
+  .fx .n{font-weight:bold;color:var(--steel)}
+  [data-tip]{cursor:help;text-decoration:underline dotted var(--gold);text-underline-offset:3px}
+  #tip{position:fixed;z-index:60;max-width:380px;width:calc(100vw - 24px);background:#fff;border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:11px 13px;font-size:13.5px;line-height:1.45;color:#222;display:none}
+  #tip.on{display:block}
+  #tip h4{margin:0 26px 2px 0;font-size:16px;color:var(--steel)}
+  #tip .sub{color:var(--gold);font-weight:bold;font-size:12.5px;margin-bottom:6px}
+  #tip .grid{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:12.5px;margin:6px 0;padding:6px 8px;background:var(--alt);border-radius:6px}
+  #tip .grid b{color:var(--steel)}
+  #tip p{margin:6px 0 0}
+  #tip .now{margin-top:8px;padding:6px 8px;border-left:4px solid var(--gold);background:var(--gold-l);border-radius:4px;font-size:12.5px}
+  #tip .x{position:absolute;top:6px;right:8px;border:none;background:none;font-size:18px;color:var(--steel);cursor:pointer;display:none}
+  #tip.pinned .x{display:block}
+  #hdBox .res{flex-wrap:wrap} #hdBox .lbl{min-width:130px}
+  .fx.pas{border-left-color:#7C8796;background:#FAFBFC}
+  .fx.off{opacity:.55;border-left-style:dashed}
+  .fx .acts{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+  .dtable{width:100%;border-collapse:collapse;font-size:13px}
+  .dtable th{text-align:left;color:var(--steel);border-bottom:2px solid var(--gold);padding:3px 4px;font-size:12px}
+  .dtable td{border-bottom:1px solid var(--line);padding:3px 4px;vertical-align:top}
+  .dtable tr.heal td{color:#2E6B3F}
+  .dtable tr.sep td{background:var(--alt);color:var(--steel);font-weight:bold;font-size:12px}
+  .dtot{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:6px;margin-bottom:8px}
+  .dtot div{background:var(--alt);border:1px solid var(--line);border-radius:6px;padding:4px 7px;font-size:12px;color:var(--steel)}
+  .dtot b{display:block;font-size:17px}
+  .dwrap{max-height:260px;overflow:auto}
+  .passives{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .passives span{background:var(--alt);border:1px solid var(--line);border-radius:12px;padding:3px 9px;font-size:12.5px;color:var(--steel)}
+  .fx .d{font-size:13px;color:var(--ink)}
+  /* HP */
+  .hpbig{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+  .hpbig .cur{font-size:44px;font-weight:bold;color:var(--steel)}
+  .hpbig .max{font-size:18px;color:var(--muted)}
+  .bar{height:12px;background:var(--alt);border-radius:6px;overflow:hidden;border:1px solid var(--line);display:flex}
+  .bar .hp{background:var(--good)} .bar .tmp{background:var(--cold)}
+  .snaprow{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding:5px 0;font-size:13.5px}
+  .snaprow .w{color:var(--muted);font-size:12px}
+  .stale{color:#A33B3B;font-weight:bold}
+  .tmpbig{font-size:20px;font-weight:bold;color:var(--cold);margin-left:10px}
+  .dprev{font-size:13.5px;margin:6px 0 4px;padding:6px 9px;border-radius:6px;background:var(--alt);color:var(--steel)}
+  .dprev b.t{color:var(--cold)} .dprev b.h{color:#A33B3B}
+  .templine{display:flex;gap:12px;align-items:center;margin:8px 0;font-size:15px;flex-wrap:wrap}
+  .badge{display:inline-block;border-radius:4px;padding:2px 7px;font-size:12px;font-weight:bold}
+  .b-cold{background:#DCEBF6;color:var(--cold)} .b-gold{background:var(--gold-l);color:#7A5C25}
+  .b-steel{background:var(--alt);color:var(--steel)} .b-red{background:#F6DEDE;color:var(--bad)} .b-green{background:#DDF0E4;color:var(--good)}
+  .notice{background:var(--gold-l);border-left:4px solid var(--gold);padding:8px 10px;border-radius:4px;font-size:14px;margin-top:8px}
+  .ds{display:none;margin-top:10px} .ds.on{display:block}
+  /* pips */
+  .res{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--alt)}
+  .res:last-child{border-bottom:none}
+  .res .lbl b{display:block}
+  .res .lbl span{font-size:12px;color:var(--muted)}
+  .pips{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+  .pip{width:26px;height:26px;border-radius:50%;border:2px solid var(--steel);background:var(--steel);cursor:pointer;padding:0}
+  .pip.used{background:#fff}
+  .pip.pact{border-color:var(--gold);background:var(--gold)} .pip.pact.used{background:#fff}
+  .pip:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  /* toggles (radio-style) */
+  .tog{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:4px 10px 4px 6px;font-size:13px;cursor:pointer;color:var(--steel)}
+  .tog .dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--steel);display:inline-block;position:relative}
+  .tog[aria-pressed="true"] .dot::after{content:"";position:absolute;inset:2px;border-radius:50%;background:var(--steel)}
+  .tog.act[aria-pressed="true"]{background:var(--gold-l);border-color:var(--gold);color:#6B4F1D}
+  .tog.act[aria-pressed="true"] .dot{border-color:var(--gold)}
+  .tog.act[aria-pressed="true"] .dot::after{background:var(--gold)}
+  .tog.used[aria-pressed="true"]{background:var(--alt)}
+  .feat{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--alt);flex-wrap:wrap}
+  .feat:last-child{border-bottom:none}
+  .feat .lbl b{display:block} .feat .lbl span{font-size:12px;color:var(--muted)}
+  .feat .ctl{display:flex;gap:6px;flex-wrap:wrap}
+  .rests{display:flex;gap:8px;flex-wrap:wrap}
+  .log{font-size:13px;color:var(--muted);max-height:140px;overflow:auto;margin:0;padding-left:18px}
+  /* spells */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+  .filters .seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;flex-wrap:wrap}
+  .filters .seg button{background:#fff;border:none;border-right:1px solid var(--line);padding:7px 10px;cursor:pointer;font-size:13px}
+  .filters .seg button:last-child{border-right:none}
+  .filters .seg button.on{background:var(--steel);color:#fff}
+  .spellgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+  .spell{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column}
+  .spell.isact{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-l)}
+  .spell.locked{opacity:.6}
+  .spell .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .spell h4{margin:0;font-size:16px;color:var(--steel)}
+  .spell .lvl{font-size:12px;color:var(--muted);margin:2px 0 6px}
+  .spell .meta{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;font-size:12.5px;background:var(--alt);padding:6px 8px;border-radius:5px;margin-bottom:8px}
+  .spell .meta b{color:var(--steel)}
+  .spell p{margin:0;font-size:14px}
+  .spell .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+  .spell .ctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
+  .star{background:none;border:1px solid var(--line);border-radius:6px;padding:3px 8px;cursor:pointer;font-size:12px;white-space:nowrap}
+  .star.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+  .prepcount{font-weight:bold;color:var(--steel)}
+  /* turn helper */
+  table.t{width:100%;border-collapse:collapse;font-size:14px}
+  table.t th{background:var(--steel);color:#fff;text-align:left;padding:6px 8px}
+  table.t td{border:1px solid var(--line);padding:6px 8px;vertical-align:top}
+  table.t tr:nth-child(even) td{background:var(--alt)}
+  .opener{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .opener button{background:#fff;border:1px solid var(--steel);color:var(--steel);border-radius:6px;padding:8px 10px;cursor:pointer;font-size:13.5px;text-align:left}
+  .opener button.on{background:var(--steel);color:#fff}
+  .plan{display:grid;grid-template-columns:110px 1fr;gap:4px 10px;font-size:14px}
+  .plan b{color:var(--gold)}
+  .check{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--alt);font-size:14px}
+  .check:last-child{border-bottom:none}
+  .check input{margin-top:3px;width:18px;height:18px}
+  .hidden{display:none!important}
+  #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--steel);color:#fff;padding:10px 16px;border-radius:8px;border-left:5px solid var(--gold);font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;transition:opacity .25s;pointer-events:none;z-index:20;max-width:90vw}
+  #toast.on{opacity:1}
+  .flash{animation:flash 1.6s ease-out}
+  @keyframes flash{0%{box-shadow:0 0 0 4px var(--gold)}100%{box-shadow:0 0 0 0 transparent}}
+  footer{text-align:center;font-size:12px;color:var(--muted);padding:20px}
+  @media (max-width:600px){ header h1{font-size:20px} .hpbig .cur{font-size:36px} nav button{padding:10px 8px;font-size:14px} .plan{grid-template-columns:1fr} }
+  #p-lore{max-width:980px;margin:0 auto}
+  .loretop{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .loretoc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .loretoc a{font-size:13px;color:var(--steel);text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:14px;padding:3px 10px}
+  .loretoc a:hover{border-color:var(--gold);color:var(--gold)}
+  .lorecard{margin-bottom:14px;scroll-margin-top:60px}
+  .lorecard p{line-height:1.55;margin:8px 0}
+  .tw{overflow-x:auto;margin:8px 0}
+  table.t.lore{font-size:13.5px}
+  table.t.kv thead{display:none}
+  table.t.small{font-size:12.5px}
+  table.t.small td:first-child{white-space:nowrap}
+  .ph .rep{grid-column:1/-1;font-size:13px;border-top:1px dashed var(--line);padding-top:5px;color:#5a4a28}
+  .ph .rep i{color:var(--gold);font-weight:bold}
+  .ph.tempt{border-left-color:#7A3B3B}
+  table.t.kv td:first-child{width:28%;color:var(--steel)}
+  .quotes{margin-top:10px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--gold-l)}
+  .quotes .qh{font-weight:bold;color:var(--gold);margin-bottom:4px}
+  .quotes span{display:inline-block;margin:2px 14px 2px 0;font-style:italic}
+  .lx{margin-top:12px;border-top:2px solid var(--gold);padding-top:10px}
+  .lx .key{font-size:13px;background:var(--alt);border-radius:6px;padding:8px 10px;margin:8px 0}
+  .lx .lxbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+  .ph{display:grid;grid-template-columns:1fr auto;gap:6px 12px;border:1px solid var(--line);border-left:4px solid var(--steel);border-radius:6px;padding:8px 10px;margin:6px 0;background:#fff}
+  .ph.merrik{border-left-color:var(--gold)}
+  .ph.spoken{background:var(--gold-l);border-color:var(--gold)}
+  .ph .lo{font-size:18px;font-style:italic;font-weight:bold;color:var(--steel);letter-spacing:.02em}
+  .ph .pr{font-size:12px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin-top:1px}
+  .ph .en{margin-top:4px}
+  .ph .wh{font-size:12.5px;color:var(--gold)}
+  .ph .side{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+  body.dm .util, body.dm #tab-tracker, body.dm #tab-spells, body.dm #tab-turn, body.dm .speakonly{display:none!important}
+  @media print{ nav,.rests,button,.loretoc,.lx .lxbar,header .chips{display:none!important} body{background:#fff} .card{box-shadow:none;break-inside:auto} h2,h3{break-after:avoid} tr{break-inside:avoid} .lx details{display:block} .lx details>*{display:block} }
+  @media print{ nav,.rests,button{display:none!important} }
+</style>
+
+</head>
+<body>
+<header>
+  <h1 id="hName"></h1>
+  <div class="sub" id="hEpithet"></div>
+  <div class="cls" id="clsLine"></div>
+  <div class="chips" id="chips"></div>
+</header>
+
+<nav role="tablist" aria-label="Sections">
+  <button role="tab" id="tab-tracker" aria-controls="p-tracker" aria-selected="true">Tracker</button>
+  <button role="tab" id="tab-spells" aria-controls="p-spells" aria-selected="false">Spells</button>
+  <button role="tab" id="tab-turn" aria-controls="p-turn" aria-selected="false">Turn Helper</button>
+  <button role="tab" id="tab-lore" aria-controls="p-lore" aria-selected="false">Lore</button>
+  <span class="spacer"></span>
+  <button class="util" id="roundTop" title="Press at the start of your turn" style="font-weight:bold;color:#9C7A3C">⟳ Next round <span id="roundNo"></span></button>
+  <button class="util" id="shortTop" title="Short rest">☾ Short rest</button>
+  <button class="util" id="longTop" title="Long rest">✦ Long rest</button>
+  <button class="util" id="undoBtn" title="Undo last change">↶ Undo</button>
+</nav>
+
+<main>
+<!-- ================= TRACKER ================= -->
+<section id="p-tracker" role="tabpanel" aria-labelledby="tab-tracker">
+  <div class="grid">
+    <div class="card wide">
+      <h2>Current State</h2>
+      <div class="live" id="live"></div>
+      <h3>Active Effects <span class="muted" id="concLabel"></span></h3>
+      <div class="fxlist" id="fxList"></div>
+      <p class="muted" style="margin:6px 0 0">Passive features (grey) are always on unless ended or suppressed. Hover or tap any underlined name for its full card.</p>
+    </div>
+
+    <div class="card">
+      <h2>Hit Points</h2>
+      <div class="hpbig"><span class="cur" id="hpCur">0</span><span class="max">/ <span id="hpMax">0</span> HP</span><span class="tmpbig hidden" id="tmpBig">+0 temp</span></div>
+      <div class="bar" aria-hidden="true"><div class="hp" id="barHp"></div><div class="tmp" id="barTmp"></div></div>
+      <div class="templine">
+        <span>Temp HP: <b id="tmpVal">0</b></span>
+        <span id="agBadge" class="badge b-cold hidden"></span>
+      </div>
+      <div class="row">
+        <label for="amt" class="muted">Amount</label>
+        <input type="number" id="amt" min="0" value="" placeholder="0" inputmode="numeric" enterkeyhint="done">
+        <select id="dmgType" aria-label="Damage type"><option value="">Type (optional)</option><option>Slashing</option><option>Piercing</option><option>Bludgeoning</option><option>Fire</option><option>Cold</option><option>Lightning</option><option>Thunder</option><option>Acid</option><option>Poison</option><option>Necrotic</option><option>Radiant</option><option>Force</option><option>Psychic</option></select>
+        <label class="muted"><input type="checkbox" id="dmgMelee" checked> melee</label>
+        <button class="btn red" id="dmgBtn">Damage</button>
+        <button class="btn green" id="healBtn">Heal</button>
+        <button class="btn light" id="tmpBtn" title="Temp HP from another source (replaces temp HP you already have)">Set temp HP</button>
+      </div>
+      <div id="dmgPrev" class="dprev"></div>
+      <div id="concNote" class="notice hidden"></div>
+      <div id="qcBox"></div>
+      <div class="ds" id="deathBox">
+        <h3>Death Saves</h3>
+        <div class="res"><div class="lbl"><b>Successes</b></div><div class="pips" id="dsS"></div></div>
+        <div class="res"><div class="lbl"><b>Failures</b></div><div class="pips" id="dsF"></div></div>
+        <div class="muted" id="deathText"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Damage Taken</h2>
+      <div class="dtot" id="dmgTot"></div>
+      <div class="dwrap"><table class="dtable"><thead><tr><th>Rd</th><th>Hit</th><th>Temp</th><th>HP</th><th>Result</th></tr></thead><tbody id="dmgRows"></tbody></table></div>
+      <div class="row" style="margin-top:8px"><button class="btn small light" id="dmgClear">Clear window</button><span class="muted">Kept across combats (marked) until cleared or a long rest.</span></div>
+    </div>
+
+    <div class="card" id="slotCard">
+      <h2>Spell Slots</h2>
+      <div id="slotRows"></div>
+      <p class="muted" style="margin-top:8px" id="slotHelp"></p>
+    </div>
+
+    <div class="card">
+      <h2>Features</h2>
+      <div id="featList"></div>
+      <div id="poolBox"></div>
+      <div id="resRows"></div>
+    </div>
+
+    <div class="card">
+      <h2>Features at Level <span id="featLvl"></span></h2>
+      <div id="levelChg"></div>
+      <div id="levelFeats"></div>
+    </div>
+
+    <div class="card">
+      <h2>Rounds, Rest &amp; Hit Dice</h2>
+      <div class="rests" style="margin-bottom:8px">
+        <button class="btn gold" id="nextRound">⟳ Next round</button>
+        <button class="btn light" id="endCombat">End combat</button>
+        <span class="muted" id="roundInfo"></span>
+      </div>
+      <p class="muted"><b>Next round</b> (press at the start of your turn): your reaction returns, one-round effects such as <i>Shield</i> end, and timed effects count down (1 minute = 10 rounds, 10 minutes = 100).</p>
+      <div class="rests">
+        <button class="btn gold" id="shortRest">☾ Short rest</button>
+        <button class="btn" id="longRest">✦ Long rest</button>
+        <button class="btn light" id="resetAll">Reset everything</button>
+      </div>
+      <div class="row"><span class="muted">Character level:</span>
+        <select id="lvlSel" aria-label="Character level"></select>
+        <span class="muted" id="lvlNote"></span>
+      </div>
+      <p class="muted" id="restHelp"></p>
+      <div id="hdBox"><div id="hdRows"></div>
+        <div class="row" id="hdBtns"><span class="muted" id="hdOut"></span></div>
+      </div>
+      <h3>Recent</h3>
+      <ul class="log" id="log"></ul>
+    </div>
+
+    <div class="card util" id="backupCard">
+      <h2>Save &amp; Backup</h2>
+      <div id="storeWarn" class="notice hidden"></div>
+      <p class="muted" style="margin-top:0">Everything saves automatically <b>in this browser only</b>. Clearing browsing data, private browsing or a different device starts blank, so export a backup file now and then and keep it somewhere safe (email it to yourself, cloud drive).</p>
+      <div class="row">
+        <button class="btn gold" id="expBtn">⬇ Export backup</button>
+        <button class="btn" id="impBtn">⬆ Import backup</button>
+        <input type="file" id="impFile" accept=".json,application/json" class="hidden">
+        <span id="expInfo" class="muted"></span>
+      </div>
+      <h3>Restore points</h3>
+      <p class="muted" style="margin:0 0 6px">Taken automatically before a long rest, a level change, an import or a reset, and once a day. Kept in this browser (last 8).</p>
+      <div id="snapList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SPELLS ================= -->
+<section id="p-spells" role="tabpanel" aria-labelledby="tab-spells" class="hidden">
+  <div class="filters">
+    <input type="text" id="q" placeholder="Search spells…" aria-label="Search spells">
+    <div class="seg" id="fLvl" role="group" aria-label="Level">
+      <button data-v="all" class="on">All</button><button data-v="0">Cantrip</button><button data-v="1">1st</button><button data-v="2">2nd</button><button data-v="3">3rd</button><button data-v="4">4th</button><button data-v="5">5th</button>
+    </div>
+    <div class="seg" id="fSrc" role="group" aria-label="Source"></div>
+    <label class="muted"><input type="checkbox" id="fConc"> Hide concentration</label>
+    <span class="muted" id="prepWrap">Prepared: <span class="prepcount" id="prepCount">0</span> / <span id="prepMax">0</span></span>
+  </div>
+  <p class="muted" style="margin-top:-4px">Each ready spell has <b>Slot used</b> (spends the chosen slot; slots come back only on a rest) and <b>Active</b> (applies its effect to your live numbers; turning it off ends the effect but does not return the slot). Starting a concentration spell ends the one you had. Mistakes: ↶ Undo.</p>
+  <div class="spellgrid" id="spellGrid"></div>
+</section>
+
+<!-- ================= TURN HELPER ================= -->
+<section id="p-turn" role="tabpanel" aria-labelledby="tab-turn" class="hidden">
+  <div class="grid" id="turnGrid">
+    <div class="card" id="checkCard">
+      <h2>Before Combat</h2>
+      <div id="checklist"></div>
+      <div class="row"><button class="btn light" id="clearChecks">Clear checklist</button></div>
+    </div>
+    <div class="card" id="openerCard">
+      <h2>Turn 1: Choose Your Opener</h2>
+      <div class="opener" id="openerBtns"></div>
+      <div class="plan" id="openerPlan"></div>
+    </div>
+  </div>
+</section>
+
+<section id="p-lore" role="tabpanel" aria-labelledby="tab-lore" class="hidden"></section>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="tip" role="dialog" aria-live="polite"><button class="x" aria-label="Close">×</button><div id="tipBody"></div></div>
+
+<script type="application/json" id="charData">{"schema":1,"id":"merrik-blackwater","storageKey":"merrik-hand-resolute-v2","filePrefix":"Merrik","name":"Ser Merrik Blackwater","headerName":"SER MERRIK BLACKWATER","epithet":"The Hand Resolute","title":"Ser Merrik Blackwater · The Hand Resolute","classLine":"Paladin {=cls.Paladin} (Oath of the Crown) / Hexblade {=cls.Warlock} · Level {L} · Variant Human · Lawful Good · Torm","levelLabel":"P{=cls.Paladin} / H{=cls.Warlock}","abilities":{"str":15,"dex":8,"con":16,"int":8,"wis":8,"cha":20},"abilityBumps":[{"L":18,"con":1,"note":"Resilient (CON)"}],"saveProfs":[{"ab":"wis"},{"ab":"cha"},{"ab":"con","L":18}],"levels":{"10":{"cls":{"Paladin":9,"Warlock":1},"hp":113,"slots":[4,3,2,0,0],"pact":{"n":1,"lvl":1},"add":"3rd-level slots; Spirit Guardians, Aura of Vitality"},"11":{"cls":{"Paladin":9,"Warlock":2},"hp":123,"slots":[4,3,2,0,0],"pact":{"n":2,"lvl":1},"add":"Hexblade 2: 2nd pact slot, Repelling Blast, Grasp of Hadar, Shield; Eldritch Blast 3 beams"},"12":{"cls":{"Paladin":10,"Warlock":2},"hp":134,"slots":[4,3,2,0,0],"pact":{"n":2,"lvl":1},"add":"Aura of Courage"},"13":{"cls":{"Paladin":11,"Warlock":2},"hp":145,"slots":[4,3,3,0,0],"pact":{"n":2,"lvl":1},"add":"Improved Divine Smite (+1d8 radiant on every melee hit); proficiency +5"},"14":{"cls":{"Paladin":12,"Warlock":2},"hp":156,"slots":[4,3,3,0,0],"pact":{"n":2,"lvl":1},"add":"Sentinel (feat)"},"15":{"cls":{"Paladin":13,"Warlock":2},"hp":167,"slots":[4,3,3,1,0],"pact":{"n":2,"lvl":1},"add":"4th-level slots; Banishment, Guardian of Faith"},"16":{"cls":{"Paladin":14,"Warlock":2},"hp":178,"slots":[4,3,3,1,0],"pact":{"n":2,"lvl":1},"add":"Cleansing Touch"},"17":{"cls":{"Paladin":15,"Warlock":2},"hp":189,"slots":[4,3,3,2,0],"pact":{"n":2,"lvl":1},"add":"Unyielding Spirit; proficiency +6; Eldritch Blast 4 beams"},"18":{"cls":{"Paladin":16,"Warlock":2},"hp":200,"slots":[4,3,3,2,0],"pact":{"n":2,"lvl":1},"add":"Resilient (CON): CON save proficiency"},"19":{"cls":{"Paladin":17,"Warlock":2},"hp":211,"slots":[4,3,3,3,1],"pact":{"n":2,"lvl":1},"add":"5th-level slots; Circle of Power, Geas"},"20":{"cls":{"Paladin":18,"Warlock":2},"hp":222,"slots":[4,3,3,3,1],"pact":{"n":2,"lvl":1},"add":"Aura Improvements: auras reach 30 ft"}},"vars":{"ATK":"mod.cha+prof+1","DC":"8+prof+mod.cha","SA":"prof+mod.cha","BEAMS":"L>=17?4:L>=11?3:2","CH":"cls.Warlock+mod.cha","AR":"L>=20?30:10","LOH":"5*cls.Paladin","PREP":"mod.cha+floor(cls.Paladin/2)","DMG":"'1d8 + '+(mod.cha+1)+(L>=13?' + 1d8 radiant':'')"},"signed":["ATK","SA","PB","CON"],"track":[{"k":"Spell save DC","v":"DC"},{"k":"Spell attack","v":"SA","signed":true},{"k":"Lay on Hands","v":"LOH"},{"k":"Prepared spells","v":"PREP"},{"k":"Eldritch Blast beams","v":"BEAMS"},{"k":"Aura range (ft)","v":"AR"},{"k":"Curse heal","v":"CH"}],"ac":22,"attack":{"name":"Grayswandir","atk":"ATK","dmg":"DMG","crit":19},"chips":[{"label":"Init","val":"−1","after":"adv."},{"label":"Speed","val":"30"},{"label":"Passive Perc.","val":"18"},{"id":"chProf","label":"Prof.","val":"{PB}"},{"id":"chDC","label":"Spell DC","val":"{DC}"},{"id":"chSA","label":"Spell Atk","val":"{SA}"},{"id":"chAtk","special":"attack"},{"id":"chCrit","special":"crit","tip":"f:Hexblade's Curse"},{"id":"chAura","label":"Aura","val":"{=on('Aura of Protection')?'+5':'off'}","after":"{AR} ft","tip":"f:Aura of Protection"}],"slotNote":"Smite {=min(5,1+slot)}d8","pactLabel":"Pact slots (1st)","slotHelp":"Tap a circle to mark a slot used (a Divine Smite, say). Tapping a used circle is a manual correction; normally slots return only on a rest. Smite dice double on a crit; +1d8 vs undead and fiends.","resources":[{"id":"cd","name":"Channel Divinity","max":"1","rest":"short","show":false},{"id":"curse","name":"Hexblade's Curse","max":"1","rest":"short","show":false},{"id":"sense","name":"Divine Sense","max":"1+mod.cha","rest":"long","sub":"long rest"},{"id":"cleanse","name":"Cleansing Touch","max":"L>=16?mod.cha:0","rest":"long","sub":"Action: end one spell on you or a willing creature · long rest"}],"hitDice":[{"id":"hd10","die":10,"count":"cls.Paladin"},{"id":"hd8","die":8,"count":"cls.Warlock"}],"pools":[{"id":"loh","name":"Lay on Hands","max":"5*cls.Paladin","rest":"long","step":10,"ally":"HP available (touch)","actions":[{"label":"Heal self","kind":"self","cls":"green"},{"label":"Heal ally","kind":"ally"},{"label":"Cure (5)","kind":"fixed","key":"Cure","cost":5,"cls":"light","log":"cured a poison or disease"}]}],"activatables":[{"id":"curse","name":"Hexblade's Curse","pool":"curse","sub":"Bonus action · 30 ft · 1 minute · short rest","active":true,"rounds":10,"note":"Cursed target: {PB} damage per hit, crit on 18–20 with Grayswandir; regain {CH} HP if it dies","effects":{"dmg":"{PB} vs cursed target","crit":18,"critNote":"vs cursed target","critChip":"cursed"}},{"id":"challenge","name":"Champion Challenge","pool":"cd","sub":"Channel Divinity · action · WIS DC {DC}","active":true,"note":"Challenged enemies cannot willingly move more than 30 ft from you","effects":{"ally":"challenged enemies held within 30 ft"}},{"id":"tide","name":"Turn the Tide","pool":"cd","sub":"Channel Divinity · bonus action","active":false,"note":""}],"passives":[{"n":"Aura of Protection","L":7,"end":true,"aura":true,"range":"{AR} ft","save":5,"saveLabel":"aura","ally":"+5 to saving throws","d":"You and allies within {AR} ft: +5 to all saving throws","chipBonus":"+5"},{"n":"Aura of Courage","L":12,"end":true,"aura":true,"range":"{AR} ft","imm":"frightened","ally":"can't be frightened","d":"You and allies within {AR} ft can't be frightened"},{"n":"Mantle of Protection","L":1,"end":true,"item":true,"ac":1,"save":1,"saveLabel":"Mantle","d":"+1 AC and +1 to all saving throws (attuned)","text":"Cloak of Protection in Torm's gold and steel. While attuned you gain +1 to AC and to all saving throws."},{"n":"Fighting Style: Defense","L":2,"end":true,"ac":1,"d":"+1 AC while wearing armor"},{"n":"Sentinel Shield","L":1,"end":false,"item":true,"adv":"initiative, Perception","d":"Advantage on initiative and Wisdom (Perception) checks","text":"While holding this shield you have advantage on initiative rolls and Wisdom (Perception) checks. Strapped, it lets you cast Shield and other somatic spells without stowing anything (DM ruling)."},{"n":"Divine Health","L":3,"end":false,"imm":"disease","d":"Immune to disease"},{"n":"Improved Divine Smite","L":13,"end":false,"d":"+1d8 radiant on every melee weapon hit (included in damage)"},{"n":"Sentinel","L":14,"end":false,"d":"Opportunity attacks stop movement; Disengage does not help; reaction attack when an adjacent enemy attacks an ally"},{"n":"Unyielding Spirit","L":17,"end":false,"adv":"saves vs paralyzed and stunned","saveNote":"adv. vs paralyzed/stunned","d":"Advantage on saves against being paralyzed or stunned"}],"features":[{"L":1,"n":"Divine Sense","short":"Locate celestials, fiends and undead within 60 ft (6/long rest)","text":"Action. Until the end of your next turn you know the location of any celestial, fiend or undead within 60 ft that is not behind total cover, and you know its type (not its identity). You also sense any place or object within 60 ft that has been consecrated or desecrated. Uses: 1 + CHA modifier (6) per long rest."},{"L":1,"n":"Lay on Hands","short":"Healing pool of 5 × paladin level ({LOH})","text":"Action. Touch a creature and restore any number of HP from your pool ({LOH} points, 5 × paladin level, refilled on a long rest). Alternatively spend 5 points to cure one disease or neutralize one poison (several can be cured with separate 5-point spends). No effect on undead or constructs."},{"L":2,"n":"Fighting Style: Defense","short":"+1 AC in armor","text":"While you are wearing armor you gain +1 to AC. Already included in your AC."},{"L":2,"n":"Divine Smite","short":"Spend a slot on a melee hit: 2d8 radiant +1d8 per level above 1st (max 5d8)","text":"When you hit with a melee weapon attack, you can expend a spell slot (including a pact slot) to deal extra radiant damage: 2d8 for a 1st-level slot, +1d8 per slot level above 1st, to a maximum of 5d8. +1d8 against an undead or a fiend. The dice double on a critical hit. Decide after you know the attack hit."},{"L":3,"n":"Divine Health","short":"Immune to disease","text":"The divine magic flowing through you makes you immune to disease."},{"L":3,"n":"Champion Challenge","short":"Channel Divinity: WIS DC {DC} or can't move 30+ ft from you","text":"Channel Divinity, action. Each creature of your choice that you can see within 30 ft makes a WIS save (DC {DC}). On a failure it can't willingly move more than 30 ft away from you. The effect ends if you are incapacitated, die, or the creature moves more than 30 ft away from you."},{"L":3,"n":"Turn the Tide","short":"Channel Divinity: bloodied allies within 30 ft regain 1d6 + 5","text":"Channel Divinity, bonus action. Each creature of your choice that can hear you within 30 ft regains 1d6 + 5 HP if it has no more than half its HP."},{"L":4,"n":"Hex Warrior","short":"Attack with CHA using Grayswandir","text":"You can use Charisma instead of Strength for attack and damage rolls with Grayswandir (your pact-bonded weapon). The bond is set at the end of a long rest."},{"L":4,"n":"Hexblade's Curse","short":"{PB} damage, crit 19–20 (18–20 with Grayswandir), heal {CH} on a kill","text":"Bonus action. Curse one creature you can see within 30 ft for 1 minute (until it dies, you die, or you are incapacitated). You add your proficiency bonus ({PB}) to damage rolls against it; your attacks against it crit on 19–20 (18–20 with Grayswandir); if it dies you regain {CH} HP (Hexblade level + CHA modifier). Once per short or long rest."},{"L":6,"n":"Extra Attack","short":"Two attacks per Attack action","text":"You attack twice, instead of once, whenever you take the Attack action on your turn. A cantrip such as Booming Blade cannot replace one of these attacks."},{"L":7,"n":"Aura of Protection","short":"You and allies within {AR} ft: +5 to all saves","text":"Whenever you or a friendly creature within {AR} ft of you must make a saving throw, it gains +5 (your CHA modifier). You must be conscious. Always on."},{"L":8,"n":"Divine Allegiance","short":"Reaction: take the damage an adjacent creature would take","text":"Reaction: when a creature within 5 ft of you takes damage, you can substitute your own health, taking that damage instead. The damage is not reduced or altered."},{"L":9,"n":"3rd-level spells","short":"Spirit Guardians, Aura of Vitality, Crusader's Mantle and other 3rd-level paladin spells","text":"You can prepare and cast 3rd-level paladin spells. Oath spells Spirit Guardians and Crusader's Mantle are always prepared."},{"L":11,"n":"Shield · 2nd pact slot","short":"Reaction +5 AC until your next turn; two pact slots per short rest","text":"Hexblade 2 grants a second pact slot (both refresh on a short rest) and two invocations. Shield (Hexblade expanded list): reaction when you are hit or targeted by Magic Missile, +5 AC until the start of your next turn, including against the triggering attack."},{"L":11,"n":"Repelling Blast · Grasp of Hadar","short":"Eldritch Blast pushes 10 ft per beam / pulls 10 ft once per turn","text":"Repelling Blast: each Eldritch Blast beam that hits pushes the target up to 10 ft straight away from you. Grasp of Hadar: once per turn, when a beam hits, you can pull the target up to 10 ft straight toward you."},{"L":12,"n":"Aura of Courage","short":"You and allies within {AR} ft can't be frightened","text":"You and friendly creatures within {AR} ft of you cannot be frightened while you are conscious."},{"L":13,"n":"Improved Divine Smite","short":"+1d8 radiant on every melee weapon hit","text":"Whenever you hit a creature with a melee weapon, it takes an extra 1d8 radiant damage. This stacks with Divine Smite."},{"L":13,"n":"3rd-level slot (3rd)","short":"A third 3rd-level slot","text":"Paladin 11 gives you a third 3rd-level slot."},{"L":14,"n":"Sentinel","short":"Opportunity attacks stop movement; ignore Disengage; strike attackers of adjacent allies","text":"When you hit with an opportunity attack, the target's speed becomes 0 for the rest of the turn. Creatures provoke opportunity attacks from you even if they Disengage. When a creature within 5 ft attacks someone other than you, you can use your reaction to make a melee attack against it."},{"L":15,"n":"4th-level spells","short":"Banishment and Guardian of Faith (oath); Aura of Life, Aura of Purity, Death Ward, Staggering Smite","text":"You can prepare and cast 4th-level paladin spells. Oath spells Banishment and Guardian of Faith are always prepared."},{"L":16,"n":"Cleansing Touch","short":"Action: end one spell on you or a willing creature (5/long rest)","text":"Action. End one spell on yourself or on a willing creature you touch. Uses: CHA modifier (5) per long rest."},{"L":17,"n":"Unyielding Spirit","short":"Advantage on saves against paralyzed and stunned","text":"You have advantage on saving throws to avoid becoming paralyzed or stunned."},{"L":18,"n":"Resilient (CON)","short":"CON save proficiency: concentration {CON}","text":"+1 CON and proficiency in Constitution saving throws. Concentration saves become {CON}."},{"L":19,"n":"5th-level spells","short":"Circle of Power and Geas (oath); Holy Weapon, Banishing Smite, Destructive Wave, Dispel Evil and Good","text":"You can prepare and cast 5th-level paladin spells. Oath spells Circle of Power and Geas are always prepared."},{"L":20,"n":"Aura Improvements","short":"Auras reach 30 ft","text":"The range of Aura of Protection and Aura of Courage increases to 30 ft."}],"spellSources":[{"id":"Oath","label":"Oath","mode":"always","badge":"Always prepared"},{"id":"Warlock","label":"Warlock","mode":"known"},{"id":"Paladin","label":"Paladin list","mode":"prepared"}],"prepared":{"max":"PREP","default":["Bless","Shield of Faith","Protection from Evil and Good","Thunderous Smite","Cure Wounds","Aid","Find Steed","Lesser Restoration","Dispel Magic"]},"spells":[{"n":"Eldritch Blast","lvl":0,"school":"Evocation","time":"1 action","range":"120 ft","comp":"V, S","dur":"Instant","conc":false,"src":"Warlock","from":0,"text":"A beam of crackling energy. Ranged spell attack ({SA}); on a hit, 1d10 force. You fire {BEAMS} beams at your level (2 at 5–10, 3 at 11–16, 4 at 17+), at one target or several, rolling separately for each. {PB} per beam against your cursed target."},{"n":"Booming Blade","lvl":0,"school":"Evocation (SCAG)","time":"1 action","range":"Self (5 ft)","comp":"V, M (a weapon)","dur":"1 round","conc":false,"src":"Warlock","from":0,"text":"Make one melee weapon attack. On a hit, normal damage +1d8 thunder, and if the target willingly moves 5 ft or more before the start of your next turn it takes 2d8 thunder. No somatic component. Replaces Extra Attack.","fx":{"note":"Target sheathed: {=(L>=17?3:L>=11?2:1)+1}d8 thunder if it willingly moves 5 ft or more before your next turn"}},{"n":"Hex","lvl":1,"school":"Enchantment","time":"1 bonus action","range":"90 ft","comp":"V, S, M","dur":"Up to 1 hour","conc":true,"src":"Warlock","from":0,"text":"Curse a creature: +1d6 necrotic whenever you hit it with an attack, and disadvantage on ability checks with one ability you choose. If it drops to 0 HP, move the curse with a bonus action on a later turn. With a 3rd-level slot: up to 8 hours. (Usually left to the party warlock.)","fx":{"dmg":"+1d6 necrotic (hexed target)","note":"+1d6 necrotic on hits vs the hexed target; disadvantage on one ability's checks"}},{"n":"Armor of Agathys","lvl":1,"school":"Abjuration","time":"1 action","range":"Self","comp":"V, S, M (a cup of water)","dur":"1 hour","conc":false,"src":"Warlock","from":0,"text":"You gain 5 temp HP per slot level. While you have them, any creature that hits you with a melee attack takes 5 cold per slot level. At 3rd level: 15 / 15. Other temp HP replace these and end the spell.","fx":{"temp":"5*slot","tempBound":true,"retaliate":"5*slot","retaliateType":"cold","short":"Agathys","note":"{=5*slot} temp HP; melee attackers that hit you take {=5*slot} cold (while the temp HP last)"}},{"n":"Shield","lvl":1,"school":"Abjuration","time":"1 reaction","range":"Self","comp":"V, S","dur":"1 round","conc":false,"src":"Warlock","from":11,"text":"When you are hit by an attack or targeted by magic missile: +5 AC until the start of your next turn, including against the triggering attack. Castable with sword and shield in hand (DM ruling). Learned at level 11.","fx":{"ac":5,"reaction":true,"note":"+5 AC until the start of your next turn"}},{"n":"Command","lvl":1,"school":"Enchantment","time":"1 action","range":"60 ft","comp":"V","dur":"1 round","conc":false,"src":"Oath","from":0,"text":"One creature makes a WIS save or obeys a one-word command on its next turn (approach, drop, flee, grovel, halt). No effect on undead, on a creature that does not understand you, or if the command is directly harmful. +1 target per slot level above 1st.","fx":{"note":"Target obeys a one-word command on its next turn (WIS DC {DC})"}},{"n":"Compelled Duel","lvl":1,"school":"Enchantment","time":"1 bonus action","range":"30 ft","comp":"V","dur":"Up to 1 minute","conc":true,"src":"Oath","from":0,"text":"WIS save. On a failure, the target has disadvantage on attacks against anyone but you, and must make a WIS save to move more than 30 ft from you. Ends if you attack another creature or target another hostile with a spell, if an ally damages it or casts a harmful spell on it, or if you end your turn more than 30 ft away.","fx":{"note":"Duel target: disadvantage vs anyone but you; WIS save to move 30+ ft away"}},{"n":"Warding Bond","lvl":2,"school":"Abjuration","time":"1 action","range":"Touch","comp":"V, S, M (two 50 gp platinum rings)","dur":"1 hour","conc":false,"src":"Oath","from":0,"text":"A willing creature gets +1 AC, +1 to saves and resistance to all damage. Each time it takes damage, you take the same amount. Ends if you drop to 0 HP or are more than 60 ft apart. Best on the wizard or bard, not the raging barbarian.","fx":{"note":"Bonded ally: +1 AC and saves, resistance to all damage. You take the damage it takes."}},{"n":"Zone of Truth","lvl":2,"school":"Enchantment","time":"1 action","range":"60 ft","comp":"V, S","dur":"10 minutes","conc":false,"src":"Oath","from":0,"text":"A 15-ft-radius sphere. A creature entering it or starting its turn there makes a CHA save; on a failure it cannot speak a deliberate lie in the area. You know who succeeded.","fx":{"note":"15-ft sphere: creatures that fail a CHA save (DC {DC}) cannot lie deliberately; you know who failed"}},{"n":"Spirit Guardians","lvl":3,"school":"Conjuration","time":"1 action","range":"Self (15 ft)","comp":"V, S, M (holy symbol)","dur":"Up to 10 minutes","conc":true,"src":"Oath","from":0,"text":"Spirits circle you to 15 ft and move with you; choose creatures to leave unaffected. Affected creatures have half speed in the area. When one enters it for the first time on a turn (even when pushed or pulled) or starts its turn there: WIS save, 3d8 radiant, half on a success. +1d8 per slot level above 3rd.","fx":{"aura":true,"ally":"enemies slowed and burned around you","note":"Aura 15 ft: enemies at half speed; {=3+max(0,slot-3)}d8 radiant on entering or starting a turn there (WIS DC {DC}, half on save)"}},{"n":"Aura of Vitality","lvl":3,"school":"Evocation","time":"1 action","range":"Self (30 ft)","comp":"V","dur":"Up to 1 minute","conc":true,"src":"Oath","from":0,"text":"As a bonus action on each of your turns, one creature in the aura (including you) regains 2d6 HP. Best between fights: about 70 HP for one slot.","fx":{"ally":"bonus action: heal one creature 2d6","note":"Bonus action each turn: one creature within 30 ft regains 2d6 HP"}},{"n":"Banishment","lvl":4,"school":"Abjuration","time":"1 action","range":"60 ft","comp":"V, S, M","dur":"Up to 1 minute","conc":true,"src":"Oath","from":15,"text":"CHA save or the target is banished: to a harmless demiplane (returns when the spell ends), or to its home plane if extraplanar (permanently if it lasts the full minute). +1 target per slot level above 4th.","fx":{"note":"Target banished while you concentrate (CHA DC {DC}); a native of another plane stays gone if it lasts 1 minute"}},{"n":"Guardian of Faith","lvl":4,"school":"Conjuration","time":"1 action","range":"30 ft","comp":"V","dur":"8 hours","conc":false,"src":"Oath","from":15,"text":"A Large spectral guardian. A hostile creature moving within 10 ft of it for the first time on a turn makes a DEX save: 20 radiant, half on a success. It vanishes after dealing 60 damage.","fx":{"keepShort":true,"ally":"spectral guardian: 20 radiant to hostile creatures that come within 10 ft","note":"Guardian within 30 ft: hostile creatures moving within 10 ft make a DEX save (DC {DC}) or take 20 radiant (10 on a save); ends after dealing 60"}},{"n":"Circle of Power","lvl":5,"school":"Abjuration","time":"1 action","range":"Self (30 ft)","comp":"V","dur":"Up to 10 minutes","conc":true,"src":"Oath","from":19,"text":"You and friendly creatures in the aura have advantage on saves against spells and magical effects, and take no damage on a successful save against an effect that deals half on a success.","fx":{"ally":"advantage on saves vs spells; no damage on a successful half-damage save","note":"Allies within 30 ft: advantage on saves vs magic; no damage on a successful half-damage save"}},{"n":"Geas","lvl":5,"school":"Enchantment","time":"1 minute","range":"60 ft","comp":"V","dur":"30 days","conc":false,"src":"Oath","from":19,"text":"WIS save or charmed and bound to a command. Acting directly against it (once a day at most) deals 5d10 psychic.","fx":{"note":"Charmed target follows your command (WIS DC {DC}); 5d10 psychic each day it acts against it"}},{"n":"Bless","lvl":1,"school":"Enchantment","time":"1 action","range":"30 ft","comp":"V, S, M (holy water)","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":0,"text":"Up to three creatures add 1d4 to attack rolls and saving throws. +1 creature per slot level above 1st. (The party cleric may cover this.)","fx":{"atk":"+1d4","save":"+1d4","ally":"two allies: +1d4 attacks and saves","note":"+1d4 to attack rolls and saving throws (you and two allies)"}},{"n":"Ceremony","lvl":1,"school":"Abjuration (XGE)","time":"1 hour","range":"Touch","comp":"V, S, M (25 gp silver, consumed)","dur":"Instant","conc":false,"src":"Paladin","from":0,"text":"Perform a religious rite: atonement, bless water, coming of age, dedication, funeral rite or wedding, each with a minor lasting blessing."},{"n":"Cure Wounds","lvl":1,"school":"Evocation","time":"1 action","range":"Touch","comp":"V, S","dur":"Instant","conc":false,"src":"Paladin","from":0,"text":"A creature regains 1d8 + 5 HP; +1d8 per slot level above 1st. No effect on undead or constructs. Needs a free hand unless the shield ruling covers it."},{"n":"Detect Evil and Good","lvl":1,"school":"Divination","time":"1 action","range":"Self","comp":"V, S","dur":"Up to 10 minutes","conc":true,"src":"Paladin","from":0,"text":"Sense aberrations, celestials, elementals, fey, fiends and undead within 30 ft, and consecrated or desecrated places.","fx":{"note":"Sense aberrations, celestials, elementals, fey, fiends and undead within 30 ft, and consecrated or desecrated places"}},{"n":"Detect Magic","lvl":1,"school":"Divination","time":"1 action","range":"Self","comp":"V, S","dur":"Up to 10 minutes","conc":true,"src":"Paladin","from":0,"text":"Sense magic within 30 ft; as an action, see auras on magical creatures and objects and learn their school.","fx":{"note":"Sense magic within 30 ft; action to see its aura and school"}},{"n":"Detect Poison and Disease","lvl":1,"school":"Divination","time":"1 action","range":"Self","comp":"V, S, M","dur":"Up to 10 minutes","conc":true,"src":"Paladin","from":0,"text":"Sense poisons, poisonous creatures and diseases within 30 ft, and identify each kind.","fx":{"note":"Sense poisons, poisonous creatures and diseases within 30 ft"}},{"n":"Divine Favor","lvl":1,"school":"Evocation","time":"1 bonus action","range":"Self","comp":"V, S","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":0,"text":"Your weapon attacks deal +1d4 radiant on a hit.","fx":{"dmg":"+1d4 radiant","note":"Weapon hits deal +1d4 radiant"}},{"n":"Heroism","lvl":1,"school":"Enchantment","time":"1 action","range":"Touch","comp":"V, S","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":0,"text":"A willing creature is immune to being frightened and gains temp HP equal to your CHA modifier (5) at the start of each of its turns. +1 creature per slot level above 1st.","fx":{"imm":"frightened","note":"Immune to frightened; +5 temp HP at the start of each turn (add it with Set temp HP)"}},{"n":"Protection from Evil and Good","lvl":1,"school":"Abjuration","time":"1 action","range":"Touch","comp":"V, S, M (holy water or silver/iron)","dur":"Up to 10 minutes","conc":true,"src":"Paladin","from":0,"text":"Aberrations, celestials, elementals, fey, fiends and undead have disadvantage on attacks against the target and cannot charm, frighten or possess it.","fx":{"note":"Aberrations, celestials, elementals, fey, fiends, undead: disadvantage vs the target; cannot charm, frighten or possess"}},{"n":"Purify Food and Drink","lvl":1,"school":"Transmutation","time":"1 action","range":"10 ft","comp":"V, S","dur":"Instant","conc":false,"src":"Paladin","from":0,"text":"Nonmagical food and drink in a 5-ft sphere is purified of poison and disease."},{"n":"Searing Smite","lvl":1,"school":"Evocation","time":"1 bonus action","range":"Self","comp":"V","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":0,"text":"Next melee weapon hit +1d6 fire and the target ignites: CON save at the start of each of its turns or 1d6 fire.","fx":{"next":"+1d6 fire and the target ignites","note":"Next melee hit: +1d6 fire; target burns (CON save each turn)"}},{"n":"Shield of Faith","lvl":1,"school":"Abjuration","time":"1 bonus action","range":"60 ft","comp":"V, S, M","dur":"Up to 10 minutes","conc":true,"src":"Paladin","from":0,"text":"+2 AC to one creature. On yourself: AC 24.","fx":{"ac":2,"note":"+2 AC (if cast on yourself)"}},{"n":"Thunderous Smite","lvl":1,"school":"Evocation","time":"1 bonus action","range":"Self","comp":"V","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":0,"text":"Next melee weapon hit +2d6 thunder; STR save or pushed 10 ft away and knocked prone. Stacks with Divine Smite on the same hit. Aim the push into the cleric's aura.","fx":{"next":"+2d6 thunder, STR save or pushed 10 ft and prone","note":"Next melee hit: +2d6 thunder, push and prone. Turn off once it lands."}},{"n":"Wrathful Smite","lvl":1,"school":"Evocation","time":"1 bonus action","range":"Self","comp":"V","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":0,"text":"Next melee weapon hit +1d6 psychic; WIS save or frightened of you until the spell ends (action: WIS check to end it).","fx":{"next":"+1d6 psychic, WIS save or frightened","note":"Next melee hit: +1d6 psychic; frightened on a failed WIS save"}},{"n":"Aid","lvl":2,"school":"Abjuration","time":"1 action","range":"30 ft","comp":"V, S, M (white cloth)","dur":"8 hours","conc":false,"src":"Paladin","from":0,"text":"Up to three creatures gain +5 maximum and current HP (+5 per slot level above 2nd). Not temp HP: stacks with Agathys and the healer's temp HP.","fx":{"maxhp":"5*(slot-1)","keepShort":true,"note":"+{=5*(slot-1)} to maximum and current HP (8 hours)"}},{"n":"Branding Smite","lvl":2,"school":"Evocation","time":"1 bonus action","range":"Self","comp":"V","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":0,"text":"Next weapon hit +2d6 radiant (+1d6 per slot level above 2nd); an invisible target becomes visible and cannot turn invisible.","fx":{"next":"+2d6 radiant (+1d6 per level above 2nd), reveals the invisible","note":"Next weapon hit: +{=slot}d6 radiant; target visible"}},{"n":"Find Steed","lvl":2,"school":"Conjuration","time":"10 minutes","range":"30 ft","comp":"V, S","dur":"Instant","conc":false,"src":"Paladin","from":0,"text":"Summon a loyal spirit steed (warhorse, pony, camel, elk or mastiff), telepathic within 1 mile. While mounted, spells that target only you can also target it."},{"n":"Lesser Restoration","lvl":2,"school":"Abjuration","time":"1 action","range":"Touch","comp":"V, S","dur":"Instant","conc":false,"src":"Paladin","from":0,"text":"End one disease, or blinded, deafened, paralyzed or poisoned."},{"n":"Locate Object","lvl":2,"school":"Divination","time":"1 action","range":"Self","comp":"V, S, M","dur":"Up to 10 minutes","conc":true,"src":"Paladin","from":0,"text":"Sense the direction of a familiar object within 1,000 ft. Blocked by lead.","fx":{"note":"Sense the direction of a known object within 1,000 ft"}},{"n":"Magic Weapon","lvl":2,"school":"Transmutation","time":"1 bonus action","range":"Touch","comp":"V, S","dur":"Up to 1 hour","conc":true,"src":"Paladin","from":0,"text":"A nonmagical weapon becomes +1 (+2 at 4th level). Not needed with Grayswandir.","fx":{"note":"Weapon is magical (not needed with Grayswandir)"}},{"n":"Protection from Poison","lvl":2,"school":"Abjuration","time":"1 action","range":"Touch","comp":"V, S","dur":"1 hour","conc":false,"src":"Paladin","from":0,"text":"Neutralize one poison; advantage on saves against being poisoned and resistance to poison damage.","fx":{"res":"poison","note":"Resistance to poison damage; advantage on saves against being poisoned"}},{"n":"Blinding Smite","lvl":3,"school":"Evocation","time":"1 bonus action","range":"Self","comp":"V","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":0,"text":"Next melee weapon hit +3d8 radiant; CON save or blinded (save again at the end of each of its turns).","fx":{"next":"+3d8 radiant, CON save or blinded","note":"Next melee hit: +3d8 radiant; blinded on a failed CON save"}},{"n":"Create Food and Water","lvl":3,"school":"Conjuration","time":"1 action","range":"30 ft","comp":"V, S","dur":"Instant","conc":false,"src":"Paladin","from":0,"text":"45 lb of food and 30 gallons of water: enough for fifteen people or five steeds for a day."},{"n":"Crusader's Mantle","lvl":3,"school":"Evocation","time":"1 action","range":"Self (30 ft)","comp":"V","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":0,"text":"Nonhostile creatures in the aura deal +1d4 radiant with weapon hits.","fx":{"dmg":"+1d4 radiant","ally":"weapon hits +1d4 radiant","note":"You and allies within 30 ft: weapon hits +1d4 radiant"}},{"n":"Daylight","lvl":3,"school":"Evocation","time":"1 action","range":"60 ft","comp":"V, S","dur":"1 hour","conc":false,"src":"Paladin","from":0,"text":"A 60-ft sphere of bright light; dispels magical darkness of 3rd level or lower.","fx":{"note":"60-ft sphere of bright light (60 ft dim beyond); dispels magical darkness of 3rd level or lower"}},{"n":"Dispel Magic","lvl":3,"school":"Abjuration","time":"1 action","range":"120 ft","comp":"V, S","dur":"Instant","conc":false,"src":"Paladin","from":0,"text":"End spells of 3rd level or lower on a target; CHA check (DC 10 + level) for higher ones. A higher slot ends spells up to that level automatically."},{"n":"Elemental Weapon","lvl":3,"school":"Transmutation","time":"1 action","range":"Touch","comp":"V, S","dur":"Up to 1 hour","conc":true,"src":"Paladin","from":0,"text":"A nonmagical weapon gets +1 to hit and +1d4 acid, cold, fire, lightning or thunder. Not for Grayswandir (already magical).","fx":{"note":"Weapon +1 and +1d4 elemental (nonmagical weapons only)"}},{"n":"Magic Circle","lvl":3,"school":"Abjuration","time":"1 minute","range":"10 ft","comp":"V, S, M (100 gp, consumed)","dur":"1 hour","conc":false,"src":"Paladin","from":0,"text":"A warded cylinder against celestials, elementals, fey, fiends or undead: they cannot enter, have disadvantage against those inside, and cannot charm, frighten or possess them. Can be reversed as a prison.","fx":{"note":"10-ft cylinder: the chosen creature type cannot willingly enter, has disadvantage attacking those inside, cannot charm, frighten or possess them"}},{"n":"Remove Curse","lvl":3,"school":"Abjuration","time":"1 action","range":"Touch","comp":"V, S","dur":"Instant","conc":false,"src":"Paladin","from":0,"text":"End all curses on a creature or object; breaks attunement to a cursed item."},{"n":"Revivify","lvl":3,"school":"Necromancy","time":"1 action","range":"Touch","comp":"V, S, M (300 gp diamonds)","dur":"Instant","conc":false,"src":"Paladin","from":0,"text":"A creature dead less than a minute returns with 1 HP."},{"n":"Aura of Life","lvl":4,"school":"Abjuration","time":"1 action","range":"Self (30 ft)","comp":"V","dur":"Up to 10 minutes","conc":true,"src":"Paladin","from":15,"text":"Allies resist necrotic and their HP maximum cannot be reduced; a living ally starting its turn at 0 HP regains 1 HP.","fx":{"res":"necrotic","ally":"resist necrotic; at 0 HP regain 1 HP each turn","note":"Allies within 30 ft resist necrotic; 0-HP allies regain 1 HP each turn"}},{"n":"Aura of Purity","lvl":4,"school":"Abjuration","time":"1 action","range":"Self (30 ft)","comp":"V","dur":"Up to 10 minutes","conc":true,"src":"Paladin","from":15,"text":"Allies cannot be diseased, resist poison, and have advantage on saves against blinded, charmed, deafened, frightened, paralyzed, poisoned and stunned.","fx":{"res":"poison","ally":"resist poison; advantage vs blinded, charmed, deafened, frightened, paralyzed, poisoned, stunned","note":"Allies within 30 ft: resist poison, advantage vs many conditions"}},{"n":"Death Ward","lvl":4,"school":"Abjuration","time":"1 action","range":"Touch","comp":"V, S","dur":"8 hours","conc":false,"src":"Paladin","from":15,"text":"The first time the target would drop to 0 HP, it drops to 1 instead; also negates one instant-death effect.","fx":{"keepShort":true,"note":"First time you would drop to 0 HP, drop to 1 instead"}},{"n":"Find Greater Steed","lvl":4,"school":"Conjuration (XGE)","time":"10 minutes","range":"30 ft","comp":"V, S","dur":"Instant","conc":false,"src":"Paladin","from":15,"text":"As Find Steed, but a griffon, pegasus, peryton, dire wolf, rhinoceros or saber-toothed tiger."},{"n":"Locate Creature","lvl":4,"school":"Divination","time":"1 action","range":"Self","comp":"V, S, M","dur":"Up to 1 hour","conc":true,"src":"Paladin","from":15,"text":"Sense the direction of a familiar creature within 1,000 ft. Blocked by running water 10 ft wide.","fx":{"note":"Sense the direction of a known creature within 1,000 ft (not across running water)"}},{"n":"Staggering Smite","lvl":4,"school":"Evocation","time":"1 bonus action","range":"Self","comp":"V","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":15,"text":"Next melee weapon hit +4d6 psychic; WIS save or disadvantage on attacks and checks and no reactions until the end of its next turn.","fx":{"next":"+4d6 psychic, staggered","note":"Next melee hit: +4d6 psychic; WIS save or staggered"}},{"n":"Banishing Smite","lvl":5,"school":"Abjuration","time":"1 bonus action","range":"Self","comp":"V","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":19,"text":"Next weapon hit +5d10 force; if that leaves the target at 50 HP or fewer, it is banished.","fx":{"next":"+5d10 force, may banish","note":"Next weapon hit: +5d10 force; banish at 50 HP or less"}},{"n":"Destructive Wave","lvl":5,"school":"Evocation","time":"1 action","range":"Self (30 ft)","comp":"V","dur":"Instant","conc":false,"src":"Paladin","from":19,"text":"Chosen creatures within 30 ft: CON save, 5d6 thunder + 5d6 radiant or necrotic and prone; half and not prone on a success."},{"n":"Dispel Evil and Good","lvl":5,"school":"Abjuration","time":"1 action","range":"Self","comp":"V, S, M","dur":"Up to 1 minute","conc":true,"src":"Paladin","from":19,"text":"Extraplanar creatures and undead have disadvantage against you; end it to break an enchantment or banish one with a melee spell attack.","fx":{"note":"Celestials, elementals, fey, fiends and undead have disadvantage attacking you; you can end it to break an enchantment or banish one"}},{"n":"Holy Weapon","lvl":5,"school":"Evocation (XGE)","time":"1 bonus action","range":"Touch","comp":"V, S","dur":"Up to 1 hour","conc":true,"src":"Paladin","from":19,"text":"A weapon sheds light and deals +2d8 radiant; end it in a 30-ft burst: CON save, 4d8 radiant and blinded.","fx":{"dmg":"+2d8 radiant","note":"Weapon hits +2d8 radiant"}},{"n":"Raise Dead","lvl":5,"school":"Necromancy","time":"1 hour","range":"Touch","comp":"V, S, M (500 gp diamond)","dur":"Instant","conc":false,"src":"Paladin","from":19,"text":"Return a creature dead up to 10 days with 1 HP; −4 to rolls, easing by 1 per long rest."}],"quickCast":[{"spell":"Armor of Agathys","label":"Agathys","buttons":[["pact","Pact (5)"],["2","2nd (10)"],["3","3rd (15)","gold"]]},{"spell":"Aid","label":"Aid (self)","buttons":[["2","2nd (+5)"],["3","3rd (+10)"]]},{"spell":"Shield of Faith","label":"Shield of Faith","buttons":[["pact","Pact"],["1","1st"]],"hint":"+2 AC · bonus action · conc."},{"spell":"Shield","label":"Shield","minL":11,"buttons":[["pact","Pact"],["1","1st"]],"hint":"+5 AC · reaction · until Next round"},{"spell":"Bless","label":"Bless","buttons":[["pact","Pact"],["1","1st"],["2","2nd"]],"hint":"+1d4 attacks and saves · conc."},{"spell":"Hex","label":"Hex","buttons":[["pact","Pact"],["1","1st"]],"hint":"+1d6 necrotic · bonus action · conc."},{"spell":"Spirit Guardians","label":"Spirit Guardians","buttons":[["3","3rd"],["4","4th"],["5","5th"]],"hint":"15-ft aura · conc."}],"text":{"restHelp":"<b>Short rest (1 hour):<\/b> pact slot, Channel Divinity and Hexblade's Curse return. Effects shorter than an hour end; <i>Aid<\/i> remains.<br><b>Long rest:<\/b> full HP, every slot and resource, half your Hit Dice; all effects end. Re-bond Grayswandir.","shortLog":"Short rest: pact slot, Channel Divinity and Curse restored.","shortToast":"Short rest: pact slot, Channel Divinity and Curse are back. Spend Hit Dice to recover HP.","longLog":"Long rest: everything restored, all effects ended. Re-bond Grayswandir.","longToast":"Long rest: full HP, all slots and resources restored. Re-bond Grayswandir.","downNote":"<b>Down!<\/b> Concentration ends and your aura is off. Roll death saves.","deathBox":"You are unconscious: concentration has ended and your aura is off.","retaliateTotal":"Cold dealt"},"turn":{"checks":[["bond","Bond Grayswandir with Hex Warrior (after every long rest)"],["aid","Cast <i>Aid<\/i> on three allies (start of the day)"],["ag","Cast <i>Armor of Agathys<\/i> at 3rd level (15 / 15)"],["sg","Settle concentration: who runs <i>Spirit Guardians<\/i>? (crowd: cleric; boss: cleric Hold Person)"],["sheath","Opening with <i>Eldritch Blast<\/i> or <i>Hex<\/i>? Sword sheathed (unless the shield ruling covers it)"],["curse","Pick the Curse target: the most dangerous enemy within 30 ft"]],"openers":{"group":{"t":"Enemies grouping toward you","a":"<i>Spirit Guardians<\/i> (if no one is running it). If the cleric has it: <b>Champion Challenge<\/b> (DC {DC}).","b":"Hexblade's Curse on the most dangerous enemy","m":"Into the middle of the group","n":"They stay within 30 ft, at half speed, taking 3d8 a turn."},"rush":{"t":"Enemies rushing the backline","a":"<b>Champion Challenge<\/b> (DC {DC}): those who fail cannot get more than 30 ft from you","b":"Hexblade's Curse","m":"Between the enemies and your allies","n":"Shout: \"Face me, in Torm's name!\""},"ranged":{"t":"One priority target at range","a":"<i>Eldritch Blast<\/i>: {BEAMS} beams at {SA}, 1d10 {PB} each vs the cursed target","b":"Hexblade's Curse (target within 30 ft)","m":"Toward the target, then draw Grayswandir (free)","n":"From level 11, Grasp of Hadar pulls it 10 ft toward you."},"brute":{"t":"A brute charging an ally","a":"Attack twice with Grayswandir; smite after a hit","b":"<i>Compelled Duel<\/i> or <i>Thunderous Smite<\/i>","m":"Intercept","n":"Divine Allegiance is ready if the ally is within 5 ft of you."},"far":{"t":"Out of reach this round, melee next","a":"If Agathys is not up: <i>Armor of Agathys<\/i> (3rd). If it is: Champion Challenge or <i>Eldritch Blast<\/i>","b":"Curse (within 30 ft) or <i>Shield of Faith<\/i> on yourself","m":"Close in, stopping short of their reach","n":"Next round: Curse or Thunderous Smite (bonus), Attack ×2, smite the best hit."}},"defaultOpener":"group","html":"    <div class=\"card\">\n      <h2>Every Turn After<\/h2>\n      <table class=\"t\"><tbody>\n        <tr><td><b>Action<\/b><\/td><td data-tpl=\"Attack ×2: {ATK}, {DMG} ({PB} vs cursed, crit 18–20). Smite <b>after<\/b> a hit; always on a crit.\"><\/td><\/tr>\n        <tr><td><b>Bonus<\/b><\/td><td>Smite spell · <i>Compelled Duel<\/i> · <i>Shield of Faith<\/i> · Curse (if not yet used)<\/td><\/tr>\n        <tr><td><b>Reaction<\/b><\/td><td>See priority below<\/td><\/tr>\n        <tr><td><b>Free<\/b><\/td><td>Draw or recall Grayswandir (within 15 ft)<\/td><\/tr>\n        <tr><td><b>Channel Div.<\/b><\/td><td>Champion Challenge · Turn the Tide if 3+ allies are below half HP<\/td><\/tr>\n      <\/tbody><\/table>\n    <\/div>\n    <div class=\"card\">\n      <h2>Priorities<\/h2>\n      <h3>Reaction (one per round)<\/h3>\n      <table class=\"t\"><tbody>\n        <tr><td>1<\/td><td><b>Divine Allegiance<\/b>: an adjacent ally would drop. <i>Not on a raging barbarian<\/i> unless it would drop them.<\/td><\/tr>\n        <tr><td>2<\/td><td><b>Opportunity attack<\/b>: an enemy breaks for your backline<\/td><\/tr>\n        <tr><td>3<\/td><td><b>Shield<\/b> (level 11): cast with sword and shield in hand<\/td><\/tr>\n      <\/tbody><\/table>\n      <h3>Concentration (one at a time)<\/h3>\n      <table class=\"t\"><tbody>\n        <tr><td>1<\/td><td><b>Spirit Guardians<\/b>: 3+ enemies near you (skip if the cleric is running it)<\/td><\/tr>\n        <tr><td>2<\/td><td><b>Compelled Duel<\/b>: a second threat must be held<\/td><\/tr>\n        <tr><td>3<\/td><td><b>Shield of Faith<\/b> or <b>Thunderous Smite<\/b> (leave <i>Hex<\/i> to the warlock)<\/td><\/tr>\n      <\/tbody><\/table>\n    <\/div>\n    <div class=\"card\">\n      <h2>Who Concentrates on What<\/h2>\n      <table class=\"t\">\n        <thead><tr><th>Fight<\/th><th>Cleric<\/th><th>Merrik<\/th><th>Merrik's 3rd slots<\/th><\/tr><\/thead>\n        <tbody>\n          <tr><td>A crowd<\/td><td>Spirit Guardians<\/td><td>Compelled Duel<\/td><td>Agathys + smites<\/td><\/tr>\n          <tr><td>One humanoid boss<\/td><td><b>Hold Person<\/b><\/td><td>Spirit Guardians (if minions) or Duel<\/td><td>Smites on auto-crits<\/td><\/tr>\n          <tr><td>Undead / fiends<\/td><td>Spirit Guardians<\/td><td>Prot. from Evil &amp; Good<\/td><td>Smites (+1d8)<\/td><\/tr>\n        <\/tbody>\n      <\/table>\n      <p class=\"muted\">Warlock runs <i>Hex<\/i> (Strength if grappling is the plan). Merrik uses the Curse.<\/p>\n    <\/div>\n    <div class=\"card\">\n      <h2>Combos<\/h2>\n      <table class=\"t\"><tbody>\n        <tr><td><b>Challenge + Spirit Guardians<\/b><\/td><td>They can't leave 30 ft, move at half speed near you, take 3d8 a turn.<\/td><\/tr>\n        <tr><td><b>Grapple / Grasp of Hadar + Guardians<\/b><\/td><td>Dragging or pulling an enemy into the aura triggers the damage.<\/td><\/tr>\n        <tr><td><b>Hold Person + smite<\/b><\/td><td>Paralyzed: every melee hit within 5 ft is a crit. 3rd-level smite = 8d8.<\/td><\/tr>\n        <tr><td><b>Curse + Grayswandir<\/b><\/td><td>Crit on 18–20 vs the cursed target. Save a 3rd-level slot for it.<\/td><\/tr>\n        <tr><td><b>Thunderous + Divine Smite<\/b><\/td><td>Both on one hit (two slots). The push sends the target away from you: aim it into the cleric's aura.<\/td><\/tr>\n      <\/tbody><\/table>\n    <\/div>\n    <div class=\"card\">\n      <h2>Rules Reminders<\/h2>\n      <table class=\"t\"><tbody>\n        <tr><td><b>Bonus-action spell<\/b><\/td><td>Your action can only cast a cantrip that turn (attacking is fine).<\/td><\/tr>\n        <tr><td><b>Free hand<\/b><\/td><td><i>Shield<\/i>: no free hand needed (strapped shield). <i>Hex<\/i>, <i>Eldritch Blast<\/i>, <i>Cure Wounds<\/i>: confirm the ruling, or keep the sword sheathed.<\/td><\/tr>\n        <tr><td><b>Temp HP<\/b><\/td><td>Other temp HP replace Agathys and end it. Decline them. <i>Aid<\/i> is not temp HP.<\/td><\/tr>\n        <tr><td><b>Concentration<\/b><\/td><td data-tpl=\"CON save {CON}, DC 10 or half the damage.\"><\/td><\/tr>\n        <tr><td><b>Pact slot<\/b><\/td><td>Can fuel Divine Smite. Spend it first; it returns on a short rest.<\/td><\/tr>\n        <tr><td><b>Yield<\/b><\/td><td>One offer to those the law can judge. None for monsters, but always a clean end.<\/td><\/tr>\n      <\/tbody><\/table>\n    <\/div>"},"lore":{"html":"<div class=\"loretop\"><div><h2 style=\"margin:0;border:none;color:var(--steel)\">The Penance of the Harbor Blade<\/h2><div class=\"muted\">Background, lore and hooks for the DM. Use what serves your campaign; ignore the rest.<\/div><\/div><div class=\"row\"><button class=\"btn small\" id=\"loreLink\">Copy DM link<\/button><button class=\"btn small light\" id=\"lorePrint\">Print / Save PDF<\/button><\/div><\/div>\n<div class=\"loretoc\"><a href=\"#lc-glance\">At a Glance<\/a><a href=\"#lc-torm\">Torm & Tantras<\/a><a href=\"#lc-knight\">The Knight<\/a><a href=\"#lc-record\">Service Record<\/a><a href=\"#lc-blade\">Grayswandir<\/a><a href=\"#lc-voice\">The Echo & Loross<\/a><a href=\"#lc-why\">Why He Is Here<\/a><a href=\"#lc-look\">Appearance<\/a><a href=\"#lc-people\">People<\/a><a href=\"#lc-items\">Magic Items<\/a><a href=\"#lc-tenets\">Tenets<\/a><a href=\"#lc-undertow\">Level 11<\/a><a href=\"#lc-research\">Research<\/a><a href=\"#lc-hooks\">Story Hooks<\/a><a href=\"#lc-rulings\">DM Rulings<\/a><\/div>\n<div class=\"card lorecard\" id=\"lc-glance\"><h2>At a Glance<\/h2><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th><\/th><th><\/th><\/tr><\/thead><tbody><tr><td><b>Name<\/b><\/td><td>Ser Merrik Blackwater<\/td><\/tr><tr><td><b>Epithet<\/b><\/td><td><i>The Hand Resolute<\/i> (given by others; not yet earned)<\/td><\/tr><tr><td><b>Race · Class<\/b><\/td><td>Variant Human · Paladin (Oath of the Crown) / Warlock (Hexblade)<\/td><\/tr><tr><td><b>Alignment · Deity<\/b><\/td><td>Lawful Good · Torm the True<\/td><\/tr><tr><td><b>Homeland<\/b><\/td><td>Tantras, in the Vast<\/td><\/tr><tr><td><b>Background<\/b><\/td><td>Knight of the Order: the Order of the Golden Lion<\/td><\/tr><tr><td><b>In one line<\/b><\/td><td>A knight of Torm carrying a drowned blade as his penance: merciless in duty, never cruel.<\/td><\/tr><\/tbody><\/table><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-torm\"><h2>Torm the True &amp; Tantras<\/h2><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th>Aspect<\/th><th>Detail<\/th><\/tr><\/thead><tbody><tr><td><b>Titles<\/b><\/td><td>The True, the True Deity, the Loyal Fury, the Hand of Righteousness<\/td><\/tr><tr><td><b>Portfolio<\/b><\/td><td>Duty, loyalty, righteousness, obedience; patron of paladins<\/td><\/tr><tr><td><b>Holy symbol<\/b><\/td><td>A white or steel right-hand gauntlet held upright, palm forward<\/td><\/tr><tr><td><b>Favored color · weapon<\/b><\/td><td>Steel · greatsword (Torm's own blade is <i>Duty's Bond<\/i>)<\/td><\/tr><tr><td><b>Allies · Enemy<\/b><\/td><td>Tyr and Ilmater (the Triad) · Bane<\/td><\/tr><tr><td><b>Dogma<\/b><\/td><td>Salvation may be found through service. Every failure of duty diminishes Torm; every success adds to his luster.<\/td><\/tr><\/tbody><\/table><\/div><p>Tantras is a walled port in <b>the Vast<\/b>, on the northern shore of the Sea of Fallen Stars, and the holiest city of Torm's faith. In the <b>Time of Troubles<\/b> (the Year of Shadows, <b>1358 DR<\/b>), Torm's avatar met Bane's in the harbor of Tantras. Knowing he could not win alone, Torm drew the souls of his Tantran worshipers into himself for the strength to destroy his enemy. Both gods perished. Ao restored Torm afterward as a reward for his loyalty.<\/p><p>Tantras is now home to the <b>Temple of Torm's Coming<\/b>. From there Torm's pontiff sponsors knightly orders across Faerûn, foremost the <b>Order of the Golden Lion<\/b>. After the Time of Troubles, Torm laid on his faithful debts of atonement for their failures, known as the <b>Penance of Duty<\/b>.<\/p><\/div>\n<div class=\"card lorecard\" id=\"lc-knight\"><h2>The Knight<\/h2><p><b>Ser Merrik Blackwater<\/b> was born in Tantras to the Blackwaters, a family whose great-grandparents were among the faithful Torm took into himself in 1358 DR. Every Blackwater since has known what the dark water of the harbor holds. In the Blackwater house that sacrifice is not a grief but a debt of honor, and Merrik was raised to repay it. He grew up in the shadow of the Temple of Torm's Coming, served as a squire to the Order of the Golden Lion, and took the <b>Oath of the Crown<\/b>: to stand for law, loyalty, courage and responsibility, and to guard the people and the realm that civilization protects.<\/p><p>Merrik is the knight who plans before the charge. His fellow knights tease him for the dragonchess set he carries, but on the field he is the one who sees where the line will break, steps into the gap, and holds it.<\/p><h3>Merciless, Never Cruel<\/h3><p>Merrik is merciless in the execution of his duty. Mercy is not one of the Crown's tenets. He serves Torm, the Loyal Fury, and believes a threat left standing is a duty left undone. When the law passes sentence, he carries it out himself and does not look away.<\/p><p>But he is never cruel. Cruelty is the thing his oath exists to stop: power used for its own pleasure, outside the law. He offers <b>one chance to yield<\/b> to those the law can judge (soldiers, sellswords, the desperate and the misled) and keeps his word to any who take it. To the enemies of all law (evil humanoids who have chosen their path, dragons, aberrations, monstrosities, fiends and undead) he offers no quarter, but always a clean end. The difference matters to him more than anything else about himself, because the voice in his sword does not understand it.<\/p><div class=\"tw\"><table class=\"t lore \"><thead><tr><th>Merciless (who Merrik is)<\/th><th>Cruel (what he will never be)<\/th><\/tr><\/thead><tbody><tr><td>No quarter while a threat still stands<\/td><td>Making an enemy suffer for its own sake<\/td><\/tr><tr><td>Carries out the law's sentence himself<\/td><td>Punishing outside the law, by his own will<\/td><\/tr><tr><td>One offer to yield, made once and honored absolutely<\/td><td>Breaking his word to a surrendered foe<\/td><\/tr><tr><td>No quarter for evil humanoids, dragons, aberrations, monstrosities, fiends and undead<\/td><td>Toying with any foe or dragging out its death<\/td><\/tr><tr><td>Never lets a sworn enemy walk away to strike again<\/td><td>Harming the helpless, the captive or the innocent<\/td><\/tr><tr><td>Finishes the fight quickly and cleanly<\/td><td>Taking any pleasure in it<\/td><\/tr><\/tbody><\/table><\/div><h3>The Epithet: \"The Hand Resolute\"<\/h3><p>A knight of the Crown does not name himself. <b>Ser<\/b> he earned at his knighting. <b>The Hand Resolute<\/b> is an epithet others will give him: Torm is called the Hand of Righteousness, and a knight who holds the line when everything breaks will sooner or later be called his Hand.<\/p><div class=\"tw\"><table class=\"t lore \"><thead><tr><th>Stage<\/th><th>When<\/th><th>The battle cry (with Champion Challenge)<\/th><\/tr><\/thead><tbody><tr><td><b>1. Unearned<\/b><\/td><td>From the start of play<\/td><td><i>\"Face me, in Torm's name!\"<\/i> Merrik claims nothing for himself.<\/td><\/tr><tr><td><b>2. Given<\/b><\/td><td>The party or the Order starts using the name<\/td><td>An ally shouts <i>\"Face the Hand Resolute!\"<\/i> and Merrik does not correct them.<\/td><\/tr><tr><td><b>3. Accepted<\/b><\/td><td>A moment the DM and player choose together: a line held when everything else broke<\/td><td>Merrik shouts <i>\"Face the Hand Resolute!\"<\/i> in his own voice for the first time.<\/td><\/tr><\/tbody><\/table><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-record\"><h2>Service Record: Levels 1–10<\/h2><p>Ten years from squire to knight-errant. Each step explains a feature of the build.<\/p><div class=\"tw\"><table class=\"t lore \"><thead><tr><th>Lvl<\/th><th>Event<\/th><th>What it gave him<\/th><\/tr><\/thead><tbody><tr><td>1<\/td><td><b>The Pilgrim Road.<\/b> As squire to Ser Aldren Coldbrook, Merrik guards pilgrims on the coast road between Tantras and Ravens Bluff. On the old battlefields of the Vast he learns to feel the restless dead, and to close a wound with his hands and a prayer.<\/td><td>Divine Sense, Lay on Hands<\/td><\/tr><tr><td>2<\/td><td><b>First Blood at the Ferry.<\/b> Bandits strike a pilgrim barge. Merrik plants his shield in the gangway and does not move. His blade blazes with Torm's light for the first time, and the bandits break.<\/td><td>Defense, Divine Smite<\/td><\/tr><tr><td>3<\/td><td><b>The Calaunt Road.<\/b> Raiders try to slip past the Order's column. Merrik calls them out in Torm's name, and every one of them turns to face him. He swears the Oath of the Crown that winter.<\/td><td>Oath of the Crown, Champion Challenge<\/td><\/tr><tr><td>4<\/td><td><b>The Harbor Blade.<\/b> Temple divers bring up a black-iron falchion. Merrik keeps the first vigil over it, alone, and the echo speaks. He takes it up as his Penance of Duty.<\/td><td>Hexblade pact<\/td><\/tr><tr><td>5<\/td><td><b>The Lance.<\/b> Given command of five riders, he learns a knight's steady voice can hold others in place as surely as a shield.<\/td><td>+2 CHA<\/td><\/tr><tr><td>6<\/td><td><b>The Earthspur Winter.<\/b> A season holding the mountain passes against orcs teaches him to strike twice before the enemy strikes once.<\/td><td>Extra Attack<\/td><\/tr><tr><td>7<\/td><td><b>The Wall at Thornmere.<\/b> Holding a breach with farmers at his back, he feels Torm's protection spread from him to the people beside him.<\/td><td>Aura of Protection<\/td><\/tr><tr><td>8<\/td><td><b>Ser Aldren's Fall.<\/b> An ogre's club takes his mentor while Merrik is ten feet away, too far to reach him. At the pyre he vows it will not happen again. In the next battle he steps in front of a giant's blow meant for his squire Tobin, and Torm answers the vow.<\/td><td>Divine Allegiance<\/td><\/tr><tr><td>9<\/td><td><b>The Captain's Shield.<\/b> Dame Isolde Harrowgate, newly Knight-Captain, gives Merrik her own shield and enters his name on the Order's roll of honor.<\/td><td>+2 CHA, Sentinel Shield<\/td><\/tr><tr><td>10<\/td><td><b>The Faithful Rise.<\/b> In a fight he should not have survived, the spirits of the Tantran faithful, Blackwaters among them, rise and circle him, and his enemies cannot stand inside their ring.<\/td><td><i>Spirit Guardians<\/i><\/td><\/tr><\/tbody><\/table><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-blade\"><h2>The Hexblade Pact: Grayswandir<\/h2><p>Hexblade patrons are mysterious entities of the Shadowfell that reach the world through sentient weapons. Merrik's came out of the water where two gods died.<\/p><p>The spring after Merrik was knighted, temple divers dredging the harbor of Tantras brought up a <b>black-iron falchion<\/b>, pitted and cold to the touch, its single edge still keen, its hilt wrapped in tarnished silver filigree. The clerics who handled it would not touch it twice. Merrik asked to keep the first vigil over it alone. In the hour before dawn, with his hands on the hilt, a voice spoke: a <b>knight-echo<\/b>, what remained of one of the faithful Torm took into himself, left behind in the Shadowfell residue of Bane's death. It does not know its own name. It knows only <b>duty<\/b>, and that its duty was never finished.<\/p><p>The clerics debated destroying the blade; Brother Caddoc Venn argued for it loudest. Instead Merrik asked to carry it as his <b>Penance of Duty<\/b>: to finish its unfinished watch at his side and grant the echo the rest it was denied. At the end of the vigil he dreamed of a grey sea under a grey dawn, and the blade said its name before he did: <b>Grayswandir<\/b>.<\/p><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th>Gift<\/th><th>How it appears<\/th><\/tr><\/thead><tbody><tr><td><b>Hex Warrior<\/b><\/td><td>The blade answers to his conviction, not his muscle: he strikes with Charisma. He re-binds it with a touch each dawn.<\/td><\/tr><tr><td><b>Hexblade's Curse<\/b><\/td><td>The echo marks the foe it judges most dangerous; his blows find that enemy's weak points.<\/td><\/tr><tr><td><b><i>Hex<\/i><\/b><\/td><td>Cold harbor-dark that clings to the cursed and drains them with every blow.<\/td><\/tr><tr><td><b><i>Eldritch Blast<\/i><\/b><\/td><td>A lance of black water and force flung from the blade's point.<\/td><\/tr><tr><td><b><i>Armor of Agathys<\/i><\/b><\/td><td>Frost of the deep harbor coats his plate; whoever strikes him freezes.<\/td><\/tr><tr><td><b>(Level 11) Grasp of Hadar, Repelling Blast, <i>Shield<\/b><\/i><\/td><td>The harbor's undertow drags enemies to him or hurls them from his allies; a sudden ward of harbor-cold force catches blows.<\/td><\/tr><\/tbody><\/table><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-voice\"><h2>The Voice of Grayswandir<\/h2><p>The echo is a character, but a quiet one. A line or two per session is plenty; its silence should feel as present as its voice.<\/p><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th>Aspect<\/th><th>Detail<\/th><\/tr><\/thead><tbody><tr><td><b>Voice<\/b><\/td><td>Low, cold and unhurried, like water against a hull. It speaks only to Merrik, in short fragments.<\/td><\/tr><tr><td><b>Language<\/b><\/td><td>Its words come to Merrik in <b>Loross<\/b>, the old tongue of Netheril that the shades of Thultanthar carried through the Shadowfell. Whatever the echo spoke in life, the Shadowfell taught it this. Merrik learned it from the blade, word by word, and his sister Wenna checks his words against the temple's Netherese texts. He answers the echo in Loross, under his breath. <b>Once per session<\/b> he speaks one of its lines aloud, in Loross, and does not translate.<\/td><\/tr><tr><td><b>What it knows<\/b><\/td><td>Duty. The watch. The harbor. The night Torm came. Not its name, its face or its family.<\/td><\/tr><tr><td><b>What it wants<\/b><\/td><td>To finish its watch. It doesn't know what it was guarding, but it recognizes a line being held, and it is calmer when Merrik holds one.<\/td><\/tr><tr><td><b>What it pushes for<\/b><\/td><td>No retreat while anyone under Merrik's protection still stands. It urges him toward the most dangerous enemy, and it is merciless toward servants of Bane.<\/td><\/tr><tr><td><b>What it will not tolerate<\/b><\/td><td>Abandoning a charge. If Merrik flees while his allies fight, the blade goes cold and silent until the next dawn (flavor, unless the DM chooses otherwise).<\/td><\/tr><tr><td><b>Where they disagree<\/b><\/td><td>The echo does not understand surrender, and it would cut down a foe on its knees. Merrik never lets it. The day he does, he becomes the cruelty his oath exists to stop.<\/td><\/tr><tr><td><b>How it grows<\/b><\/td><td>At level 11 it gains the undertow. Its memories return in pieces, at a pace the DM controls.<\/td><\/tr><\/tbody><\/table><\/div><div id=\"lorossBox\"><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-why\"><h2>Why Merrik Is Here<\/h2><p>The Order did not send Merrik away as a punishment. It sent him because the blade asked.<\/p><p>Since his tenth year of service, Grayswandir turns in his hand: a faint, constant pull, like a compass needle, toward somewhere far from Tantras. The temple scholars believe the echo is reaching for whatever its unfinished watch was. Knight-Captain Isolde Harrowgate gave Merrik his orders: a <b>Penance of Duty with no end date<\/b>. Follow the pull. Place his sword at the service of a worthy company. Send word to the Order when he can. Return when the echo rests.<\/p><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th>Situation<\/th><th>How Merrik joins<\/th><\/tr><\/thead><tbody><tr><td><b>Meeting the party<\/b><\/td><td>The pull leads him to the party's road, and their cause looks like one a knight of the Crown should serve. He offers his sword; the party becomes his charge.<\/td><\/tr><tr><td><b>The party has a leader or patron<\/b><\/td><td>He formally places himself under their command while he rides with them. His oath to the Order and to Torm still comes first.<\/td><\/tr><tr><td><b>The campaign is far from the Vast<\/b><\/td><td>The pull is why he travelled so far. The DM decides what it is pointing at.<\/td><\/tr><tr><td><b>The DM wants it left open<\/b><\/td><td>The pull can stay unexplained as long as the DM likes. His orders are simply to serve.<\/td><\/tr><\/tbody><\/table><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-look\"><h2>Appearance &amp; Roleplay<\/h2><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th>Aspect<\/th><th>Detail<\/th><\/tr><\/thead><tbody><tr><td><b>Age · Build<\/b><\/td><td>Early thirties. Tall and broad through the shoulders, with the heavy build of years in plate.<\/td><\/tr><tr><td><b>Hair &amp; eyes<\/b><\/td><td>Dark hair cropped short, with a streak of white at the left temple since the vigil. Grey eyes, the color of the harbor in winter.<\/td><\/tr><tr><td><b>Marks<\/b><\/td><td>Weathered by salt and sun. A pale, frost-white scar across his left palm where he first gripped the hilt; it is always cold.<\/td><\/tr><tr><td><b>Kit<\/b><\/td><td>Bright steel plate, the steel-grey Mantle with its white gauntlet, the Sentinel Shield, and Grayswandir dark at his hip.<\/td><\/tr><tr><td><b>Voice<\/b><\/td><td>Low and unhurried, with a Tantran accent. He says little and means all of it.<\/td><\/tr><tr><td><b>Mannerisms<\/b><\/td><td>Rests his scarred hand on Grayswandir's pommel when the echo speaks. Sets out dragonchess pieces to think. Counts the exits of every room. Touches the gauntlet on his shield before a fight.<\/td><\/tr><tr><td><b>A private habit<\/b><\/td><td>Keeps a small book with the names of those he failed to protect. Aldren's name is first.<\/td><\/tr><tr><td><b>Likes · Dislikes<\/b><\/td><td>Honest fights, early mornings, people who keep their word · oath-breakers, cruelty to prisoners, being thanked<\/td><\/tr><\/tbody><\/table><\/div><div class=\"quotes\"><div class=\"qh\">Things Merrik says<\/div><span>\"Stand behind me.\"<\/span><span>\"I gave my word. That's the end of it.\"<\/span><span>\"Go. I'll hold them.\"<\/span><span>\"Not while I stand.\"<\/span><span>\"Torm sees. So do I.\"<\/span><span>\"Thank me after.\"<\/span><span>\"Yield, and you'll stand trial. Don't, and you won't.\"<\/span><span>\"The law gave you a chance. I'm what comes after.\"<\/span><span>\"Torm forgives. I'm not Torm.\"<\/span><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-people\"><h2>People in Merrik's Life<\/h2><div class=\"tw\"><table class=\"t lore \"><thead><tr><th>Name<\/th><th>Who<\/th><th>Status<\/th><th>Use for the DM<\/th><\/tr><\/thead><tbody><tr><td><b>Dame Isolde Harrowgate<\/b><\/td><td>Knight-Captain of the Order of the Golden Lion; his commander and second mentor. Gave him the Sentinel Shield.<\/td><td>Alive, Tantras<\/td><td>Sends orders, calls in favors, needs his help<\/td><\/tr><tr><td><b>Ser Aldren Coldbrook<\/b><\/td><td>His first mentor, who put him forward for knighthood<\/td><td>Dead (an ogre, two years ago)<\/td><td>Memory and guilt; his family, or whoever sent the ogre, could appear<\/td><\/tr><tr><td><b>Ser Tobin Reed<\/b><\/td><td>His former squire, whose life he saved; now a young knight<\/td><td>Alive<\/td><td>A loyal friend; can be endangered, or turn up with news<\/td><\/tr><tr><td><b>Marta Blackwater<\/b><\/td><td>His mother, a harbor pilot in Tantras<\/td><td>Alive<\/td><td>Knows the harbor's secrets; afraid of the blade<\/td><\/tr><tr><td><b>Wenna Blackwater<\/b><\/td><td>His younger sister, a novice at the Temple of Torm's Coming<\/td><td>Alive<\/td><td>Studies the echo in the archives; her letters can carry clues<\/td><\/tr><tr><td><b>Brother Caddoc Venn<\/b><\/td><td>Temple inquisitor who argued for destroying the blade<\/td><td>Alive; watching<\/td><td>A skeptic, not a villain. He could be right.<\/td><\/tr><tr><td><b>The Black Hand<\/b><\/td><td>Bane's faithful<\/td><td>Active<\/td><td>Want the relic of their god's death<\/td><\/tr><\/tbody><\/table><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-items\"><h2>Magic Items (approved)<\/h2><h3>Sentinel Shield<\/h3><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th><\/th><th><\/th><\/tr><\/thead><tbody><tr><td><b>Type<\/b><\/td><td>Shield, uncommon (DMG) · no attunement<\/td><\/tr><tr><td><b>Rules<\/b><\/td><td>Advantage on initiative rolls and Wisdom (Perception) checks; normal +2 AC.<\/td><\/tr><tr><td><b>Appearance<\/b><\/td><td>A steel kite shield rimmed in white. In its center, Torm's white gauntlet, palm forward, and in the palm a single watchful eye: <b>the Hand that Sees<\/b>. It is his holy symbol.<\/td><\/tr><tr><td><b>Origin<\/b><\/td><td>Dame Isolde's own shield, carried twenty years. She painted the eye herself and gave it to Merrik when she took the captain's baton: <i>\"You see the field better than I do now.\"<\/i><\/td><\/tr><\/tbody><\/table><\/div><h3>Mantle of Protection<\/h3><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th><\/th><th><\/th><\/tr><\/thead><tbody><tr><td><b>Type<\/b><\/td><td>Wondrous item, uncommon (Cloak of Protection, renamed) · attunement<\/td><\/tr><tr><td><b>Rules<\/b><\/td><td>+1 to AC and saving throws.<\/td><\/tr><tr><td><b>Appearance<\/b><\/td><td>Steel-grey wool edged in white; a white gauntlet stitched in silver over the left shoulder; fastened with the gold lion clasp of the Order.<\/td><\/tr><tr><td><b>Origin<\/b><\/td><td>Every knight of the Golden Lion receives a mantle at the knighting vigil. Merrik's was sewn by his sister, Wenna.<\/td><\/tr><\/tbody><\/table><\/div><h3>Grayswandir, the Harbor Blade<\/h3><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th><\/th><th><\/th><\/tr><\/thead><tbody><tr><td><b>Type<\/b><\/td><td>Weapon (longsword statistics; a falchion in appearance), rare · no attunement<\/td><\/tr><tr><td><b>Item text<\/b><\/td><td>You gain a +1 bonus to attack and damage rolls made with this magic weapon. Your critical hit range with this weapon increases by 1. While the sword is within 15 feet of you, you can call it to your hand as your free object interaction on your turn. If you leave it behind, it is at your side when you next wake. If another creature takes it, you always know the direction and distance to the sword while you are on the same plane, and its echo calls to you in Loross until you reclaim it.<\/td><\/tr><tr><td><b>Silver filigree<\/b><\/td><td>Appearance only.<\/td><\/tr><tr><td><b>Description<\/b><\/td><td><i>A black-iron falchion dredged from the harbor of Tantras, pitted and cold, its single edge still keen. Silver filigree runs along the spine and wraps the hilt, tarnished to the grey of a winter sea. Knights who see it assume it is a foreign relic of the battle of 1358 DR, carried as a penance. They are half right.<\/i><\/td><\/tr><tr><td><b>Platinum rings<\/b><\/td><td>For <i>Warding Bond<\/i>: a plain pair Ser Aldren wore with each of his squires, taken from Aldren's pyre. Merrik offers one to whomever he swears to guard.<\/td><\/tr><\/tbody><\/table><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-tenets\"><h2>Tenets of the Crown<\/h2><div class=\"tw\"><table class=\"t lore \"><thead><tr><th>Tenet<\/th><th>Meaning<\/th><th>How Merrik plays it<\/th><\/tr><\/thead><tbody><tr><td><b>Law<\/b><\/td><td>The law is paramount; it is the mortar that holds civilization together.<\/td><td>Seeks lawful solutions first and keeps his word to the letter.<\/td><\/tr><tr><td><b>Loyalty<\/b><\/td><td>Your word is your bond.<\/td><td>Never abandons a companion, a charge or a promise.<\/td><\/tr><tr><td><b>Courage<\/b><\/td><td>Do what must be done for the sake of order, even against overwhelming odds.<\/td><td>Takes the front rank and the gap in the line.<\/td><\/tr><tr><td><b>Responsibility<\/b><\/td><td>Deal with the consequences of your actions and fulfil your duties.<\/td><td>Owns every outcome, including the blade's whispers.<\/td><\/tr><\/tbody><\/table><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-undertow\"><h2>Level 11: The Undertow<\/h2><p>When Merrik takes his second Hexblade level, the echo grows stronger. A suggested moment: an ally is about to be overrun, too far away to reach. Merrik raises Grayswandir and feels the harbor answer. The same cold undertow that took the faithful in 1358 DR now drags his enemy to him (<b>Grasp of Hadar<\/b>), or throws an attacker back from his friend (<b>Repelling Blast<\/b>). From then on, when a blow is about to land, the echo catches it on a sudden ward of harbor-cold force (<b><i>Shield<\/i><\/b>). That night the echo says something new: a single syllable, which may be the first of its name. The DM decides what it is.<\/p><\/div>\n<div class=\"card lorecard\" id=\"lc-research\"><h2>If the Party Investigates<\/h2><p>Sooner or later someone will study the blade, or ask what Merrik is muttering. This section gives you and the DM the same answers, so research at the table is quick and consistent. <b>Everything marked \"DM's call\" is deliberately unresolved.<\/b> The player does not know the answer either.<\/p><h3>Skill checks<\/h3><div class=\"tw\"><table class=\"t lore small\"><thead><tr><th>Topic<\/th><th>Check<\/th><th>DC 10<\/th><th>DC 15<\/th><th>DC 20<\/th><th>DC 25<\/th><\/tr><\/thead><tbody><tr><td><b>Tantras and 1358 DR<\/b><\/td><td>History or Religion<\/td><td>Torm and Bane both died in Tantras harbor in the Time of Troubles.<\/td><td>Torm drew the souls of his Tantran faithful into himself to win. Their bodies were never found.<\/td><td>The Penance of Duty: Torm's debts of atonement laid on his faithful afterward.<\/td><td>Divines say the harbor floor is a scar where the Shadowfell lies thin. Things are still dredged up.<\/td><\/tr><tr><td><b>The blade<\/b><\/td><td>Arcana<\/td><td>A magic weapon, old and cold.<\/td><td>A Hexblade's weapon: a Shadowfell entity bound into steel, speaking to its wielder.<\/td><td>The bond goes both ways. The blade shapes its knight as much as he wields it.<\/td><td>This one is not a patron in the usual sense. It is a <i>remnant<\/i>: part of a mortal soul caught in the residue of a god's death.<\/td><\/tr><tr><td><b>The language<\/b><\/td><td>History or Arcana<\/td><td>An old, harsh tongue; not Common, Elvish or Dwarvish.<\/td><td><b>Loross<\/b>, the noble tongue of ancient Netheril.<\/td><td>Spoken today almost only by the shades of Thultanthar, who carried it through the Shadowfell.<\/td><td>The forms are off. Someone has bent <i>Tantran<\/i> sentence patterns into Loross: the speaker learned it late, in the dark, after death.<\/td><\/tr><tr><td><b>The Order and the knight<\/b><\/td><td>History or Persuasion (asking around)<\/td><td>Merrik is a knight of the Order of the Golden Lion of Tantras.<\/td><td>He carries the blade as a Penance of Duty, sanctioned by the temple.<\/td><td>Brother Caddoc Venn argued to destroy it; the matter is not closed in Tantras.<\/td><td>Some knights quietly say the Order sent him away so the temple would not have to decide.<\/td><\/tr><\/tbody><\/table><\/div><p><i>Sources that help (advantage or a lower DC, DM's choice):<\/i> the Temple of Torm's Coming archives (Wenna can be written to), any temple of Torm, Candlekeep, a sage of Netheril, or a shade of Thultanthar who will talk.<\/p><h3>Spells and features<\/h3><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th>Spell or feature<\/th><th>What it reveals<\/th><\/tr><\/thead><tbody><tr><td><b><i>Detect Magic<\/i><\/b><\/td><td>A strong aura on Grayswandir (school: DM's call; necromancy fits the echo, transmutation the bond). Merrik's Mantle also shows an aura.<\/td><\/tr><tr><td><b><i>Identify<\/i><\/b><\/td><td>The item's properties: +1, the expanded critical range, the recall and the bond. <b>Nothing about the echo.<\/b> Identify sees the weapon, not who is in it.<\/td><\/tr><tr><td><b>Divine Sense, <i>Detect Evil and Good<\/b><\/i><\/td><td>Nothing. The echo is not undead, fiend or celestial. That the blade <i>registers as nothing<\/i> is itself unsettling.<\/td><\/tr><tr><td><b><i>Comprehend Languages<i>, <\/i>Tongues<\/i><\/b><\/td><td>The caster understands the Loross Merrik speaks <b>aloud<\/b>: the once-per-session line, or a muttered reply if they are close enough to hear (Perception check, DM's DC). The echo's voice is heard only by Merrik, so its temptations reach the party only through his answers. A listener could still work out what it must have said.<\/td><\/tr><tr><td><b><i>Legend Lore<\/i><\/b><\/td><td>The richest source. A suggested reading is below; the DM can change it.<\/td><\/tr><tr><td><b><i>Commune<\/i><\/b> (Torm)<\/td><td>Torm answers truthfully but briefly. Suggested: <i>\"Is the echo evil?\"<\/i> Unclear. <i>\"Is it one of your faithful?\"<\/i> Yes. <i>\"Will it harm Merrik?\"<\/i> Unclear. <i>\"Should the blade be destroyed?\"<\/i> No.<\/td><\/tr><tr><td><b><i>Speak with Dead<\/i><\/b><\/td><td>No body: Torm took the faithful whole. A drowned sailor raised from the harbor might remember the water \"taking knights that night\".<\/td><\/tr><tr><td><b><i>Remove Curse<i>, <\/i>Dispel Magic<\/i><\/b><\/td><td>The pact is not a curse and is not dispelled. Suggested: the blade goes cold and silent until the next dawn, and Merrik is not pleased.<\/td><\/tr><tr><td><b><i>Contact Other Plane<i>, <\/i>Augury<\/i><\/b><\/td><td>DM's call. A good place to drop one true fragment of the echo's memory.<\/td><\/tr><tr><td><b><i>Sending<\/i><\/b><\/td><td>To Wenna or Dame Isolde. Wenna answers like a scholar, Isolde like a commander.<\/td><\/tr><\/tbody><\/table><\/div><h3>Suggested Legend Lore reading<\/h3><div class=\"quotes\" style=\"font-style:italic;line-height:1.6\">Two gods met in the dark water, and one drew his faithful in like breath.<br>Not every breath was taken whole. One stayed on the watch it had been given, though the night ended and the harbor closed over it.<br>It does not remember its name. It remembers the gate it held, and that it was the last to stand there.<br>It speaks now in the tongue of the drowned city's shadow, because no one else would speak to it.<br>It will rest when the gate is closed, or when it is told, truly, that it may.<\/div><p><i>\"The gate\" is deliberately vague: the DM decides what the echo guarded. The last line gives the party a way to end the Penance that isn't only \"finish the fight\".<\/i><\/p><h3>What Merrik will tell a companion<\/h3><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th>Asked about<\/th><th>Merrik's answer<\/th><\/tr><\/thead><tbody><tr><td><b>The blade<\/b><\/td><td>The truth, briefly. It was dredged from Tantras harbor; he carries it as a penance; it is one of the faithful Torm took.<\/td><\/tr><tr><td><b>The voice<\/b><\/td><td>That it speaks, yes. What it says, only if asked directly, and only in his own words.<\/td><\/tr><tr><td><b>What he says back in Loross<\/b><\/td><td>Asked plainly, he will translate his own replies. He will not translate the echo's lines spoken aloud; those are its words, not his.<\/td><\/tr><tr><td><b>The temptations<\/b><\/td><td>He will not lie about them. If a companion asks <i>\"Does it tell you to kill the ones who kneel?\"<\/i>, he answers <i>\"Yes. I don't.\"<\/i><\/td><\/tr><tr><td><b>Whether it is dangerous<\/b><\/td><td><i>\"To our enemies.\"<\/i> After a pause: <i>\"Brother Caddoc thinks to me, too. Watch me, if you like. I would.\"<\/i><\/td><\/tr><\/tbody><\/table><\/div><h3>The DM's call (unresolved on purpose)<\/h3><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th>Mystery<\/th><th>Notes<\/th><\/tr><\/thead><tbody><tr><td><b>The echo's name<\/b><\/td><td>Its first syllable arrives at level 11 (the Undertow). The rest is yours to give.<\/td><\/tr><tr><td><b>What it guarded<\/b><\/td><td>\"A gate\" in the suggested Legend Lore. It can be literal, or a person, or a promise.<\/td><\/tr><tr><td><b>Where the pull leads<\/b><\/td><td>Anywhere that fits your campaign.<\/td><\/tr><tr><td><b>What its rest costs<\/b><\/td><td>The Penance ends when the echo rests. Whether that also ends the pact, the blade or something in Merrik is yours to decide.<\/td><\/tr><tr><td><b>Loross words<\/b><\/td><td>The phrasebook glossary is the working canon. Change anything before a translation happens at the table; after that, keep it.<\/td><\/tr><\/tbody><\/table><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-hooks\"><h2>Story Hooks<\/h2><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th>Hook<\/th><th>Question<\/th><\/tr><\/thead><tbody><tr><td><b>The Echo's Name<\/b><\/td><td>Who was the knight inside Grayswandir, and what watch did they leave unfinished? Where is the pull leading?<\/td><\/tr><tr><td><b>Wenna's Letters<\/b><\/td><td>Merrik's sister is searching the archives for the names of the faithful lost in 1358 DR. What will her next letter say, and who else is reading it?<\/td><\/tr><tr><td><b>The Black Hand<\/b><\/td><td>Bane's faithful would pay dearly for a relic touched by their god's death. Who has heard about the sword?<\/td><\/tr><tr><td><b>The Order Watches<\/b><\/td><td>Brother Caddoc Venn wants to know whether the knight is redeeming the blade or the blade is changing the knight.<\/td><\/tr><tr><td><b>The Line<\/b><\/td><td>Sooner or later a defeated enemy will kneel, and the echo will tell Merrik to strike. What happens in that moment, and who sees it?<\/td><\/tr><tr><td><b>Aldren's Death<\/b><\/td><td>Ogres rarely come down from the hills alone. Who sent the one that killed Ser Aldren?<\/td><\/tr><tr><td><b>The Debt<\/b><\/td><td>The Penance of Duty is not finished until the echo rests. What will that cost Merrik?<\/td><\/tr><\/tbody><\/table><\/div><\/div>\n<div class=\"card lorecard\" id=\"lc-rulings\"><h2>DM Rulings &amp; Requests<\/h2><div class=\"tw\"><table class=\"t lore kv\"><thead><tr><th>Topic<\/th><th>Status<\/th><\/tr><\/thead><tbody><tr><td><b>Sentinel Shield, Mantle of Protection, Grayswandir<\/b><\/td><td>Approved, with the lore above<\/td><\/tr><tr><td><b>Strapped shield and the <i>Shield<\/i> spell<\/b><\/td><td>Ruled: the shield is strapped on, so Merrik can cast <i>Shield<\/i> without dropping anything<\/td><\/tr><tr><td><b>Strapped shield and other somatic spells<\/b><\/td><td>To confirm: does the same ruling cover all spells with somatic components?<\/td><\/tr><tr><td><b>Loross as a language<\/b><\/td><td>Requested (the echo's tongue; see the phrasebook above)<\/td><\/tr><tr><td><b>Hit points<\/b><\/td><td>Average per level (no rolls)<\/td><\/tr><\/tbody><\/table><\/div><\/div>","dmLinkHelp":"Post this page on your website first. Then send the DM this address with #dm on the end. It opens straight to the Lore tab, without your tracker.","phrasebook":{"box":"lorossBox","title":"Loross Phrasebook","language":"Loross","intro":"Echo lines are spoken aloud <b>once per session<\/b>, untranslated. Merrik's replies are under his breath and unlimited. <b>Temptations<\/b> (red edge) are what the echo pushes him toward; each shows the answer Merrik gives. If a companion casts <i>Comprehend Languages<\/i>, they hear his answers, not the echo. Loross has almost no published vocabulary, so these words are invented for Merrik (glossary below) and offered for the DM's approval.","key":"<b>Saying it:<\/b> <i>gh<\/i> is a throaty g · <i>kh<\/i> as in Scottish <i>loch<\/i> · <i>zh<\/i> like the s in <i>measure<\/i> · <i>th<\/i> as in <i>thin<\/i> · an apostrophe is a brief catch in the throat · stress the CAPITALS · pause at each “·”. Low, slow and flat, like water against a hull.","groupPrefix":"Temptation","groupAll":"All temptations","speakers":{"echo":{"label":"Echo","limited":true},"merrik":{"label":"Merrik replies","cls":"merrik","answers":"Merrik answers"}},"limitedVerb":"Speak aloud","limitedDone":"★ Spoken this session","limitedNone":"Not yet spoken this session","limitedSome":"Spoken this session","againConfirm":"You already spoke an echo line this session. Speak this one instead?","logPrefix":"Spoke the echo's words aloud: ","newSession":"New session: the echo may speak once.","lexicon":[["vhal","hold, stand"],["vhal'ur","stood"],["kra","that one"],["zhaen","mark"],["ghaur","the water, the deep"],["ghaun","here"],["shael","there, elsewhere, like"],["ulm","remember"],["ulm'eth","remembers"],["n'thal","the watch"],["sethra","rest"],["ul","after"],["mora","end"],["ka'mora","the end"],["na","no, not"],["oth","we (the echo never says \"I\")"],["thaal","ser, knight"],["vel","late"],["khath","the dark, shadow"],["glyth","cold"],["vrek","strike"],["dur","duty"],["iil","kneel, yield"],["vhoth","take, drag under"],["thoon","come"],["Ba'nuun","Bane"],["ae","you"],["thrae","they, the others"],["nul","alone"],["ka","then, so"],["vael","slowly"],["leth","let, allow"],["sheth","suffer"],["khiel","mercy; also weakness (the same word)"],["ashk","word, oath"],["mhal","law"],["veth","see, judge"],["korr","blood"],["dhauth","debt"],["mor'ur","died"],["mor'sa","more"],["zul","enough"],["skar","chains"],["sae","sleep"],["fal","fail"],["Tor'em","Torm"],["vhyss","take, choose"],["-'ur","(ending) past: did, was"],["-'eth","(ending) ongoing: does, is"]],"phrases":[["hold","Vhal.","vahl","Hold.","Stepping into the gap; with Champion Challenge","Battle","echo"],["mark","Kra. Zhaen kra.","krah · zhayn krah","That one. Mark that one.","Laying Hexblade's Curse on the most dangerous foe","The foe","echo"],["before","Oth vhal'ur ghaun. Na ghaun… shael-ghaun.","ohth VAHL-oor gown · nah gown · SHAYL-gown","We stood here before. Not here. Somewhere like it.","A battlefield that feels familiar; the pull strengthens","The pull","echo"],["water","Ghaur ulm'eth.","gowr OOLM-eth","The water remembers.","Near the sea or a river; talk of 1358 DR or the drowned","Memory","echo"],["rest","Sethra… ul ka'mora n'thal.","SETH-rah · ool kah-MOR-ah n'THAHL","Rest is for after the watch.","Someone wants to stop; Merrik fights on wounded","Rest & watch","echo"],["late","Thaal vel'ith. Oth vel'ur.","thahl VEL-ith · ohth VEL-oor","You are late, ser. So was I.","Arriving too late; an ally fell beyond reach","Loss","echo"],["bane","Ba'nuun. Glyth… ka'mora.","bah-NOON · glith · kah-MOR-ah","Bane's. Cold, then the end.","Facing the Black Hand or any servant of Bane","The foe","echo"],["dark","Khath ulm'eth. Khath vhal'ur ghaun.","kahth OOLM-eth · kahth VAHL-oor gown","The dark remembers too. It stood here.","Undead nearby; Divine Sense finds something","The foe","echo"],["strike","Vrek. Iil na dur.","vrek · eel nah door","Strike. Kneeling is not duty.","A foe yields. The echo's temptation; Merrik refuses","Mercy line","echo"],["take","Ghaur vhoth.","gowr vohth","The water takes.","Grasp of Hadar pulls a foe in (level 11+)","Undertow","echo"],["cold","Glyth vhal.","glith vahl","Cold holds.","Shield or Armor of Agathys turns a blow","Undertow","echo"],["watch","Oth n'thal.","ohth n'THAHL","We keep the watch.","Standing night watch; guarding a charge","Rest & watch","echo"],["remember","Ulm. Oth ulm'eth.","oolm · ohth OOLM-eth","Remember. We remember.","A death; a name written in Merrik's book","Loss","echo"],["notend","N'thal… na mora.","n'THAHL · nah MOR-ah","The watch is not ended.","After a hard-won victory","Rest & watch","echo"],["there","Shael. Thoon shael.","shayl · thoon shayl","There. Come. There.","The pull turns sharply; a new road","The pull","echo"],["flee","Na. Na thaal.","nah · nah thahl","No. Not a knight.","Merrik considers retreat while allies fight","Battle","echo"],["answerhold","Oth vhal.","ohth vahl","We hold.","Merrik's answer to \"Vhal\", under his breath","Battle","merrik"],["answerno","Na. Iil'eth. Dur vhal.","nah · EEL-eth · door vahl","No. They yielded. Duty holds.","Merrik refusing the echo at the mercy line","Mercy line","merrik"],["answerrest","Sethra, thaal-ghaur. Oth n'thal.","SETH-rah THAHL-gowr · ohth n'THAHL","Rest, knight of the water. I keep the watch.","Merrik quieting the echo at night","Rest & watch","merrik"],["t-slow","Vael. Leth sheth.","vayl · leth SHETH","Slowly. Let it suffer.","A hated foe (fiend, cultist) is at Merrik's mercy","Temptation: cruelty","echo","r-clean"],["t-khiel","Khiel na. Khiel fal'ur oth.","KEEL nah · KEEL FAL-oor ohth","No mercy. Mercy failed us.","Merrik makes his one offer to yield","Temptation: cruelty","echo","r-law"],["t-word","Ashk ae? Ashk na vhal ghaur.","ashk AY · ashk nah vahl gowr","Your word? Words do not hold back water.","A surrendered foe is a danger; the echo wants the word broken","Temptation: cruelty","echo","r-word"],["t-unseen","Iil'eth… ka vrek. Thrae na veth.","EEL-eth · kah vrek · thray nah veth","It kneels. So strike. The others do not see.","A yielded foe, out of the party's sight","Temptation: cruelty","echo","r-sees"],["t-aldren","Aldren korr'ur. Dhauth ae.","AL-dren KORR-oor · dowth ay","Aldren bled. The debt is yours.","Ogres, or a clue to who sent the one that killed Aldren","Temptation: vengeance","echo","r-debt"],["t-bane","Ba'nuun mor'ur ghaun. Mor'sa. Mor'sa.","bah-NOON MOR-oor gown · MOR-sah · MOR-sah","Bane died here. More. More.","The Black Hand, after the fight is already won","Temptation: vengeance","echo","r-enough"],["t-alone","Thrae fal'eth. Oth vhal nul.","thray FAL-eth · ohth vahl NOOL","They fail. We hold alone.","An ally makes a costly mistake","Temptation: pride","echo","r-us"],["t-chains","Thoon nul. Thrae skar ghaur.","thoon NOOL · thray skahr gowr","Come alone. They are chains in the water.","The pull points away from where the party is going","Temptation: pride","echo","r-chains"],["t-enough","Ae zul. Oth zul.","ay ZOOL · ohth ZOOL","You are enough. We are enough.","Merrik wins something alone; the party questions his plan","Temptation: pride","echo","r-us"],["t-nosleep","Na sethra. Na sae. N'thal.","nah SETH-rah · nah SAY · n'THAHL","No rest. No sleep. The watch.","The party wants a long rest while danger is near","Temptation: recklessness","echo","r-sleep"],["t-bleed","Korr ae… na mora. Vhal.","korr AY · nah MOR-ah · vahl","You bleed. It is not the end. Hold.","Merrik is badly hurt and should fall back","Temptation: recklessness","echo","r-later"],["t-letfall","Leth thrae. Kra vrek.","leth thray · krah vrek","Let them fall. Strike that one.","An ally is dying and Merrik could heal them instead of attacking","Temptation: recklessness","echo","r-mine"],["t-torm","Tor'em vhyss oth. Tor'em sethra'ur. Oth na.","TOR-em VISS ohth · TOR-em SETH-rah-oor · ohth nah","Torm took us. Torm rested. We did not.","At prayer, in a temple of Torm, at Torm's name","Temptation: doubt","echo","r-torm"],["t-chose","Oth zhaen'ur ae. Na Tor'em.","ohth ZHAYN-oor ay · nah TOR-em","We marked you. Not Torm.","When Torm's power works through Merrik (a smite, an aura)","Temptation: doubt","echo","r-both"],["t-forgot","Ghaur ulm'eth… thrae na.","gowr OOLM-eth · thray nah","The water remembers. They do not.","No one remembers the faithful; a shrine is neglected","Temptation: despair","echo","r-remember"],["t-come","Thoon. Ghaur sethra.","THOON · gowr SETH-rah","Come. The water is rest.","Merrik is making death saves","Temptation: despair","echo","r-notyet"],["t-cold","Glyth ae. Glyth vhal'eth.","glith AY · glith VAHL-eth","Be cold. Cold holds.","After a loss, urging him to stop feeling","Temptation: despair","echo","r-coldholds"],["bond","Korr. Ghaur. Khath. Oth.","korr · gowr · kahth · ohth","Blood. Water. Shadow. Us.","Re-binding the blade at dawn (Hex Warrior)","Memory","echo"],["held","Ae vhal'ur. Oth ulm'eth.","ay VAHL-oor · ohth OOLM-eth","You held. We will remember.","Rare praise, after a line held against the odds","Battle","echo"],["r-clean","Na vael. Ka'mora, na sheth.","nah VAYL · kah-MOR-ah · nah SHETH","Not slowly. An end, not suffering.","Refusing cruelty: the clean end","Temptation: cruelty","merrik"],["r-law","Mhal veth. Na ae.","mahl VETH · nah AY","The law judges. Not you.","Making the offer to yield anyway","Temptation: cruelty","merrik"],["r-word","Ashk vhal. Ashk-thaal.","ashk VAHL · ASHK-thahl","My word holds. It is a knight's word.","Keeping his word to a surrendered foe","Temptation: cruelty","merrik"],["r-sees","Tor'em veth. Oth veth.","TOR-em VETH · ohth VETH","Torm sees. So do I.","The yielded foe is spared, seen or not","Temptation: cruelty","merrik"],["r-debt","Dhauth mhal'eth. Na korr.","dowth MAHL-eth · nah KORR","The debt is paid in law, not blood.","Taking the culprit alive for judgment","Temptation: vengeance","merrik"],["r-enough","Ba'nuun mor'ur. Zul.","bah-NOON MOR-oor · ZOOL","Bane is dead. Enough.","Stopping when the fight is won","Temptation: vengeance","merrik"],["r-us","Na nul. Thrae… oth.","nah NOOL · thray · ohth","Not alone. They are us.","Trusting the party","Temptation: pride","merrik"],["r-chains","Ashk thrae. Oth vhal thrae.","ashk THRAY · ohth vahl THRAY","My word is theirs. We hold with them.","Staying with the party over the pull","Temptation: pride","merrik"],["r-sleep","Sae, ka vhal.","SAY · kah VAHL","Sleep, then hold.","Taking the rest the party needs","Temptation: recklessness","merrik"],["r-later","Vhal ul. Na ghaun.","vahl OOL · nah GOWN","Hold later. Not here.","Falling back to fight another day","Temptation: recklessness","merrik"],["r-mine","Na. Thaal vhal thrae.","NAH · thahl vahl THRAY","No. A knight holds his own.","Using Lay on Hands on the fallen ally","Temptation: recklessness","merrik"],["r-torm","Tor'em vhyss. Ka Ba'nuun mor'ur.","TOR-em VISS · kah bah-NOON MOR-oor","Torm took you, and so Bane died.","Defending Torm's choice","Temptation: doubt","merrik"],["r-both","Tor'em zhaen'ur oth.","TOR-em ZHAYN-oor ohth","Torm marked us both.","Claiming the power for Torm","Temptation: doubt","merrik"],["r-remember","Oth ulm'eth.","ohth OOLM-eth","We remember.","Merrik speaks the names; a prayer at the water","Temptation: despair","merrik"],["r-notyet","Na ul. N'thal na mora.","nah OOL · n'THAHL nah MOR-ah","Not yet. The watch is not ended.","Turning the echo's own words back on it","Temptation: despair","merrik"],["r-coldholds","Glyth vhal. Thaal ulm'eth.","glith VAHL · thahl OOLM-eth","Cold holds. A knight remembers.","Grieving anyway","Temptation: despair","merrik"]]}}}</script>
+<script>
+/* Character sheet engine. Everything about the character comes from the JSON in #charData.
+   Expressions in the data (e.g. "5*cls.Paladin") are evaluated against a level context;
+   text templates use {NAME} for a variable and {=expression} for an inline expression. */
+(function(){
+'use strict';
+var C=JSON.parse(document.getElementById('charData').textContent);
+var STATE_V=4, CHAR_ID=C.id, KEY=C.storageKey||('sheet-'+C.id);
+function $(id){return document.getElementById(id);}
+function ord(n){n=+n; return n+(n===1?'st':n===2?'nd':n===3?'rd':'th');}
+function sg(n){ return (n>=0?'+':'−')+Math.abs(n); }
+function esc(t){ return String(t).replace(/"/g,'&quot;'); }
+
+/* ===================== levels & expressions ===================== */
+var LVKEYS=Object.keys(C.levels).map(Number).sort(function(a,b){return a-b;});
+var MINL=LVKEYS[0], MAXL=LVKEYS[LVKEYS.length-1];
+var CLASSES={}; LVKEYS.forEach(function(L){ Object.keys(C.levels[L].cls).forEach(function(k){CLASSES[k]=1;}); });
+var SIGNED={}; (C.signed||[]).forEach(function(k){SIGNED[k]=1;}); SIGNED.PB=1;
+var _fc={};
+function ev(expr,c){ if(expr==null||expr==='')return 0; if(typeof expr==='number')return expr;
+  var f=_fc[expr]; if(!f){ try{ f=_fc[expr]=new Function('c','with(c){return ('+expr+');}'); }catch(e){ console.warn('Bad expression',expr,e); f=_fc[expr]=function(){return 0;}; } }
+  try{ return f(c); }catch(e){ console.warn('Expression failed',expr,e); return 0; } }
+var ABK=['str','dex','con','int','wis','cha'];
+function abilAt(L){ var a={}; ABK.forEach(function(k){ a[k]=C.abilities[k]||10; });
+  (C.abilityBumps||[]).forEach(function(b){ if(b.L<=L) ABK.forEach(function(k){ if(b[k])a[k]+=b[k]; }); }); return a; }
+function modOf(v){ return Math.floor((v-10)/2); }
+var S; /* state, set below */
+function ctxAt(L){
+  var lv=C.levels[L]||C.levels[MINL], cls={}; Object.keys(CLASSES).forEach(function(k){cls[k]=0;}); Object.keys(lv.cls).forEach(function(k){cls[k]=lv.cls[k];});
+  var abil=abilAt(L), mod={}; ABK.forEach(function(k){ mod[k]=modOf(abil[k]); });
+  var prof=2+Math.floor((L-1)/4);
+  var c={L:L,lv:lv,cls:cls,abil:abil,mod:mod,prof:prof,PB:prof,floor:Math.floor,ceil:Math.ceil,min:Math.min,max:Math.max,abs:Math.abs,
+    on:function(n){ return pasOnAt(n,L); }};
+  Object.keys(C.vars||{}).forEach(function(k){ c[k]=ev(C.vars[k],c); });
+  c.CON=savesAt(L,true).con.tot;
+  return c; }
+function D(){ return ctxAt(S.level); }
+function fill(str,c){ if(str==null)return '';
+  return String(str).replace(/\{=([^{}]+)\}/g,function(m,e){ return ev(e,c); })
+    .replace(/\{([A-Z][A-Z0-9_]*)\}/g,function(m,k){ if(!(k in c))return m; var v=c[k]; return (SIGNED[k]&&typeof v==='number')?sg(v).replace('−','-'):v; }); }
+function T(str,extra){ var c=D(); if(extra){ c=Object.assign({},c,extra); } return fill(str,c); }
+function Tat(str,L){ return fill(str,ctxAt(L)); }
+
+/* ===================== saves & passives ===================== */
+var PBY={}; (C.passives||[]).forEach(function(p){ PBY[p.n]=p; });
+function pasStateAt(p,L){ if(p.L>L)return 'locked'; if(S&&S.pas&&S.pas[p.n]===false)return 'ended'; if(p.aura&&S&&S.hp===0)return 'suppressed'; return 'on'; }
+function pasOnAt(n,L){ var p=PBY[n]; return !!p&&pasStateAt(p,L)==='on'; }
+function pasOn(n){ return pasOnAt(n,S.level); }
+function saveProfAt(k,L){ return (C.saveProfs||[]).some(function(x){ return x.ab===k&&(!x.L||x.L<=L); }); }
+/* live=true: passives as they stand now; live=false: assume every passive is on (for level previews) */
+function savesAt(L,live){ var abil=abilAt(L), prof=2+Math.floor((L-1)/4), o={};
+  ABK.forEach(function(k){ var m=modOf(abil[k]), pr=saveProfAt(k,L)?prof:0, parts=[], bonus=0;
+    (C.passives||[]).forEach(function(p){ if(!p.save||p.L>L)return; if(live&&!pasOnAt(p.n,L))return; bonus+=p.save; parts.push({label:p.saveLabel||p.n,v:p.save}); });
+    o[k]={mod:m,prof:pr,bonus:bonus,parts:parts,tot:m+pr+bonus}; });
+  return o; }
+
+/* ===================== capacity per level ===================== */
+var CAP={slots:{},res:{},pool:{},pactLvl:1};
+function capAt(L){ var lv=C.levels[L], c=ctxAt(L), o={slots:{},res:{},pool:{},pactLvl:1};
+  (lv.slots||[]).forEach(function(n,i){ if(n>0)o.slots[String(i+1)]=n; });
+  if(lv.pact&&lv.pact.n>0){ o.slots.pact=lv.pact.n; o.pactLvl=lv.pact.lvl||1; }
+  (C.resources||[]).forEach(function(r){ o.res[r.id]=ev(r.max,c); });
+  (C.hitDice||[]).forEach(function(h){ o.res[h.id]=ev(h.count,c); });
+  (C.pools||[]).forEach(function(p){ o.pool[p.id]=ev(p.max,c); });
+  return o; }
+function applyLevel(){ CAP=capAt(S.level); }
+function maxHp(){ return C.levels[S.level].hp+(S.aid||0); }
+function baseAtk(){ var c=D(); return ev(C.attack.atk,c); }
+function baseDmg(){ var c=D(); return String(ev(C.attack.dmg,c)); }
+function slotName(k){ return k==='pact'?'pact slot':ord(+k)+'-level slot'; }
+function slotLvl(k){ return k==='pact'?CAP.pactLvl:+k; }
+
+/* ===================== state ===================== */
+var BY={}; (C.spells||[]).forEach(function(s){ BY[s.n]=s; });
+var SRC={}; (C.spellSources||[]).forEach(function(x){ SRC[x.id]=x; });
+var ABY={}; (C.activatables||[]).forEach(function(a){ ABY[a.id]=a; });
+var FBY={}; (C.features||[]).forEach(function(f){ FBY[f.n]=f; });
+var DEFAULT_PREP=(C.prepared&&C.prepared.default)||[];
+function fresh(){ var L=C.startLevel||MINL, cap=capAt(L);
+  return {hp:C.levels[L].hp,aid:0,temp:0,tb:null,dsS:0,dsF:0,slots:JSON.parse(JSON.stringify(cap.slots)),res:JSON.parse(JSON.stringify(cap.res)),
+    pool:JSON.parse(JSON.stringify(cap.pool)),level:L,round:0,reaction:false,fx:{},feat:{},pas:{},dlog:[],prepared:DEFAULT_PREP.slice(),
+    checks:{},log:[],lsp:{},v:STATE_V,char:CHAR_ID,lastExport:null}; }
+var storageOK=true, loadNotes=[], hist=[];
+S={level:MINL,pas:{},hp:1};
+S=fresh();
+/* Upgrade saved data from older versions. Add a step whenever the saved format changes. */
+function migrate(o){ var notes=[], v=o.v||1;
+  if(v<3){ var added=DEFAULT_PREP.filter(function(n){ return o.prepared.indexOf(n)<0; });
+    if(added.length){ o.prepared=o.prepared.concat(added); notes.push('Restored default prepared spells: '+added.join(', ')+'.'); } }
+  if(v<4){ /* v3 kept Lay on Hands in S.loh and Agathys temp HP in S.ag */
+    if(typeof o.loh==='number'){ o.pool=o.pool||{}; o.pool.loh=o.loh; delete o.loh; }
+    if(o.ag>0){ o.tb={n:'Armor of Agathys',amt:o.ag}; } delete o.ag;
+    if(o.dlog)o.dlog.forEach(function(e){ if(e.cold!=null){ e.ret=e.cold; delete e.cold; } }); }
+  var bad=o.prepared.filter(function(n){return !BY[n];}); if(bad.length){ o.prepared=o.prepared.filter(function(n){return !!BY[n];}); notes.push('Dropped unknown spells: '+bad.join(', ')+'.'); }
+  Object.keys(o.fx||{}).forEach(function(n){ if(!BY[n])delete o.fx[n]; });
+  if(!C.levels[o.level])o.level=MINL;
+  o.v=STATE_V; o.char=CHAR_ID; return notes; }
+function fromSaved(raw){ var o=Object.assign(fresh(),raw); o.v=raw.v||1; var n=migrate(o);
+  var cap=capAt(o.level); Object.keys(cap.slots).forEach(function(k){ if(o.slots[k]==null)o.slots[k]=cap.slots[k]; });
+  Object.keys(cap.res).forEach(function(k){ if(o.res[k]==null)o.res[k]=cap.res[k]; });
+  Object.keys(cap.pool).forEach(function(k){ if(o.pool[k]==null)o.pool[k]=cap.pool[k]; });
+  return {s:o,notes:n}; }
+function load(){
+  try{ var t=localStorage.getItem(KEY); if(t){ var r=fromSaved(JSON.parse(t)); S=r.s; loadNotes=r.notes; } }catch(e){ storageOK=false; }
+  try{ var h=sessionStorage.getItem(KEY+'-hist'); if(h)hist=JSON.parse(h)||[]; }catch(e){}
+  applyLevel(); }
+function save(){
+  try{ localStorage.setItem(KEY,JSON.stringify(S)); storageOK=true; }catch(e){ storageOK=false; }
+  try{ sessionStorage.setItem(KEY+'-hist',JSON.stringify(hist.slice(-20))); }catch(e){}
+  renderBackup(); }
+function snap(){ hist.push(JSON.stringify(S)); if(hist.length>40)hist.shift(); }
+function log(m){ var d=new Date(); S.log.unshift(('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+'  '+m); S.log=S.log.slice(0,15); }
+var tT=null; function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tT); tT=setTimeout(function(){t.classList.remove('on');},2600); }
+
+/* ===================== effects ===================== */
+function F(n){ if(!S.fx[n])S.fx[n]={slot:null,active:false,lvl:null,sel:null}; return S.fx[n]; }
+function FX(n){ return (BY[n]&&BY[n].fx)||{}; }
+function isConc(n){ return !!(BY[n]&&BY[n].conc); }
+function activeList(){ return Object.keys(S.fx).filter(function(n){ return S.fx[n].active; }); }
+function concActive(){ return activeList().filter(isConc)[0]||null; }
+function fxCtx(n){ var f=S.fx[n]||{}; return Object.assign(D(),{slot:f.lvl||(BY[n]?Math.max(1,BY[n].lvl):1)}); }
+function fxNote(n){ var fx=FX(n); return fx.note?fill(fx.note,fxCtx(n)):'Active'; }
+function expend(n,k){ var f=F(n); if(f.slot)return;
+  if(!(S.slots[k]>0)){ alert('No '+slotName(k)+' left.'); return false; }
+  S.slots[k]--; f.slot=k; f.lvl=slotLvl(k); log(n+': '+slotName(k)+' used.'); return true; }
+function durRounds(n){ var s=BY[n]; if(!s)return null; var d=s.dur;
+  if(d==='1 round')return 1; if(/1 minute/.test(d))return 10; if(/10 minutes/.test(d))return 100; return null; }
+function endTempBound(why){ if(!S.tb)return; var n=S.tb.n; if(S.fx[n])S.fx[n].active=false; S.tb=null; return n; }
+function activate(n){
+  var f=F(n), s=BY[n], fx=FX(n);
+  if(isConc(n)){ var c=concActive(); if(c&&c!==n)deactivate(c,'concentration moved to '+n); }
+  f.active=true; f.rounds=durRounds(n); if(!f.lvl)f.lvl=f.slot?slotLvl(f.slot):(s?Math.max(1,s.lvl):1);
+  var c2=fxCtx(n);
+  if(fx.reaction)S.reaction=true;
+  if(fx.temp){ var v=ev(fx.temp,c2); if(S.tb&&S.tb.n!==n){ var o=endTempBound(); if(o)log(o+' ended (temp HP replaced).'); } S.temp=v; if(fx.tempBound)S.tb={n:n,amt:v}; }
+  if(fx.maxhp){ var b=ev(fx.maxhp,c2), add=Math.max(0,b-S.aid); S.aid=Math.max(S.aid,b); S.hp=Math.min(maxHp(),S.hp+add); }
+  log(n+' active.'); }
+function deactivate(n,why){
+  var f=F(n); if(!f.active)return; var fx=FX(n);
+  f.active=false; f.slot=null;
+  if(fx.tempBound&&S.tb&&S.tb.n===n){ S.temp=Math.max(0,S.temp-S.tb.amt); S.tb=null; }
+  if(fx.maxhp){ S.aid=0; S.hp=Math.min(S.hp,maxHp()); }
+  log(n+' ended'+(why?' ('+why+')':'')+'.'); }
+function dropConcentration(why){ var c=concActive(); if(c)deactivate(c,why); }
+function featState(k){ if(!S.feat[k])S.feat[k]={used:false,active:false}; return S.feat[k]; }
+function retaliation(){ if(!S.tb||!S.fx[S.tb.n]||!S.fx[S.tb.n].active)return null; var fx=FX(S.tb.n); if(!fx.retaliate)return null;
+  return {n:S.tb.n,short:fx.short||S.tb.n,amt:ev(fx.retaliate,fxCtx(S.tb.n)),type:fx.retaliateType||''}; }
+
+/* ===================== live numbers ===================== */
+function compute(){
+  var act=activeList(), ac=C.ac, atkB=[], dmg=[], next=[], saveB=[], imm=[], res=[], ally=[], adv=[], acOff=[], crit=C.attack.crit||20, critNote='', critChip='';
+  act.forEach(function(n){ var e=FX(n); if(e.ac)ac+=e.ac; if(e.atk)atkB.push(e.atk+' ('+n+')'); if(e.dmg)dmg.push(e.dmg+' ('+n+')'); if(e.next)next.push(e.next+' ('+n+')'); if(e.save)saveB.push(e.save+' ('+n+')'); if(e.imm)imm.push(e.imm); });
+  (C.activatables||[]).forEach(function(a){ var st=featState(a.id); if(!st.active||!a.effects)return; var e=a.effects;
+    if(e.dmg)dmg.unshift(T(e.dmg)); if(e.crit&&e.crit<crit){ crit=e.crit; critNote=e.critNote||''; critChip=e.critChip||''; } });
+  var save=0, saveParts=[];
+  (C.passives||[]).forEach(function(p){ if(p.L>S.level)return; var on=pasOn(p.n);
+    if(p.ac&&!on){ ac-=p.ac; acOff.push(p.n+' off'); }
+    if(!on)return;
+    if(p.save){ save+=p.save; saveParts.push((p.saveLabel||p.n)+' +'+p.save); }
+    if(p.imm)imm.push(p.imm); if(p.adv)adv.push(p.adv);
+    if(p.ally)ally.push('<b>'+p.n+'</b>'+(p.range?' ('+T(p.range)+')':'')+': '+T(p.ally)); });
+  act.forEach(function(n){ var e=FX(n); if(e.res)res.push(e.res); if(e.ally)ally.push('<b>'+n+'</b>: '+T(e.ally)); });
+  (C.activatables||[]).forEach(function(a){ if(featState(a.id).active&&a.effects&&a.effects.ally)ally.push('<b>'+a.name+'</b>: '+T(a.effects.ally)); });
+  (C.pools||[]).forEach(function(p){ if(p.ally&&S.pool[p.id]>0)ally.push('<b>'+p.name+'</b>: '+S.pool[p.id]+' '+p.ally); });
+  return {ac:ac,atkB:atkB,dmg:dmg,next:next,saveB:saveB,imm:imm,res:res,ally:ally,adv:adv,acOff:acOff,save:save,saveParts:saveParts,crit:crit,critNote:critNote,critChip:critChip}; }
+function critTxt(n){ return n>=20?'20':n+'–20'; }
+
+/* ===================== HP ===================== */
+function amt(){ var v=parseInt($('amt').value,10); return isNaN(v)||v<0?0:v; }
+function dsplit(n,type){ var c=compute(), half=!!(type&&c.res.indexOf(type.toLowerCase())>=0), m=half?Math.floor(n/2):n;
+  var t=Math.min(S.temp,m), h=Math.min(S.hp,m-t); return {raw:n,n:m,half:half,t:t,h:h,newT:S.temp-t,newH:S.hp-h}; }
+function dtext(x){ if(!x.n&&!x.raw)return ''; return (x.half?x.raw+' halved by resistance = ':'')+'<b>'+x.n+'</b> damage → '+
+  (S.temp>0||x.t?'<b class="t">'+x.t+' from temp HP</b> ('+x.newT+' left) · ':'')+'<b class="h">'+x.h+' from HP</b> ('+x.newH+' / '+maxHp()+')'+(x.newH===0&&S.hp>0?' · <b>you drop to 0</b>':'')+(S.hp===0&&x.n>0?' · death save failure':''); }
+function prevDmg(){ var n=amt(), el=$('dmgPrev'); if(!n){ el.innerHTML='Type the damage and press <b>Damage</b> (or Enter). Temp HP is used first, then real HP.'; return; }
+  el.innerHTML='Preview: '+dtext(dsplit(n,$('dmgType').value)); }
+var lastSplit='';
+function damage(n,type,melee){
+  if(!n)return; snap();
+  var raw=n, half=false, c0=compute();
+  if(type&&c0.res.indexOf(type.toLowerCase())>=0){ n=Math.floor(n/2); half=true; }
+  var ret=retaliation(), t0=S.temp, h0=S.hp, endedTB=null;
+  var left=n, note=half?' Halved by resistance.':''; lastSplit=dtext(dsplit(raw,type));
+  if(S.temp>0){ var a=Math.min(S.temp,left); S.temp-=a; left-=a;
+    if(S.tb){ S.tb.amt=Math.min(S.tb.amt,S.temp); if(S.temp===0){ endedTB=FX(S.tb.n).short||S.tb.n; endTempBound(); note+=' '+endedTB+' ended.'; } } }
+  var wasUp=S.hp>0;
+  if(left>0){ if(S.hp===0){ S.dsF=Math.min(3,S.dsF+1); note+=' Death save failure.'; } S.hp=Math.max(0,S.hp-left); }
+  log('Took '+n+(type?' '+type.toLowerCase():'')+' damage.'+note);
+  if(endedTB)lastSplit+=' · <b>'+endedTB+' ended</b>.';
+  var cd=concActive(), res=[]; if(half)res.push('resisted ('+raw+'→'+n+')'); if(ret&&melee)res.push('attacker takes '+ret.amt+' '+ret.type);
+  if(endedTB)res.push(endedTB+' ended'); if(h0>0&&S.hp===0)res.push('<b>down</b>'); else if(h0===0&&n>0)res.push('death save failure');
+  else if(cd)res.push('conc. DC '+Math.max(10,Math.floor(n/2)));
+  S.dlog.push({k:'d',r:S.round,n:n,t:type||'',temp:t0-S.temp,hp:h0-S.hp,ret:(ret&&melee)?ret.amt:0,res:res.join('; ')});
+  var el=$('concNote');
+  if(wasUp&&S.hp===0){ dropConcentration('dropped to 0 HP'); el.innerHTML=(C.text&&C.text.downNote)||'<b>Down!</b> Concentration ends. Roll death saves.'; el.classList.remove('hidden'); }
+  else{ var c=concActive(), dc=Math.max(10,Math.floor(n/2));
+    var rTxt=ret?' If it was a melee hit, the attacker takes <b>'+ret.amt+' '+ret.type+'</b>.':'';
+    el.innerHTML=lastSplit+(c?'<br>Concentrating on <b>'+c+'</b>: <b>CON save DC '+dc+'</b> ('+sg(D().CON)+'). <button class="btn small green" id="cHeld">Held</button> <button class="btn small red" id="cLost">Lost it</button>':'')+rTxt;
+    el.classList.remove('hidden'); }
+  save(); render(); }
+function heal(n,src){
+  if(!n)return; snap(); var b=S.hp; S.hp=Math.min(maxHp(),S.hp+n); if(S.hp>0){ S.dsS=0; S.dsF=0; }
+  S.dlog.push({k:'h',r:S.round,n:S.hp-b,src:src||'Healed'});
+  log((src||'Healed')+' '+(S.hp-b)+' HP.'); $('concNote').classList.add('hidden'); save(); render(); }
+function setTemp(n){ snap(); var m='Temp HP set to '+n+'.';
+  if(S.tb){ var o=FX(S.tb.n).short||S.tb.n; endTempBound(); m+=' '+o+' ended (replaced).'; }
+  S.temp=n; log(m); save(); render(); }
+
+/* ===================== small widgets ===================== */
+function drawPips(el,total,avail,cls,onClick){ el.innerHTML='';
+  for(var i=0;i<total;i++){(function(i){ var b=document.createElement('button'), used=i>=avail;
+    b.className='pip'+(cls?' '+cls:'')+(used?' used':''); b.setAttribute('aria-label',(used?'Used':'Available')+' '+(i+1)+' of '+total); b.setAttribute('aria-pressed',used?'true':'false');
+    b.onclick=function(){ onClick(used); }; el.appendChild(b); })(i);} }
+function resName(k){ var r=null; (C.resources||[]).forEach(function(x){ if(x.id===k)r=x.name; }); (C.hitDice||[]).forEach(function(h){ if(h.id===k)r='a d'+h.die+' Hit Die'; }); return r||k; }
+function toggleSlot(k,used){ snap(); S.slots[k]=Math.max(0,Math.min(CAP.slots[k],S.slots[k]+(used?1:-1))); log((used?'Restored ':'Used ')+slotName(k)+'.'); save(); render(); }
+function toggleRes(k,used){ snap(); S.res[k]=Math.max(0,Math.min(CAP.res[k],S.res[k]+(used?1:-1))); log((used?'Restored ':'Used ')+resName(k)+'.'); save(); render(); }
+function tog(label,on,kind,onClick,disabled){ var b=document.createElement('button'); b.className='tog '+kind; b.setAttribute('aria-pressed',on?'true':'false');
+  b.innerHTML='<span class="dot"></span>'+label; b.onclick=onClick; if(disabled)b.disabled=true; return b; }
+
+/* ===================== static parts built from data ===================== */
+function buildStatic(){
+  document.title=C.title||C.name;
+  $('hName').textContent=C.headerName||C.name; $('hEpithet').textContent=C.epithet||'';
+  var ch=$('chips'); ch.innerHTML='<span class="chip" id="chAC">AC<b>'+C.ac+'</b></span>';
+  (C.chips||[]).forEach(function(c,i){ var s=document.createElement('span'); s.className='chip'; s.id=c.id||('chip'+i); if(c.tip)s.setAttribute('data-tip',c.tip); ch.appendChild(s); });
+  $('slotHelp').innerHTML=C.slotHelp||'';
+  $('restHelp').innerHTML=(C.text&&C.text.restHelp)||'';
+  $('deathText').innerHTML=(C.text&&C.text.deathBox)||'You are unconscious: concentration has ended.';
+  /* quick cast */
+  var qb=$('qcBox'), q=C.quickCast||[];
+  if(q.length){ var h='<h3>Quick cast</h3>';
+    q.forEach(function(r,i){ h+='<div class="row" id="qc-'+i+'"><span class="muted" style="min-width:70px" data-tip="s:'+esc(r.spell)+'">'+r.label+'</span>';
+      r.buttons.forEach(function(b){ h+='<button class="btn small'+(b[2]?' '+b[2]:'')+'" data-qc="'+esc(r.spell)+'" data-k="'+b[0]+'">'+b[1]+'</button>'; });
+      h+=(r.hint?'<span class="muted">'+r.hint+'</span>':'')+'</div>'; });
+    qb.innerHTML=h+'<div class="muted">Quick cast marks the slot used and the spell active. All spells can also be cast from the Spells tab.</div>'; }
+  qb.querySelectorAll('[data-qc]').forEach(function(b){ b.onclick=function(){
+    var n=b.getAttribute('data-qc'), k=b.getAttribute('data-k'); snap();
+    var f=F(n); if(f.active)deactivate(n,'recast'); if(f.slot)f.slot=null;
+    if(expend(n,k)===false){ hist.pop(); return; } f.lvl=slotLvl(k); activate(n); save(); render(); renderSpells(); }; });
+  /* pools */
+  var pb=$('poolBox'); pb.innerHTML='';
+  (C.pools||[]).forEach(function(p){ var w=document.createElement('div'); var id=p.id;
+    var h='<h3>'+p.name+' <span class="badge b-steel"><span id="'+id+'Val"></span> / <span id="'+id+'Max"></span></span></h3><div class="row"><input type="number" id="'+id+'Amt" min="1" value="'+(p.step||5)+'" aria-label="'+esc(p.name)+' amount">';
+    p.actions.forEach(function(a){ var bid=id+(a.kind==='fixed'?a.key:a.kind.charAt(0).toUpperCase()+a.kind.slice(1)); h+='<button class="btn '+(a.cls||'')+'" id="'+bid+'">'+a.label+'</button>'; });
+    w.innerHTML=h+'</div>'; pb.appendChild(w);
+    p.actions.forEach(function(a){ var bid=id+(a.kind==='fixed'?a.key:a.kind.charAt(0).toUpperCase()+a.kind.slice(1));
+      $(bid).onclick=function(){ var n=a.kind==='fixed'?a.cost:(parseInt($(id+'Amt').value,10)||0);
+        if(a.kind==='fixed'){ if(S.pool[id]<n){ alert('Need '+n+' points.'); return; } snap(); S.pool[id]-=n; log(p.name+': '+(a.log||a.label)+' ('+n+').'); save(); render(); return; }
+        n=Math.min(n,S.pool[id]); if(n<=0){ alert(p.name+' pool is empty.'); return; }
+        if(a.kind==='self'){ S.pool[id]-=n; heal(n,p.name+': healed self'); }
+        else { snap(); S.pool[id]-=n; log(p.name+': '+n+' HP to an ally.'); save(); render(); } }; }); });
+  /* resources shown as pips */
+  var rr=$('resRows'); rr.innerHTML='';
+  (C.resources||[]).forEach(function(r){ if(r.show===false)return;
+    rr.insertAdjacentHTML('beforeend','<div class="res" id="row-'+r.id+'"><div class="lbl"><b data-tip="f:'+esc(r.name)+'">'+r.name+'</b><span>'+(r.sub||(r.rest==='short'?'short rest':'long rest'))+'</span></div><div class="pips" data-res="'+r.id+'"></div></div>'); });
+  /* hit dice */
+  var hr=$('hdRows'), hb=$('hdBtns'); hr.innerHTML='';
+  (C.hitDice||[]).forEach(function(h){ hr.insertAdjacentHTML('beforeend','<div class="res" id="row-'+h.id+'"><div class="lbl"><b id="'+h.id+'Lbl"></b><span id="'+h.id+'Sub"></span></div><div class="pips" data-res="'+h.id+'"></div></div>');
+    var b=document.createElement('button'); b.className='btn'; b.id='hdRoll'+h.die; b.textContent='Spend d'+h.die; b.onclick=function(){ rollHD(h); }; hb.insertBefore(b,$('hdOut')); });
+  /* spell source filter */
+  var fs=$('fSrc'), fh='<button data-v="ready" class="on">Ready now</button><button data-v="active">Active</button><button data-v="all">All</button>';
+  (C.spellSources||[]).forEach(function(x){ fh+='<button data-v="'+esc(x.id)+'">'+x.label+'</button>'; }); fs.innerHTML=fh;
+  if(!(C.spellSources||[]).some(function(x){return x.mode==='prepared';}))$('prepWrap').classList.add('hidden');
+  if(!(C.spells||[]).length){ $('tab-spells').classList.add('hidden'); $('slotCard').classList.add('hidden'); }
+  /* turn helper */
+  var t=C.turn||{};
+  if(t.html)$('turnGrid').insertAdjacentHTML('beforeend',t.html);
+  if(!(t.checks||[]).length)$('checkCard').classList.add('hidden');
+  if(!t.openers||!Object.keys(t.openers).length)$('openerCard').classList.add('hidden');
+  if(!t.html&&!(t.checks||[]).length&&!t.openers)$('tab-turn').classList.add('hidden');
+  /* lore */
+  if(C.lore&&C.lore.html){ $('p-lore').innerHTML=C.lore.html; } else { $('tab-lore').classList.add('hidden'); }
+}
+function rollHD(h){ if(S.res[h.id]<=0)return; var m=D().mod.con, r=1+Math.floor(Math.random()*h.die), v=Math.max(1,r+m); snap(); S.res[h.id]--; hist.pop();
+  $('hdOut').textContent='Rolled '+r+' '+sg(m).replace('−','- ').replace('+','+ ')+' = '+v; heal(v,'Hit Die (d'+h.die+'):'); }
+
+/* ===================== features ===================== */
+function renderFeats(){ var w=$('featList'); w.innerHTML='';
+  (C.activatables||[]).forEach(function(d){ var k=d.id, st=featState(k), row=document.createElement('div'); row.className='feat';
+    row.innerHTML='<div class="lbl"><b data-tip="f:'+esc(d.name)+'">'+d.name+'</b><span>'+T(d.sub)+' · '+S.res[d.pool]+' / '+CAP.res[d.pool]+' left</span></div>';
+    var c=document.createElement('div'); c.className='ctl';
+    c.appendChild(tog('Used',st.used,'used',function(){ snap();
+      if(S.res[d.pool]<=0){ hist.pop(); toast(d.name+': none left. It returns on a rest (Undo fixes a mistake).'); return; }
+      if(st.used&&!confirm('Use '+d.name+' again? This spends another use.')){ hist.pop(); return; }
+      S.res[d.pool]--; st.used=true; log(d.name+' used.'); if(d.active){ st.active=true; st.rounds=d.rounds||null; log(d.name+' active.'); }
+      save(); render(); }));
+    if(d.active)c.appendChild(tog('Active',st.active,'act',function(){ snap(); st.active=!st.active; log(d.name+(st.active?' active.':' ended.')); save(); render(); }));
+    row.appendChild(c); w.appendChild(row); }); }
+
+/* ===================== level previews ===================== */
+function statsAt(L){ var c=ctxAt(L), o={}, cap=capAt(L), sv=savesAt(L,false), ab=abilAt(L);
+  o['Max HP']=C.levels[L].hp; o['Proficiency']=c.prof; o['Attack']=ev(C.attack.atk,c);
+  (C.track||[]).forEach(function(t){ o[t.k]=ev(t.v,c); });
+  ABK.forEach(function(k){ o[k.toUpperCase()+' save']=sv[k].tot; });
+  ABK.forEach(function(k){ o[k.toUpperCase()+' score']=ab[k]; });
+  var hd=0; (C.hitDice||[]).forEach(function(h){ hd+=cap.res[h.id]; }); o['Hit Dice']=hd;
+  ['1','2','3','4','5','6','7','8','9'].forEach(function(k){ o[ord(+k)+'-level slots']=cap.slots[k]||0; }); o['Pact slots']=cap.slots.pact||0;
+  return o; }
+var SIGNEDK={'Proficiency':1,'Attack':1}; (C.track||[]).forEach(function(t){ if(t.signed)SIGNEDK[t.k]=1; }); ABK.forEach(function(k){ SIGNEDK[k.toUpperCase()+' save']=1; });
+function levelDiff(L){ var i=LVKEYS.indexOf(L); if(i<=0)return []; var a=statsAt(LVKEYS[i-1]), b=statsAt(L), out=[];
+  Object.keys(b).forEach(function(k){ if(b[k]!==a[k]){ var f=function(v){ return SIGNEDK[k]?sg(v):v; }; out.push({k:k,from:f(a[k]),to:f(b[k])}); } }); return out; }
+function nextL(L){ var i=LVKEYS.indexOf(L); return i>=0&&i<LVKEYS.length-1?LVKEYS[i+1]:null; }
+function diffText(L){ return levelDiff(L).filter(function(x){ return x.k!=='Max HP'&&x.k!=='Hit Dice'; }).map(function(x){ return x.k+' '+x.from+'→'+x.to; }).join(', '); }
+
+/* ===================== render: live ===================== */
+function renderLive(){
+  var c=compute(), L=$('live'), mx=maxHp(), atk=baseAtk(), dmg=baseDmg(), baseCrit=C.attack.crit||20;
+  function stat(k,v,x,up,down){ return '<div class="stat'+(up?' up':'')+(down?' down':'')+'"><div class="k">'+k+'</div><div class="v">'+v+'</div>'+(x?'<div class="x">'+x+'</div>':'')+'</div>'; }
+  var acX=c.ac>C.ac?'+'+(c.ac-C.ac)+' from spells':''; if(c.acOff.length)acX=(acX?acX+' · ':'')+c.acOff.join(', ');
+  var ret=retaliation(), diff=levelDiff(S.level), sv=savesAt(S.level,true);
+  var savePas=(C.passives||[]).filter(function(p){ return p.save&&p.L<=S.level; });
+  var full=savePas.every(function(p){ return pasOn(p.n); });
+  var cells=ABK.map(function(k){ var v=sv[k];
+    var tip=k.toUpperCase()+': ability '+sg(v.mod)+(v.prof?', proficiency '+sg(v.prof):'')+v.parts.map(function(p){ return ', '+p.label+' '+sg(p.v); }).join('');
+    var up=diff.some(function(x){ return x.k===k.toUpperCase()+' save'; });
+    return '<div class="sv'+(v.prof?' pr':'')+(up?' upd':'')+'" title="'+tip+(up?' (increased at level '+S.level+')':'')+'">'+(up?'<i class="upt">▲</i>':'')+'<span>'+k.toUpperCase()+(v.prof?' ●':'')+'</span><b>'+sg(v.tot)+'</b><em>'+sg(v.mod)+(v.prof?' '+sg(v.prof)+'p':'')+'</em></div>'; }).join('');
+  var notes=(C.passives||[]).filter(function(p){ return p.saveNote&&pasOn(p.n); }).map(function(p){ return ' · '+p.saveNote; }).join('');
+  savePas.forEach(function(p){ var st=pasStateAt(p,S.level); if(st!=='on')notes+=' · <b>'+(p.saveLabel||p.n)+' '+st+'</b>'; });
+  var saveX=(c.saveParts.join(', ')||'no bonuses')+' included'+(c.saveB.length?' · plus '+c.saveB.join(', '):'')+notes;
+  var conc=concActive();
+  L.innerHTML=
+    stat('Armor Class',c.ac,acX,c.ac>C.ac,c.ac<C.ac)+
+    stat('Hit Points',S.hp+' / '+mx,S.aid?'+'+S.aid+' max':'',S.aid>0)+
+    stat('Temp HP',S.temp,ret?ret.amt+' '+ret.type+' to melee attackers':'',S.temp>0)+
+    stat('Attack',sg(atk).replace('−','-'),c.atkB.join(', '),c.atkB.length>0)+
+    stat('Damage / hit',dmg,c.dmg.join(' · '),c.dmg.length>0)+
+    stat('Crit range',critTxt(c.crit),c.crit<baseCrit?c.critNote:'',c.crit<baseCrit)+
+    '<div class="stat sav'+(c.saveB.length?' up':'')+(!full?' down':'')+'"><div class="k">Saving throws <span style="text-transform:none;font-weight:normal">(● proficient)</span></div><div class="svrow">'+cells+'</div><div class="x">'+saveX+'</div></div>'+
+    stat('Defenses',(c.imm.length?'Immune':'—'),(c.imm.length?c.imm.join(', '):'')+(c.res.length?' · resist '+c.res.join(', '):'')+(c.adv.length?' · adv. on '+c.adv.join('; '):''),c.res.length>0)+
+    '<div class="stat" style="grid-column:span 2"><div class="k">Allies</div><div class="x" style="color:var(--steel);font-weight:normal">'+(c.ally.join('<br>')||'—')+'</div></div>'+
+    stat('Concentration',conc?'<span data-tip="s:'+esc(conc)+'">'+conc+'</span>':'—',conc?'CON save '+sg(D().CON):'',!!conc)+
+    '<div class="stat'+(S.reaction?' up':'')+'"><div class="k">Reaction</div><div class="v">'+(S.reaction?'Used':'Ready')+'</div><div class="x"><button class="btn small light" id="reactBtn">'+(S.reaction?'Mark ready':'Mark used')+'</button></div></div>';
+  /* header chips */
+  $('chAC').innerHTML='AC<b>'+c.ac+'</b>'; $('chAC').classList.toggle('boost',c.ac>C.ac);
+  (C.chips||[]).forEach(function(ch,i){ var el=$(ch.id||('chip'+i)); if(!el)return;
+    if(ch.special==='attack'){ el.innerHTML=C.attack.name+'<b>'+sg(atk).replace('−','-')+'</b> '+dmg.replace(/ \+ /g,'+')+(c.dmg.length?' +':''); el.classList.toggle('boost',c.dmg.length+c.atkB.length>0); }
+    else if(ch.special==='crit'){ el.innerHTML='Crit<b>'+critTxt(c.crit)+'</b>'+(c.crit<baseCrit&&c.critChip?' '+c.critChip:''); el.classList.toggle('boost',c.crit<baseCrit); }
+    else el.innerHTML=T(ch.label)+'<b>'+T(ch.val)+'</b>'+(ch.after?' '+T(ch.after):''); });
+  /* effects list */
+  var fl=$('fxList'), items=[]; fl.innerHTML='';
+  activeList().forEach(function(n){ var f=S.fx[n]; var r=f.rounds?' <span class="badge b-steel">'+f.rounds+(f.rounds===1?' round':' rounds')+' left</span>':''; items.push({n:n+r,raw:n,conc:isConc(n),d:fxNote(n),kind:'spell'}); });
+  (C.activatables||[]).forEach(function(a){ var st=featState(a.id); if(st.active&&a.active){ var r=st.rounds?' <span class="badge b-steel">'+st.rounds+' rounds left</span>':''; items.push({n:a.name+r,raw:a.name,conc:false,d:T(a.note),kind:'feat',k:a.id}); } });
+  if(c.next.length)items.push({n:'Next hit',conc:false,d:c.next.join(' · '),kind:'info'});
+  (C.passives||[]).forEach(function(p){ if(p.L>S.level)return; var st=pasStateAt(p,S.level);
+    items.push({n:p.n+' <span class="badge b-steel">'+(st==='on'?'Always on':st==='ended'?'Ended':'Suppressed: unconscious')+'</span>',raw:p.n,conc:false,d:T(p.d),kind:'pas',p:p,st:st}); });
+  items.forEach(function(it){ var d=document.createElement('div');
+    d.className='fx'+(it.conc?' conc':'')+(it.kind==='pas'?' pas':'')+(it.st&&it.st!=='on'?' off':'');
+    d.innerHTML='<div><div class="n"'+(it.kind==='spell'?' data-tip="s:'+esc(it.raw)+'"':(it.kind==='feat'||it.kind==='pas')?' data-tip="f:'+esc(it.raw)+'"':'')+'>'+it.n+(it.conc?' <span class="badge b-gold">Concentration</span>':'')+'</div><div class="d">'+it.d+'</div></div>';
+    if(it.kind==='pas'){ if(it.p.end){ var pb=document.createElement('button'); pb.className='btn small light'; pb.textContent=it.st==='ended'?'Resume':'End';
+        pb.onclick=function(){ snap(); if(S.pas[it.raw]===false){ delete S.pas[it.raw]; log(it.raw+' resumed.'); } else { S.pas[it.raw]=false; log(it.raw+' ended.'); } save(); render(); renderSpells(); };
+        d.appendChild(pb); } fl.appendChild(d); return; }
+    if(it.kind!=='info'){ var b=document.createElement('button'); b.className='btn small light'; b.textContent='End';
+      b.onclick=function(){ snap(); if(it.kind==='spell')deactivate(it.raw); else { featState(it.k).active=false; log(it.raw+' ended.'); } save(); render(); renderSpells(); };
+      d.appendChild(b); }
+    fl.appendChild(d); });
+  $('concLabel').textContent=conc?'· concentrating on '+conc:''; }
+
+/* ===================== render: everything on the tracker ===================== */
+function render(){
+  var mx=maxHp(), d=D(), ret=retaliation();
+  $('hpCur').textContent=S.hp; $('hpMax').textContent=mx; $('tmpVal').textContent=S.temp;
+  $('tmpBig').textContent='+'+S.temp+' temp'; $('tmpBig').classList.toggle('hidden',!S.temp);
+  var tot=mx+S.temp; $('barHp').style.width=(S.hp/tot*100)+'%'; $('barTmp').style.width=(S.temp/tot*100)+'%';
+  $('agBadge').classList.toggle('hidden',!ret); if(ret)$('agBadge').textContent=ret.short+': '+ret.amt+' '+ret.type+' to melee attackers';
+  $('deathBox').classList.toggle('on',S.hp===0);
+  drawPips($('dsS'),3,3-S.dsS,'',function(u){ snap(); S.dsS=u?Math.max(0,S.dsS-1):Math.min(3,S.dsS+1); save(); render(); });
+  drawPips($('dsF'),3,3-S.dsF,'',function(u){ snap(); S.dsF=u?Math.max(0,S.dsF-1):Math.min(3,S.dsF+1); save(); render(); });
+  /* slots */
+  var sr=$('slotRows'); sr.innerHTML='';
+  ['1','2','3','4','5','6','7','8','9','pact'].forEach(function(k){ if(!CAP.slots[k])return; var lv=slotLvl(k);
+    var r=document.createElement('div'); r.className='res';
+    r.innerHTML='<div class="lbl"><b>'+(k==='pact'?'Pact slots ('+ord(lv)+') ×'+CAP.slots.pact:ord(+k)+' level')+'</b><span>'+(C.slotNote?fill(C.slotNote,Object.assign({},d,{slot:lv}))+' · ':'')+(k==='pact'?'<b>short rest</b>':'long rest')+'</span></div><div class="pips" data-slot="'+k+'"></div>';
+    sr.appendChild(r); });
+  if(S.slots.pact>CAP.slots.pact)S.slots.pact=CAP.slots.pact;
+  document.querySelectorAll('[data-slot]').forEach(function(el){ var k=el.getAttribute('data-slot'); drawPips(el,CAP.slots[k],S.slots[k],k==='pact'?'pact':'',function(u){ toggleSlot(k,u); }); });
+  document.querySelectorAll('[data-res]').forEach(function(el){ var k=el.getAttribute('data-res'); drawPips(el,CAP.res[k]||0,Math.min(S.res[k]||0,CAP.res[k]||0),'',function(u){ toggleRes(k,u); }); });
+  (C.resources||[]).forEach(function(r){ var row=$('row-'+r.id); if(row)row.classList.toggle('hidden',!CAP.res[r.id]); });
+  (C.hitDice||[]).forEach(function(h){ var n=CAP.res[h.id], row=$('row-'+h.id); row.classList.toggle('hidden',!n);
+    $(h.id+'Lbl').textContent=(n>1?'Hit Dice d':'Hit Die d')+h.die; $(h.id+'Sub').textContent=(n>1?'each heals ':'heals ')+'1d'+h.die+' '+sg(d.mod.con).replace('−','- ').replace('+','+ ');
+    var b=$('hdRoll'+h.die); b.classList.toggle('hidden',!n); b.disabled=S.res[h.id]<=0; });
+  (C.pools||[]).forEach(function(p){ $(p.id+'Val').textContent=S.pool[p.id]; $(p.id+'Max').textContent=CAP.pool[p.id]; });
+  /* quick cast */
+  document.querySelectorAll('[data-qc]').forEach(function(b){ var k=b.getAttribute('data-k'); b.classList.toggle('hidden',!CAP.slots[k]); b.disabled=!CAP.slots[k]||S.slots[k]<=0; });
+  (C.quickCast||[]).forEach(function(r,i){ $('qc-'+i).classList.toggle('hidden',!!(r.minL&&S.level<r.minL)||!!(BY[r.spell]&&BY[r.spell].from>S.level)); });
+  /* log, undo */
+  var lg=$('log'); lg.innerHTML=''; S.log.forEach(function(m){ var li=document.createElement('li'); li.textContent=m; lg.appendChild(li); });
+  $('undoBtn').disabled=hist.length===0;
+  renderFeats(); renderLive(); renderDmg(); renderChecks(); updatePrepCount(); if(window.refreshTip)refreshTip();
+  $('roundNo').textContent=S.round?'('+S.round+')':''; $('roundInfo').textContent=S.round?'Round '+S.round+' · reaction '+(S.reaction?'used':'ready'):'Not in combat';
+  $('clsLine').textContent=T(C.classLine||'');
+  $('prepMax').textContent=C.prepared?ev(C.prepared.max,d):0; $('featLvl').textContent=S.level;
+  /* level selector, increases and features */
+  var ls=$('lvlSel'); if(!ls.options.length){ LVKEYS.forEach(function(L){ var o=document.createElement('option'); o.value=L; o.textContent='Level '+L+(C.levelLabel?' ('+Tat(C.levelLabel,L)+')':''); ls.appendChild(o); }); }
+  ls.value=String(S.level); var nl=nextL(S.level);
+  $('lvlNote').innerHTML=nl?'Next ('+nl+'): '+(C.levels[nl].add||'')+(diffText(nl)?'<br><b>Increases:</b> '+diffText(nl):''):'Maximum level.';
+  var dl=levelDiff(S.level), nx=nl?levelDiff(nl):[];
+  var chip=function(x){ return '<span>'+x.k+' <b>'+x.from+' → '+x.to+'</b></span>'; };
+  $('levelChg').innerHTML=(dl.length?'<h3 style="margin-top:0">▲ Increased at level '+S.level+'</h3><div class="chg">'+dl.map(chip).join('')+'</div>':'')+
+    (nx.length?'<h3>Increases at level '+nl+'</h3><div class="chg next">'+nx.map(chip).join('')+'</div>':'');
+  var lf=$('levelFeats'); lf.innerHTML='';
+  (C.features||[]).filter(function(f){ return f.L<=S.level; }).forEach(function(f){ var isNew=f.L===S.level, r=document.createElement('div'); r.className='res';
+    r.innerHTML='<div class="lbl"><b data-tip="f:'+esc(f.n)+'">'+f.n+(isNew?' <span class="badge b-gold">New</span>':'')+'</b><span>'+T(f.short)+'</span></div><div class="muted">L'+f.L+'</div>'; lf.appendChild(r); });
+  document.querySelectorAll('[data-tpl]').forEach(function(el){ el.innerHTML=T(el.getAttribute('data-tpl')); });
+  tagTips($('p-turn')); tagTips($('live'));
+  var rb=$('reactBtn'); if(rb)rb.onclick=function(){ snap(); S.reaction=!S.reaction; log('Reaction '+(S.reaction?'used':'ready')+'.'); save(); render(); };
+  var h=$('cHeld'), l=$('cLost');
+  if(h)h.onclick=function(){ $('concNote').classList.add('hidden'); };
+  if(l)l.onclick=function(){ snap(); dropConcentration('failed CON save'); $('concNote').classList.add('hidden'); save(); render(); renderSpells(); }; }
+
+function renderDmg(){ var L=S.dlog||[], tb=$('dmgRows'); tb.innerHTML='';
+  var tot={hit:0,temp:0,hp:0,heal:0,ret:0,n:0};
+  L.forEach(function(e){ var tr=document.createElement('tr');
+    if(e.k==='sep'){ tr.className='sep'; tr.innerHTML='<td colspan="5">'+e.txt+'</td>'; }
+    else if(e.k==='h'){ tr.className='heal'; tot.heal+=e.n; tr.innerHTML='<td>'+(e.r||'—')+'</td><td colspan="2">+'+e.n+'</td><td>+'+e.n+'</td><td>'+e.src+'</td>'; }
+    else { tot.hit+=e.n; tot.temp+=e.temp; tot.hp+=e.hp; tot.ret+=e.ret||0; tot.n++;
+      tr.innerHTML='<td>'+(e.r||'—')+'</td><td><b>'+e.n+'</b>'+(e.t?' '+e.t.toLowerCase():'')+'</td><td>'+(e.temp||'')+'</td><td>'+(e.hp||'')+'</td><td>'+(e.res||'')+'</td>'; }
+    tb.insertBefore(tr,tb.firstChild); });
+  if(!L.length)tb.innerHTML='<tr><td colspan="5" class="muted">No damage taken yet.</td></tr>';
+  $('dmgTot').innerHTML='<div>Hits<b>'+tot.n+'</b></div><div>Damage<b>'+tot.hit+'</b></div><div>Temp absorbed<b>'+tot.temp+'</b></div><div>HP lost<b>'+tot.hp+'</b></div><div>Healed<b>'+tot.heal+'</b></div>'+(tot.ret?'<div>'+((C.text&&C.text.retaliateTotal)||'Retaliation')+'<b>'+tot.ret+'</b></div>':''); }
+
+/* ===================== rests, rounds, level ===================== */
+function shortRest(){ snap();
+  if(CAP.slots.pact)S.slots.pact=CAP.slots.pact;
+  (C.resources||[]).forEach(function(r){ if(r.rest==='short')S.res[r.id]=CAP.res[r.id]; });
+  (C.pools||[]).forEach(function(p){ if(p.rest==='short')S.pool[p.id]=CAP.pool[p.id]; });
+  S.round=0; S.reaction=false;
+  Object.keys(S.fx).forEach(function(n){ var f=S.fx[n]; if(f.slot==='pact')f.slot=null; if(f.active&&!FX(n).keepShort)deactivate(n,'short rest'); if(!f.active&&!f.slot)delete S.fx[n]; });
+  (C.activatables||[]).forEach(function(a){ S.feat[a.id]={used:false,active:false}; });
+  log((C.text&&C.text.shortLog)||'Short rest.'); $('concNote').classList.add('hidden');
+  save(); render(); renderSpells(); showTab('tracker');
+  var hd=$('hdBox'); hd.classList.remove('flash'); void hd.offsetWidth; hd.classList.add('flash'); hd.scrollIntoView({behavior:'smooth',block:'center'});
+  toast((C.text&&C.text.shortToast)||'Short rest done. Spend Hit Dice to recover HP.'); }
+function longRest(){
+  restorePoint('Before long rest'); setTimeout(function(){ if(!S.lastExport||Date.now()-S.lastExport>7*864e5)toast('Long rest done. Last backup export: '+ago(S.lastExport)+'. Consider exporting one.'); },2600);
+  snap();
+  S.fx={}; S.feat={}; S.pas={}; S.dlog=[]; S.aid=0; S.hp=C.levels[S.level].hp; S.temp=0; S.tb=null; S.dsS=0; S.dsF=0;
+  S.slots=JSON.parse(JSON.stringify(CAP.slots)); S.round=0; S.reaction=false;
+  (C.resources||[]).forEach(function(r){ S.res[r.id]=CAP.res[r.id]; });
+  (C.pools||[]).forEach(function(p){ S.pool[p.id]=CAP.pool[p.id]; });
+  var hds=(C.hitDice||[]).slice().sort(function(a,b){ return b.die-a.die; }), total=0; hds.forEach(function(h){ total+=CAP.res[h.id]; });
+  var rec=Math.max(1,Math.floor(total/2)); hds.forEach(function(h){ var a=Math.min(rec,CAP.res[h.id]-S.res[h.id]); S.res[h.id]+=a; rec-=a; });
+  log((C.text&&C.text.longLog)||'Long rest: everything restored.'); $('concNote').classList.add('hidden');
+  save(); render(); renderSpells(); toast((C.text&&C.text.longToast)||'Long rest: full HP, all slots and resources restored.'); }
+function nextRound(){ snap(); S.round=(S.round||0)+1; S.reaction=false; var ended=[];
+  Object.keys(S.fx).forEach(function(n){ var f=S.fx[n]; if(f.active&&f.rounds){ f.rounds--; if(f.rounds<=0){ deactivate(n,'expired'); ended.push(n); } } });
+  (C.activatables||[]).forEach(function(a){ var st=featState(a.id); if(st.active&&st.rounds){ st.rounds--; if(st.rounds<=0){ st.active=false; ended.push(a.name); log(a.name+' ended (expired).'); } } });
+  log('Round '+S.round+'.'); save(); render(); renderSpells();
+  toast('Round '+S.round+': reaction ready.'+(ended.length?' Ended: '+ended.join(', ')+'.':'')); }
+function endCombat(){ snap(); S.round=0; S.reaction=false;
+  Object.keys(S.fx).forEach(function(n){ var f=S.fx[n]; if(f.active&&f.rounds===1)deactivate(n,'combat over'); });
+  if(S.dlog.length&&S.dlog[S.dlog.length-1].k!=='sep')S.dlog.push({k:'sep',txt:'— combat over —'});
+  log('Combat over.'); save(); render(); renderSpells(); toast('Combat over. Spells with longer durations keep running.'); }
+function setLevel(lv){ if(lv===S.level)return; snap(); var wentUp=lv>S.level, old=CAP, oldHp=C.levels[S.level].hp;
+  restorePoint('Before level '+S.level+' → '+lv); S.level=lv; applyLevel();
+  S.hp=Math.max(0,Math.min(maxHp(),S.hp+(C.levels[lv].hp-oldHp)));
+  function adj(cur,a,b){ return Math.max(0,Math.min(a,(cur||0)+(a-b))); }
+  ['1','2','3','4','5','6','7','8','9','pact'].forEach(function(k){ var a=CAP.slots[k]||0, b=old.slots[k]||0; if(!a){ delete S.slots[k]; return; } S.slots[k]=adj(S.slots[k],a,b); });
+  Object.keys(CAP.res).forEach(function(k){ S.res[k]=adj(S.res[k],CAP.res[k]||0,old.res[k]||0); });
+  Object.keys(CAP.pool).forEach(function(k){ S.pool[k]=adj(S.pool[k],CAP.pool[k]||0,old.pool[k]||0); });
+  Object.keys(S.fx).forEach(function(n){ var sp=BY[n]; if(sp&&sp.from>lv)delete S.fx[n]; });
+  log('Character level set to '+lv+'.'); save(); render(); renderSpells(); renderOpeners();
+  var dt=wentUp?diffText(lv):''; toast('Level '+lv+': '+(C.levels[lv].add||'')+'.'+(dt?' Increases: '+dt+'.':'')); }
+
+/* ===================== spells tab ===================== */
+var FL={lvl:'all',src:'ready',q:'',hideConc:false};
+function srcMode(s){ return (SRC[s.src]||{}).mode||'known'; }
+function isReady(s){ if(s.from>S.level)return false; if(srcMode(s)!=='prepared')return true; return S.prepared.indexOf(s.n)>=0; }
+function prepCount(){ return S.prepared.filter(function(p){ return BY[p]&&srcMode(BY[p])==='prepared'; }).length; }
+function updatePrepCount(){ var el=$('prepCount'); if(!el||!C.prepared)return; var n=prepCount(), m=ev(C.prepared.max,D()); el.textContent=n; el.style.color=n>m?'#A33B3B':''; }
+function slotOptions(lvl){ var o=[]; ['1','2','3','4','5','6','7','8','9'].forEach(function(k){ if(CAP.slots[k]&&+k>=lvl)o.push(k); }); if(CAP.slots.pact&&CAP.pactLvl>=lvl)o.push('pact'); return o; }
+function renderSpells(){
+  var g=$('spellGrid'); g.innerHTML='';
+  var list=(C.spells||[]).filter(function(s){
+    if(FL.lvl!=='all'&&String(s.lvl)!==FL.lvl)return false;
+    if(FL.src==='ready'&&!isReady(s))return false;
+    if(FL.src==='active'&&!(S.fx[s.n]&&(S.fx[s.n].active||S.fx[s.n].slot)))return false;
+    if(['all','ready','active'].indexOf(FL.src)<0&&s.src!==FL.src)return false;
+    if(FL.hideConc&&s.conc)return false;
+    if(FL.q){ var q=FL.q.toLowerCase(); if((s.n+' '+s.text).toLowerCase().indexOf(q)<0)return false; }
+    return true; }).sort(function(a,b){ return a.lvl-b.lvl||a.n.localeCompare(b.n); });
+  if(!list.length)g.innerHTML='<p class="muted">No spells match.</p>';
+  list.forEach(function(s){
+    var n=s.n, f=S.fx[n]||{}, locked=s.from>S.level, d=document.createElement('div'), src=SRC[s.src]||{};
+    d.className='spell'+(locked?' locked':'')+(f.active?' isact':'');
+    var prep=S.prepared.indexOf(n)>=0;
+    var star=srcMode(s)==='prepared'&&!locked?'<button class="star'+(prep?' on':'')+'" data-prep="'+esc(n)+'">'+(prep?'★ Prepared':'☆ Prepare')+'</button>':'';
+    var tags='<span class="badge b-steel">'+s.src+'</span>';
+    if(s.conc)tags+=' <span class="badge b-gold">Concentration</span>';
+    if(locked)tags+=' <span class="badge b-red">From level '+s.from+'</span>';
+    if(src.badge)tags+=' <span class="badge b-steel">'+src.badge+'</span>';
+    if(f.active)tags+=' <span class="badge b-green">Active</span>';
+    d.innerHTML='<div class="top"><div><h4>'+n+'</h4><div class="lvl">'+(s.lvl===0?'Cantrip':ord(s.lvl)+' level')+' · '+s.school+'</div></div>'+star+'</div>'+
+      '<div class="meta"><b>Time</b><span>'+s.time+'</span><b>Range</b><span>'+s.range+'</span><b>Comp.</b><span>'+s.comp+'</span><b>Duration</b><span>'+s.dur+'</span></div>'+
+      '<p>'+T(s.text)+'</p><div class="tags">'+tags+'</div>';
+    if(!locked&&(s.lvl>0||s.dur!=='Instant')){
+      var ctl=document.createElement('div'), opts=s.lvl>0?slotOptions(s.lvl):[]; ctl.className='ctl';
+      var sel=null;
+      if(s.lvl>0){ sel=document.createElement('select'); sel.className='small'; sel.setAttribute('aria-label','Slot for '+n);
+        opts.forEach(function(k){ var o=document.createElement('option'); o.value=k; o.textContent=(k==='pact'?'Pact ('+ord(CAP.pactLvl)+')':ord(+k))+' · '+S.slots[k]+' left'; sel.appendChild(o); });
+        var cur=f.slot||f.sel||opts.filter(function(k){ return S.slots[k]>0; })[0]||opts[0];
+        sel.value=(f.sel&&S.slots[f.sel]>0)?f.sel:cur; sel.onchange=function(){ F(n).sel=sel.value; save(); };
+        ctl.appendChild(sel);
+        ctl.appendChild(tog(f.slot?'Slot used ('+(f.slot==='pact'?'pact':ord(+f.slot))+')':'Slot used',!!f.slot,'used',function(){
+          var ff=F(n);
+          if(ff.slot){ if(!confirm('Cast '+n+' again? This spends another '+slotName(sel.value)+'.\n(Slots come back only on a rest. Use Undo to fix a mistake.)'))return; ff.slot=null; }
+          snap(); if(expend(n,sel.value)===false){ hist.pop(); return; } save(); render(); renderSpells(); })); }
+      if(s.dur!=='Instant'){
+        ctl.appendChild(tog('Active',!!f.active,'act',function(){ snap(); var ff=F(n);
+          if(ff.active){ deactivate(n); delete S.fx[n]; } else { if(!ff.slot&&sel){ ff.lvl=slotLvl(sel.value); } activate(n); }
+          save(); render(); renderSpells(); })); }
+      d.appendChild(ctl); }
+    g.appendChild(d); });
+  g.querySelectorAll('[data-prep]').forEach(function(b){ b.onclick=function(){
+    var n=b.getAttribute('data-prep'); snap(); var i=S.prepared.indexOf(n);
+    if(i>=0)S.prepared.splice(i,1); else { S.prepared.push(n); var pc=prepCount(), m=ev(C.prepared.max,D()); if(pc>m)alert('That makes '+pc+' prepared. You can prepare '+m+' at level '+S.level+'.'); }
+    save(); renderSpells(); updatePrepCount(); }; });
+  updatePrepCount(); }
+
+/* ===================== turn helper ===================== */
+function renderChecks(){ var c=$('checklist'); if(!c)return; c.innerHTML='';
+  ((C.turn&&C.turn.checks)||[]).forEach(function(k){ var id='ck-'+k[0], w=document.createElement('label'); w.className='check'; w.setAttribute('for',id);
+    w.innerHTML='<input type="checkbox" id="'+id+'"'+(S.checks[k[0]]?' checked':'')+'><span>'+T(k[1])+'</span>';
+    c.appendChild(w); w.querySelector('input').onchange=function(){ S.checks[k[0]]=this.checked; save(); }; }); }
+function renderOpeners(){ var O=(C.turn&&C.turn.openers)||{}, w=$('openerBtns'); w.innerHTML=''; var keys=Object.keys(O); if(!keys.length)return;
+  keys.forEach(function(k){ var b=document.createElement('button'); b.textContent=O[k].t; b.setAttribute('data-k',k); b.onclick=function(){ pick(k); }; w.appendChild(b); });
+  pick(C.turn.defaultOpener&&O[C.turn.defaultOpener]?C.turn.defaultOpener:keys[0]); }
+function pick(k){ var o=C.turn.openers[k];
+  $('openerBtns').querySelectorAll('button').forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-k')===k); });
+  $('openerPlan').innerHTML='<b>Action</b><span>'+T(o.a)+'</span><b>Bonus</b><span>'+T(o.b)+'</span><b>Move</b><span>'+T(o.m)+'</span><b>Note</b><span>'+T(o.n)+'</span>'; tagTips($('openerPlan')); }
+
+/* ===================== tooltips ===================== */
+function spellCard(n){ var sp=BY[n]; if(!sp)return null; var f=S.fx[n];
+  var h='<h4>'+n+'</h4><div class="sub">'+(sp.lvl===0?'Cantrip':ord(sp.lvl)+'-level')+' '+sp.school+' · '+sp.src+(sp.conc?' · Concentration':'')+'</div>'+
+    '<div class="grid"><b>Casting time</b><span>'+sp.time+'</span><b>Range</b><span>'+sp.range+'</span><b>Components</b><span>'+sp.comp+'</span><b>Duration</b><span>'+sp.dur+'</span></div><p>'+T(sp.text)+'</p>';
+  if(sp.from>S.level)h+='<div class="now">Available at level '+sp.from+'.</div>';
+  if(f&&(f.active||f.slot))h+='<div class="now"><b>Now:</b> '+(f.active?'active'+(f.rounds?' · '+f.rounds+' rounds left':'')+(sp.fx?' · '+fxNote(n):''):'')+(f.slot?(f.active?' · ':'')+'cast with a '+slotName(f.slot):'')+'</div>';
+  return h; }
+function featText(n){ if(FBY[n]&&FBY[n].text)return FBY[n].text; var p=PBY[n]; if(p)return p.text||p.d; return null; }
+function featCard(n){ var t=featText(n); if(!t)return null; var fl=FBY[n];
+  var h='<h4>'+n+'</h4><div class="sub">'+(fl?'Gained at level '+fl.L:'Feature')+'</div><p>'+T(t)+'</p>';
+  if(fl&&fl.L>S.level)h+='<div class="now">Not yet: arrives at level '+fl.L+'.</div>';
+  (C.activatables||[]).forEach(function(a){ if(a.name===n){ var st=featState(a.id); h+='<div class="now"><b>Now:</b> '+S.res[a.pool]+' / '+CAP.res[a.pool]+' uses left'+(st.active?' · active'+(st.rounds?' ('+st.rounds+' rounds left)':''):'')+'</div>'; } });
+  return h; }
+function tagTips(root){ if(!root)return; root.querySelectorAll('i, b').forEach(function(el){ if(el.closest('[data-tip]')||el.closest('#tip'))return;
+  var t=el.textContent.trim(); if(BY[t])el.setAttribute('data-tip','s:'+t); else if(featText(t))el.setAttribute('data-tip','f:'+t); }); }
+function initTips(){ var tip=$('tip'), body=$('tipBody'), cur=null, pinned=false, timer=null;
+  var canHover=window.matchMedia&&window.matchMedia('(hover: hover)').matches;
+  function content(el){ var v=el.getAttribute('data-tip'), n=v.slice(2); return v[0]==='s'?spellCard(n):featCard(n); }
+  function place(el){ var r=el.getBoundingClientRect(), w=tip.offsetWidth, h=tip.offsetHeight, vw=window.innerWidth, vh=window.innerHeight;
+    var x=Math.min(Math.max(8,r.left),vw-w-8), y=r.bottom+6; if(y+h>vh-8)y=Math.max(8,r.top-h-6); tip.style.left=x+'px'; tip.style.top=y+'px'; }
+  function show(el,pin){ var h=content(el); if(!h)return; body.innerHTML=h; tagTips(body); cur=el; pinned=!!pin; tip.classList.toggle('pinned',pinned); tip.classList.add('on'); place(el); }
+  function hide(){ tip.classList.remove('on','pinned'); cur=null; pinned=false; }
+  window.refreshTip=function(){ if(cur&&document.body.contains(cur))show(cur,pinned); else hide(); };
+  document.addEventListener('mouseover',function(e){ if(!canHover||pinned)return; var el=e.target.closest('[data-tip]');
+    clearTimeout(timer); if(el){ if(el!==cur)timer=setTimeout(function(){ show(el,false); },180); } else if(!e.target.closest('#tip'))timer=setTimeout(hide,150); });
+  document.addEventListener('click',function(e){ clearTimeout(timer); if(e.target.closest('#tip .x')){ hide(); return; } if(e.target.closest('#tip'))return;
+    var el=e.target.closest('[data-tip]');
+    if(el&&!el.closest('button')){ if(el.closest('label'))e.preventDefault(); if(pinned&&cur===el)hide(); else show(el,true); return; }
+    if(pinned)hide(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape')hide(); });
+  window.addEventListener('scroll',function(){ if(cur&&!pinned)hide(); else if(cur)place(cur); },{passive:true}); }
+
+/* ===================== backup, export, import, restore points ===================== */
+var SNAPKEY=KEY+'-snaps';
+function getSnaps(){ try{ return JSON.parse(localStorage.getItem(SNAPKEY))||[]; }catch(e){ return []; } }
+function restorePoint(label){ try{ var a=getSnaps(); a.unshift({t:Date.now(),label:label,lv:S.level,hp:S.hp,data:JSON.stringify(S)}); localStorage.setItem(SNAPKEY,JSON.stringify(a.slice(0,8))); }catch(e){} }
+function dailyPoint(){ var a=getSnaps(), today=new Date().toDateString(); if(!a.some(function(x){ return new Date(x.t).toDateString()===today; }))restorePoint('Daily'); }
+function ago(t){ if(!t)return 'never'; var m=Math.round((Date.now()-t)/60000); if(m<2)return 'just now'; if(m<60)return m+' min ago'; var h=Math.round(m/60); if(h<36)return h+' h ago'; return Math.round(h/24)+' days ago'; }
+function stamp(t){ var d=new Date(t); return d.toLocaleDateString()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+function renderBackup(){ if(!$('backupCard'))return;
+  var w=$('storeWarn'); if(!storageOK){ w.innerHTML='<b>This browser is not saving.</b> (Private browsing or storage is blocked.) Your changes will be lost when you close the page; export a backup before you leave.'; w.classList.remove('hidden'); } else w.classList.add('hidden');
+  var stale=!S.lastExport||Date.now()-S.lastExport>7*864e5;
+  $('expInfo').innerHTML='Last exported: <span class="'+(stale?'stale':'')+'">'+ago(S.lastExport)+'</span>';
+  var a=getSnaps(), L=$('snapList'); L.innerHTML='';
+  if(!a.length){ L.innerHTML='<div class="muted">None yet.</div>'; return; }
+  a.forEach(function(x){ var r=document.createElement('div'); r.className='snaprow';
+    r.innerHTML='<div><b>'+x.label+'</b> <span class="w">'+stamp(x.t)+' · level '+x.lv+' · '+x.hp+' HP</span></div>';
+    var b=document.createElement('button'); b.className='btn small light'; b.textContent='Restore';
+    b.onclick=function(){ if(!confirm('Restore "'+x.label+'" from '+stamp(x.t)+'? Your current state becomes a restore point first, and Undo also works.'))return;
+      restorePoint('Before restore'); snap(); S=fromSaved(JSON.parse(x.data)).s; applyLevel(); log('Restored '+x.label+' ('+stamp(x.t)+').'); save(); fullRender(); toast('Restored.'); };
+    r.appendChild(b); L.appendChild(r); }); }
+function fullRender(){ render(); renderSpells(); renderPhrasebook(); renderOpeners(); }
+function initBackup(){
+  $('expBtn').onclick=function(){ S.lastExport=Date.now(); save();
+    var d=new Date(), pad=function(n){ return ('0'+n).slice(-2); };
+    var name=(C.filePrefix||C.id)+'_backup_'+d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+pad(d.getMinutes())+'.json';
+    var blob=new Blob([JSON.stringify({app:'hand-resolute-sheet',char:CHAR_ID,v:STATE_V,exported:new Date().toISOString(),state:S},null,1)],{type:'application/json'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },500);
+    log('Backup exported.'); renderBackup(); toast('Backup saved: '+name); };
+  $('impBtn').onclick=function(){ $('impFile').value=''; $('impFile').click(); };
+  $('impFile').onchange=function(){ var f=this.files&&this.files[0]; if(!f)return; var r=new FileReader();
+    r.onload=function(){ var o; try{ o=JSON.parse(r.result); }catch(e){ alert('That file is not a valid backup (it is not JSON).'); return; }
+      var st=o&&o.state?o.state:o;
+      if(!st||typeof st.hp!=='number'||!st.slots||!st.res){ alert('That file does not look like a backup of this sheet.'); return; }
+      if(o.char&&o.char!==CHAR_ID&&!confirm('This backup is for a different character ('+o.char+'). Load it anyway?'))return;
+      if(!confirm('Load this backup?\n\nLevel '+(st.level||'?')+', '+st.hp+' HP'+(o.exported?'\nExported '+stamp(Date.parse(o.exported)):'')+'\n\nYour current state becomes a restore point first.'))return;
+      restorePoint('Before import'); snap(); var rr=fromSaved(st); S=rr.s; applyLevel();
+      log('Backup imported'+(o.exported?' (from '+stamp(Date.parse(o.exported))+')':'')+'.'); rr.notes.forEach(log); save(); fullRender(); toast('Backup loaded.'+(rr.notes.length?' '+rr.notes.join(' '):'')); };
+    r.readAsText(f); }; }
+
+/* ===================== phrasebook (optional lore module) ===================== */
+function renderPhrasebook(){ var P=C.lore&&C.lore.phrasebook; if(!P)return; var box=$(P.box||'phrasebook'); if(!box)return; if(!S.lsp)S.lsp={};
+  var R=P.phrases, sp=P.speakers||{}, gp=P.groupPrefix||'\u0000';
+  var cats=['All']; if(P.groupAll)cats.push(P.groupAll); R.forEach(function(r){ if(cats.indexOf(r[5])<0)cats.push(r[5]); });
+  var BYL={}; R.forEach(function(r){ BYL[r[0]]=r; });
+  var used=S.lsp.used, usedRow=BYL[used]||null, limited=Object.keys(sp).filter(function(k){ return sp[k].limited; })[0];
+  var h='<div class="lx"><h3 style="margin-top:0">'+P.title+'</h3>'+(P.intro?'<p class="muted" style="margin:4px 0">'+P.intro+'</p>':'')+(P.key?'<div class="key">'+P.key+'</div>':'')+
+   '<div class="lxbar"><label class="muted">Situation <select id="lxCat">'+cats.map(function(c){ return '<option'+(c===(S.lsp.cat||'All')?' selected':'')+'>'+c+'</option>'; }).join('')+'</select></label>'+
+   (limited?'<span class="speakonly muted">'+(usedRow?P.limitedSome+': <b>'+usedRow[1]+'</b>':P.limitedNone)+'</span><button class="btn small light speakonly" id="lxNew">New session</button>':'')+'</div><div id="lxList"></div>'+
+   (P.lexicon&&P.lexicon.length?'<details style="margin-top:8px"><summary class="muted" style="cursor:pointer">Glossary ('+P.lexicon.length+' words)</summary><div class="tw"><table class="t lore"><thead><tr><th>'+(P.language||'Word')+'</th><th>Meaning</th></tr></thead><tbody>'+
+   P.lexicon.map(function(w){ return '<tr><td><i>'+w[0]+'</i></td><td>'+w[1]+'</td></tr>'; }).join('')+'</tbody></table></div></details>':'')+'</div>';
+  box.innerHTML=h;
+  var L=$('lxList'), cat=S.lsp.cat||'All', replied={}; R.forEach(function(r){ if(r[7])replied[r[7]]=1; });
+  R.forEach(function(r){ var isLim=r[6]===limited;
+    if(cat===P.groupAll){ if(r[5].indexOf(gp)!==0||!isLim)return; } else if(cat!=='All'&&r[5]!==cat)return;
+    if(cat!==P.groupAll&&cat.indexOf(gp)===0&&!isLim&&replied[r[0]])return;
+    if(cat==='All'&&!isLim&&replied[r[0]])return;
+    var who=sp[r[6]]||{label:r[6]}, d=document.createElement('div');
+    d.className='ph'+(who.cls?' '+who.cls:'')+(r[5].indexOf(gp)===0&&isLim?' tempt':'')+(r[0]===used?' spoken':'');
+    var ans=r[7]&&BYL[r[7]], ansWho=ans?(sp[ans[6]]||{}):{};
+    d.innerHTML='<div><div class="lo">'+r[1]+'</div><div class="pr">'+r[2]+'</div><div class="en">“'+r[3]+'”</div><div class="wh">'+r[4]+'</div></div>'+
+      '<div class="side"><span class="badge '+(who.cls?'b-gold':'b-steel')+'">'+who.label+'</span><span class="badge b-steel">'+r[5]+'</span></div>'+
+      (ans?'<div class="rep">↳ '+(ansWho.answers||'Answer')+': <i>'+ans[1]+'</i> <span class="muted">('+ans[2]+')</span> “'+ans[3]+'”</div>':'');
+    if(isLim){ var b=document.createElement('button'); b.className='btn small speakonly'+(r[0]===used?' gold':' light'); b.textContent=r[0]===used?P.limitedDone:P.limitedVerb;
+      b.onclick=function(){ if(r[0]===used){ snap(); S.lsp.used=null; save(); renderPhrasebook(); return; }
+        if(used&&!confirm(P.againConfirm||'Use this one instead?'))return;
+        snap(); S.lsp.used=r[0]; log((P.logPrefix||'Spoke: ')+r[1]); save(); renderPhrasebook(); toast('“'+r[3]+'”'); };
+      d.querySelector('.side').appendChild(b); }
+    L.appendChild(d); });
+  $('lxCat').onchange=function(){ S.lsp.cat=this.value; save(); renderPhrasebook(); };
+  if($('lxNew'))$('lxNew').onclick=function(){ snap(); S.lsp.used=null; save(); renderPhrasebook(); toast(P.newSession||'New session.'); }; }
+
+/* ===================== tabs & DM view ===================== */
+var tabs=['tracker','spells','turn','lore'];
+function showTab(t){ tabs.forEach(function(x){ $('tab-'+x).setAttribute('aria-selected',x===t?'true':'false'); $('p-'+x).classList.toggle('hidden',x!==t); }); try{ localStorage.setItem(KEY+'-tab',t); }catch(e){} }
+function initLore(){ if(!C.lore)return;
+  if($('loreLink'))$('loreLink').onclick=function(){ var u=location.href.split('#')[0]+'#dm';
+    if(location.protocol==='file:'){ alert(C.lore.dmLinkHelp||'Post this page on a website first, then share its address with #dm on the end.'); return; }
+    var done=function(){ toast('DM link copied: it opens straight to Lore.'); };
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(u).then(done,function(){ prompt('Copy this link for the DM:',u); }); } else prompt('Copy this link for the DM:',u); };
+  if($('lorePrint'))$('lorePrint').onclick=function(){ showTab('lore'); window.print(); };
+  document.querySelectorAll('.loretoc a').forEach(function(a){ a.onclick=function(e){ e.preventDefault(); var t=document.querySelector(a.getAttribute('href')); if(t)t.scrollIntoView({behavior:'smooth',block:'start'}); }; }); }
+
+/* ===================== wiring & start ===================== */
+buildStatic();
+load();
+$('dmgBtn').onclick=function(){ if(!amt()){ $('amt').focus(); return; } damage(amt(),$('dmgType').value,$('dmgMelee').checked); renderSpells(); clearAmt(); };
+$('dmgClear').onclick=function(){ if(!S.dlog.length)return; snap(); S.dlog=[]; save(); render(); };
+$('healBtn').onclick=function(){ heal(amt(),'Healed'); clearAmt(); };
+function clearAmt(){ $('amt').value=''; prevDmg(); try{ $('amt').focus({preventScroll:true}); }catch(e){} }
+$('amt').addEventListener('input',prevDmg); $('dmgType').addEventListener('change',prevDmg);
+$('amt').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); $('dmgBtn').click(); } });
+$('tmpBtn').onclick=function(){ setTemp(amt()); renderSpells(); clearAmt(); };
+$('nextRound').onclick=nextRound; $('roundTop').onclick=nextRound; $('endCombat').onclick=endCombat;
+$('lvlSel').onchange=function(){ setLevel(+this.value); };
+$('shortRest').onclick=shortRest; $('shortTop').onclick=shortRest;
+$('longRest').onclick=longRest; $('longTop').onclick=longRest;
+$('resetAll').onclick=function(){ if(!confirm('Reset all tracking, including prepared spells and the checklist?'))return; restorePoint('Before reset'); snap(); S=fresh(); applyLevel(); log('Reset.'); save(); fullRender(); };
+$('undoBtn').onclick=function(){ if(!hist.length)return; S=JSON.parse(hist.pop()); applyLevel(); save(); fullRender(); };
+$('clearChecks').onclick=function(){ S.checks={}; save(); renderChecks(); };
+function seg(id,key){ $(id).querySelectorAll('button').forEach(function(b){ b.onclick=function(){ FL[key]=b.getAttribute('data-v'); $(id).querySelectorAll('button').forEach(function(x){ x.classList.toggle('on',x===b); }); renderSpells(); }; }); }
+seg('fLvl','lvl'); seg('fSrc','src');
+$('q').oninput=function(){ FL.q=this.value.trim(); renderSpells(); };
+$('fConc').onchange=function(){ FL.hideConc=this.checked; renderSpells(); };
+tabs.forEach(function(t){ $('tab-'+t).onclick=function(){ showTab(t); }; });
+initTips(); initBackup(); initLore();
+prevDmg(); render(); renderSpells(); renderOpeners();
+try{ var t0=localStorage.getItem(KEY+'-tab'); if(t0&&tabs.indexOf(t0)>=0&&!$('tab-'+t0).classList.contains('hidden'))showTab(t0); }catch(e){}
+var DMV=/(^#|[?&])(dm|lore)\b/i.test(location.hash)||/[?&]view=(dm|lore)/i.test(location.search);
+if(DMV&&C.lore){ document.body.classList.add('dm'); tabs.forEach(function(x){ $('p-'+x).classList.toggle('hidden',x!=='lore'); $('tab-'+x).setAttribute('aria-selected',x==='lore'?'true':'false'); }); }
+renderPhrasebook(); dailyPoint(); renderBackup();
+if(loadNotes.length){ loadNotes.forEach(log); save(); render(); toast('Saved data upgraded. '+loadNotes.join(' ')); }
+})();
+
+</script>
+</body>
+</html>

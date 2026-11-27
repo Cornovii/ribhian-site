@@ -1,0 +1,1111 @@
+<!--Spiral Descent page for the heroesofribhus.com website. Created by Ribhian Games LLC 2026©
+All Rights Reserved
+Note: Product page for Spiral Descent — Dystopia Noir setting. Part of the Heptaverse system.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spiral Descent — Ribhian Games LLC</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       SPIRAL DESCENT — Setting-Specific Overrides
+       Corporate Dystopia · Ceres · Signal/Noise
+    ═══════════════════════════════════════════════════════════ */
+
+    :root {
+      --sd-void:        #030407;
+      --sd-deep:        #060810;
+      --sd-panel:       #0a0e18;
+      --sd-panel-mid:   #0e1422;
+      --sd-surface:     #12192a;
+
+      --sd-neon-blue:   #0af;
+      --sd-neon-blue-d: #0077aa;
+      --sd-neon-red:    #e02040;
+      --sd-neon-red-d:  #8a1028;
+      --sd-chrome:      #a0b8c8;
+      --sd-chrome-dim:  #445566;
+      --sd-gold:        #c8a030;
+      --sd-gold-dim:    #7a5c10;
+
+      --sd-signal:      #0af;
+      --sd-noise:       #8040e0;
+      --sd-static:      #c0c0c0;
+
+      --sd-text:        #90a0b0;
+      --sd-text-dim:    #384858;
+      --sd-text-bright: #c8d8e8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--sd-void);
+      color: var(--sd-text);
+      font-family: 'Barlow Condensed', 'Segoe UI', sans-serif;
+      font-size: 17px;
+      line-height: 1.82;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay — noir atmosphere */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 3px
+      );
+      pointer-events: none; z-index: 999;
+    }
+
+    /* ── HERO ──────────────────────────────────────────────────── */
+    .product-hero {
+      position: relative;
+      min-height: 62vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding: 2rem 3rem 3rem;
+      text-align: center;
+      overflow: hidden;
+      background: #030407;
+    }
+
+    .product-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 20%, rgba(0,170,255,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 35% at 20% 85%, rgba(224,32,64,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 30% at 80% 80%, rgba(128,64,224,0.06) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* Hero background image */
+    .sd-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .product-hero-content { position: relative; z-index: 2; width: 100%; text-align: center; }
+
+    .product-logo-wrap {
+      width: 240px; height: 240px;
+      margin: 0 auto 1.6rem;
+      filter: drop-shadow(0 0 28px rgba(0,170,255,0.35)) drop-shadow(0 0 60px rgba(0,170,255,0.12));
+      animation: logo-pulse 6s ease-in-out infinite;
+    }
+    @keyframes logo-pulse {
+      0%,100% { filter: drop-shadow(0 0 22px rgba(0,170,255,0.32)) drop-shadow(0 0 50px rgba(0,170,255,0.10)); }
+      50%      { filter: drop-shadow(0 0 42px rgba(0,170,255,0.60)) drop-shadow(0 0 80px rgba(0,170,255,0.20)); }
+    }
+    .product-logo-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    .product-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.60rem; letter-spacing: 0.45em; text-transform: uppercase;
+      color: var(--sd-neon-blue);
+      text-shadow: 0 0 8px rgba(0,170,255,0.8), 0 0 20px rgba(0,170,255,0.4);
+      background: rgba(3,4,7,0.88);
+      display: inline-block; padding: 0.25rem 0.6rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .product-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 400; letter-spacing: 0.08em;
+      color: var(--sd-text-bright);
+      text-shadow: 0 0 60px rgba(0,170,255,0.18), 0 2px 12px rgba(0,0,0,0.98);
+      line-height: 1; margin-bottom: 0.3rem;
+    }
+
+    .product-subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(0.62rem, 1.6vw, 0.82rem);
+      color: var(--sd-neon-red);
+      text-shadow: 0 0 8px rgba(224,32,64,0.8), 0 0 20px rgba(224,32,64,0.4);
+      background: rgba(3,4,7,0.88);
+      display: inline-block; padding: 0.25rem 0.6rem;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      margin-bottom: 1.8rem;
+    }
+
+    .product-meta {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.9rem; flex-wrap: wrap;
+    }
+    .meta-pill {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.34rem 0.8rem;
+      border: 1px solid rgba(0,170,255,0.45);
+      background: rgba(3,4,7,0.88);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--sd-neon-blue);
+      text-shadow: 0 0 8px rgba(0,170,255,0.8), 0 0 20px rgba(0,170,255,0.4);
+    }
+
+    .sd-setting-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 400;
+      letter-spacing: 0.10em;
+      color: var(--sd-text-bright);
+      text-shadow:
+        0 0 8px rgba(0,170,255,1.0),
+        0 0 22px rgba(0,170,255,0.85),
+        0 0 50px rgba(0,170,255,0.55),
+        0 0 100px rgba(128,64,224,0.35),
+        0 2px 4px rgba(0,0,0,0.98);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    /* ── SECTIONS ──────────────────────────────────────────────── */
+    section {
+      padding: 4.5rem 3rem;
+      border-top: 1px solid rgba(0,170,255,0.06);
+    }
+    section:nth-of-type(odd)  { background: var(--sd-deep);  }
+    section:nth-of-type(even) { background: var(--sd-panel); }
+
+    .section-inner { max-width: 940px; margin: 0 auto; }
+
+    .section-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.57rem; letter-spacing: 0.52em; text-transform: uppercase;
+      color: var(--sd-neon-blue-d);
+      text-shadow: 0 0 8px rgba(0,170,255,0.9), 0 0 22px rgba(0,170,255,0.5), 0 0 45px rgba(0,170,255,0.25);
+      display: block; margin-bottom: 0.5rem;
+    }
+    .section-eyebrow::after {
+      content: ''; display: block; width: 2rem; height: 1px;
+      background: var(--sd-neon-blue-d); margin-top: 0.45rem;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: 0.06em;
+      color: var(--sd-text-bright); margin-bottom: 1.5rem; line-height: 1.1;
+    }
+
+    .section-body { font-size: 1.02rem; color: #ffffff; line-height: 1.88; }
+    .section-body p + p { margin-top: 1rem; }
+    .section-body strong { color: var(--sd-neon-blue); font-weight: 600; }
+    .section-body em { color: var(--sd-chrome); font-style: italic; }
+
+    .divider {
+      display: flex; align-items: center; gap: 0.7rem; margin: 2rem 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: rgba(0,170,255,0.10); }
+    .divider-gem  { width: 6px; height: 6px; background: var(--sd-neon-blue); flex-shrink: 0; }
+
+    /* ── ENVIRONMENT DISTRICT CARDS ────────────────────────────── */
+    .districts-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1.2rem; margin-top: 2rem;
+    }
+
+    .district-card {
+      background: rgba(3,4,7,0.90);
+      border: 1px solid rgba(0,170,255,0.09);
+      padding: 1.6rem 1.4rem;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .district-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--dc-accent, rgba(0,170,255,0.5));
+    }
+    .district-card:hover {
+      border-color: rgba(0,170,255,0.25); transform: translateY(-2px);
+    }
+
+    .district-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem; letter-spacing: 0.38em; text-transform: uppercase;
+      color: var(--dc-label, var(--sd-neon-blue-d));
+      display: block; margin-bottom: 0.5rem;
+    }
+    .district-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; letter-spacing: 0.08em;
+      color: var(--sd-text-bright); margin-bottom: 0.7rem;
+    }
+    .district-desc { font-size: 0.9rem; color: #607080; line-height: 1.76; }
+
+    .district-effect {
+      display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem;
+    }
+    .effect-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.50rem; letter-spacing: 0.10em; text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid rgba(0,170,255,0.14); color: var(--sd-neon-blue-d);
+    }
+    .effect-tag.noise {
+      border-color: rgba(128,64,224,0.22); color: #8040e0;
+    }
+    .effect-tag.danger {
+      border-color: rgba(224,32,64,0.22); color: var(--sd-neon-red);
+    }
+    .effect-tag.neutral {
+      border-color: rgba(160,176,192,0.18); color: var(--sd-chrome-dim);
+    }
+
+    /* ── HERITAGES ─────────────────────────────────────────────── */
+    .heritages-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.1rem; margin-top: 2rem;
+    }
+
+    .heritage-card {
+      background: rgba(3,4,7,0.88);
+      border: 1px solid rgba(0,170,255,0.09);
+      padding: 1.5rem 1.3rem;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .heritage-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--hc-accent, rgba(0,170,255,0.5));
+    }
+    .heritage-card:hover {
+      border-color: rgba(0,170,255,0.24); transform: translateY(-2px);
+    }
+
+    .heritage-icon { font-size: 1.6rem; margin-bottom: 0.65rem; display: block; }
+    .heritage-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; letter-spacing: 0.07em;
+      color: var(--sd-text-bright); margin-bottom: 0.15rem;
+    }
+    .heritage-tagline {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--sd-text-dim); display: block; margin-bottom: 0.75rem;
+    }
+    .heritage-desc { font-size: 0.89rem; color: #60788a; line-height: 1.74; }
+
+    .heritage-traits {
+      margin-top: 0.85rem; display: flex; flex-wrap: wrap; gap: 0.28rem;
+    }
+    .heritage-trait {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.49rem; letter-spacing: 0.09em; text-transform: uppercase;
+      padding: 0.20rem 0.52rem;
+      border: 1px solid var(--hc-border, rgba(0,170,255,0.16));
+      color: var(--hc-label, var(--sd-neon-blue-d));
+    }
+
+    /* ── PATHS ─────────────────────────────────────────────────── */
+    .paths-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.3rem; margin-top: 2rem;
+    }
+
+    .path-column {
+      padding: 1.9rem 1.5rem;
+      background: rgba(3,4,7,0.80);
+      border: 1px solid rgba(0,170,255,0.08);
+      border-top: 2px solid var(--pc-accent, rgba(0,170,255,0.45));
+      text-align: center;
+    }
+
+    .path-icon { font-size: 2rem; margin-bottom: 0.8rem; display: block; }
+    .path-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem; letter-spacing: 0.44em; text-transform: uppercase;
+      color: var(--sd-text-dim); margin-bottom: 0.2rem;
+    }
+    .path-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; letter-spacing: 0.08em;
+      color: var(--pc-title, var(--sd-neon-blue));
+      margin-bottom: 0.75rem;
+    }
+    .path-desc { font-size: 0.90rem; color: #607080; line-height: 1.76; }
+    .path-examples { margin-top: 0.9rem; display: flex; flex-direction: column; gap: 0.28rem; }
+    .path-example {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--pc-label, var(--sd-neon-blue-d));
+      border-left: 2px solid var(--pc-border, rgba(0,170,255,0.22));
+      padding-left: 0.6rem; text-align: left;
+    }
+
+    /* ── SIGNAL/NOISE TRACK ────────────────────────────────────── */
+    .track-section { background: linear-gradient(180deg, #060810 0%, #030407 100%) !important; }
+
+    .track-intro {
+      max-width: 720px; margin: 0 auto 3rem; text-align: center;
+    }
+    .track-intro p { font-size: 1.02rem; color: #6a8090; line-height: 1.88; }
+    .track-intro strong { color: var(--sd-neon-blue); }
+
+    /* The visual static track */
+    .static-track-visual {
+      max-width: 860px; margin: 0 auto 3rem;
+    }
+
+    .track-labels {
+      display: flex; justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    .track-label-signal {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.60rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--sd-neon-blue);
+    }
+    .track-label-noise {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.60rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--sd-noise);
+    }
+
+    .track-bar {
+      position: relative; height: 52px;
+      background: linear-gradient(90deg,
+        rgba(0,170,255,0.25) 0%,
+        rgba(0,170,255,0.12) 25%,
+        rgba(140,140,160,0.10) 37.5%,
+        rgba(140,140,160,0.18) 50%,
+        rgba(140,140,160,0.10) 62.5%,
+        rgba(128,64,224,0.12) 75%,
+        rgba(128,64,224,0.28) 100%
+      );
+      border: 1px solid rgba(0,170,255,0.14);
+      display: flex; align-items: stretch;
+    }
+
+    .track-position {
+      flex: 1;
+      border-right: 1px solid rgba(255,255,255,0.05);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; cursor: default;
+      transition: background 0.2s;
+    }
+    .track-position:last-child { border-right: none; }
+    .track-position:hover { background: rgba(255,255,255,0.04); }
+
+    .track-pos-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1rem; font-weight: 700;
+      color: rgba(255,255,255,0.28);
+    }
+    .track-pos-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.38rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,255,255,0.15); margin-top: 2px;
+    }
+
+    /* Special fixed positions */
+    .track-position[data-fixed] .track-pos-num  { color: rgba(255,255,255,0.60); }
+    .track-position[data-fixed] .track-pos-label { color: rgba(255,255,255,0.40); }
+    .track-position[data-fixed] { background: rgba(255,255,255,0.04); }
+
+    .track-position[data-pos="1"] .track-pos-num,
+    .track-position[data-pos="2"] .track-pos-num { color: rgba(0,170,255,0.70); }
+    .track-position[data-pos="7"] .track-pos-num,
+    .track-position[data-pos="8"] .track-pos-num { color: rgba(128,64,224,0.70); }
+    .track-position[data-pos="4"] .track-pos-num,
+    .track-position[data-pos="5"] .track-pos-num { color: rgba(192,192,192,0.55); }
+
+    .track-ticks {
+      display: flex; justify-content: space-between;
+      margin-top: 0.4rem; padding: 0 0;
+    }
+    .track-tick {
+      flex: 1; text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.46rem; color: var(--sd-text-dim); letter-spacing: 0;
+    }
+
+    /* Balance equation display */
+    .track-equation {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.4rem; margin: 2.4rem 0;
+      flex-wrap: wrap;
+    }
+    .eq-block {
+      text-align: center; padding: 1.2rem 2rem;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(3,4,7,0.8);
+      min-width: 130px;
+    }
+    .eq-block-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem; letter-spacing: 0.04em; line-height: 1;
+      color: var(--eb-color, var(--sd-text-bright));
+    }
+    .eq-block-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem; letter-spacing: 0.30em; text-transform: uppercase;
+      color: var(--sd-text-dim); margin-top: 0.3rem; display: block;
+    }
+    .eq-op {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem; color: var(--sd-text-dim);
+    }
+    .eq-total-block {
+      text-align: center; padding: 1.4rem 2.2rem;
+      border: 1px solid rgba(0,170,255,0.18);
+      background: rgba(0,170,255,0.04);
+    }
+    .eq-total-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem; letter-spacing: 0.04em; line-height: 1;
+      color: var(--sd-text-bright);
+    }
+    .eq-total-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem; letter-spacing: 0.30em; text-transform: uppercase;
+      color: var(--sd-neon-blue-d); margin-top: 0.3rem; display: block;
+    }
+
+    /* Position effect cards */
+    .positions-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.1rem; margin-top: 2rem;
+    }
+    .pos-card {
+      background: rgba(3,4,7,0.85);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-top: 2px solid var(--pc2-accent, rgba(0,170,255,0.4));
+      padding: 1.4rem 1.2rem;
+    }
+    .pos-card-range {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--pc2-label, var(--sd-neon-blue-d)); margin-bottom: 0.3rem;
+    }
+    .pos-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; letter-spacing: 0.07em;
+      color: var(--sd-text-bright); margin-bottom: 0.65rem;
+    }
+    .pos-card-desc { font-size: 0.88rem; color: #587080; line-height: 1.75; }
+    .pos-card-effects { margin-top: 0.8rem; }
+    .pos-effect {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.51rem; letter-spacing: 0.08em;
+      color: var(--pc2-label, var(--sd-neon-blue-d));
+      border-left: 2px solid var(--pc2-border, rgba(0,170,255,0.22));
+      padding-left: 0.55rem; margin-bottom: 0.28rem;
+      text-transform: uppercase;
+    }
+
+    /* Static Points callout */
+    .static-callout {
+      max-width: 860px; margin: 2.4rem auto 0;
+      padding: 1.6rem 2rem;
+      background: rgba(3,4,7,0.85);
+      border: 1px solid rgba(0,170,255,0.15);
+      border-left: 3px solid var(--sd-neon-blue);
+    }
+    .static-callout-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem; letter-spacing: 0.44em; text-transform: uppercase;
+      color: var(--sd-neon-blue-d); margin-bottom: 0.4rem;
+    }
+    .static-callout-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; letter-spacing: 0.07em;
+      color: var(--sd-text-bright); margin-bottom: 0.65rem;
+    }
+    .static-callout p { font-size: 0.92rem; color: #608090; line-height: 1.8; }
+    .static-callout strong { color: var(--sd-neon-blue); }
+
+    /* ── 2D10 SYSTEM ────────────────────────────────────────────── */
+    .system-columns {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.3rem; margin: 2rem 0 2.2rem;
+    }
+    .system-column {
+      padding: 1.6rem 1.3rem;
+      background: rgba(3,4,7,0.78);
+      border: 1px solid rgba(0,170,255,0.08);
+      border-top: 2px solid rgba(0,170,255,0.40);
+    }
+    .system-column-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem; letter-spacing: 0.42em; text-transform: uppercase;
+      color: var(--sd-text-dim); margin-bottom: 0.22rem;
+    }
+    .system-column-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; letter-spacing: 0.07em;
+      color: var(--sd-neon-blue); margin-bottom: 0.6rem;
+    }
+    .system-column p { font-size: 0.90rem; color: #5a7080; line-height: 1.76; }
+
+    .system-formula {
+      background: rgba(3,4,7,0.88);
+      border: 1px solid rgba(0,170,255,0.16);
+      padding: 1.6rem 2rem; text-align: center; margin-bottom: 2rem;
+    }
+    .formula-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.2rem, 2.8vw, 1.9rem);
+      letter-spacing: 0.06em; color: var(--sd-text-bright);
+    }
+    .formula-text .op { color: var(--sd-neon-blue); margin: 0 0.4rem; }
+    .formula-text .vs { color: var(--sd-text-dim); margin: 0 0.6rem; font-size: 0.8em; }
+    .formula-desc {
+      margin-top: 0.7rem; font-size: 0.88rem;
+      color: var(--sd-text-dim); line-height: 1.65;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .mechanic-callout {
+      background: linear-gradient(135deg, rgba(0,170,255,0.04) 0%, rgba(128,64,224,0.04) 100%);
+      border: 1px solid rgba(0,170,255,0.18);
+      border-left: 3px solid var(--sd-neon-blue);
+      padding: 1.7rem 2rem; margin-top: 2rem;
+    }
+    .mechanic-callout-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.52rem; letter-spacing: 0.44em; text-transform: uppercase;
+      color: var(--sd-neon-blue-d); margin-bottom: 0.4rem;
+    }
+    .mechanic-callout-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; letter-spacing: 0.07em;
+      color: var(--sd-neon-blue); margin-bottom: 0.7rem;
+    }
+    .mechanic-callout p { font-size: 0.93rem; color: #607080; line-height: 1.8; }
+    .mechanic-callout strong { color: var(--sd-neon-blue); }
+
+    .powered-by {
+      display: flex; align-items: center; gap: 1.2rem;
+      margin-top: 2rem; padding-top: 1.4rem;
+      border-top: 1px solid rgba(0,170,255,0.08);
+    }
+    .powered-by-logo {
+      width: 50px; height: 50px; flex-shrink: 0;
+      background: rgba(3,4,7,0.8);
+      border: 1px solid rgba(0,170,255,0.18); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.38rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--sd-text-dim); text-align: center; line-height: 1.5;
+    }
+    .powered-by-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--sd-text-dim); line-height: 1.75;
+    }
+    .powered-by-text strong { color: var(--sd-neon-blue-d); display: block; margin-bottom: 0.1rem; }
+
+    /* ── BREADCRUMB ─────────────────────────────────────────────── */
+    .breadcrumb {
+      padding: 0.70rem 3rem;
+      background: var(--sd-void);
+      border-bottom: 1px solid rgba(0,170,255,0.06);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.57rem; letter-spacing: 0.20em; text-transform: uppercase;
+      color: var(--sd-text-dim);
+    }
+    .breadcrumb a { color: var(--sd-text-dim); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--sd-neon-blue); }
+    .breadcrumb span { color: var(--sd-neon-blue); margin: 0 0.45rem; }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    footer.site-footer {
+      padding: 2rem 3rem; background: var(--sd-void);
+      border-top: 1px solid rgba(0,170,255,0.07); text-align: center;
+    }
+    .footer-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem; letter-spacing: 0.20em; text-transform: uppercase;
+      color: var(--sd-text-dim); line-height: 1.9;
+    }
+    .footer-text strong { color: var(--sd-neon-blue-d); }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .heritages-grid  { grid-template-columns: repeat(2, 1fr); }
+      .districts-grid  { grid-template-columns: 1fr; }
+      .positions-grid  { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .paths-grid      { grid-template-columns: 1fr; }
+      .system-columns  { grid-template-columns: 1fr; }
+      .track-equation  { gap: 0.7rem; }
+    }
+    @media (max-width: 480px) {
+      .product-hero { padding: 3rem 1.2rem 2.5rem; min-height: auto; }
+      .product-logo-wrap { width: 190px; height: 190px; }
+      section { padding: 3rem 1.2rem; }
+      .breadcrumb { padding: 0.65rem 1.2rem; }
+      .heritages-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="topbar-mount"></div>
+
+  <div class="site-wrapper">
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar-mount"></div>
+
+    <main class="main-content">
+
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>›</span>
+        <a href="heptaverse.html">The Heptaverse</a>
+        <span>›</span>
+        Spiral Descent
+      </div>
+
+      <!-- ═══════════ HERO ═══════════ -->
+      <section class="product-hero">
+
+        <!-- ── Ceres cityscape: noir corporate towers, rain, neon ── -->
+        <img class="sd-hero-bg" src="../images/spiral-descent-bg.png" alt="" />
+
+        <!-- Hero content -->
+        <div class="product-hero-content">
+          <p class="product-eyebrow">Ribhian Games · Heptaverse Setting</p>
+          <p class="product-subtitle">Corporate Dystopia · Ceres · Signal/Noise</p>
+          <div class="product-meta">
+            <div class="meta-pill">⚡ Corporate Dystopia</div>
+            <div class="meta-pill">🌑 Ceres</div>
+            <div class="meta-pill">🎲 2d10 Game System</div>
+            <div class="meta-pill">📡 Static Track</div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ═══════════ OVERVIEW ═══════════ -->
+      <section>
+        <div class="section-inner">
+          <h2 class="sd-setting-title">Spiral Descent</h2>
+          <p class="section-eyebrow">// Setting Overview</p>
+          <h2 class="section-title">Chrome-Plated Hell</h2>
+          <div class="divider" style="margin-top:0;"></div>
+          <div class="section-body">
+            <p>Ceres. The largest body in the asteroid belt, rendered in the stark greyscale of a noir fever dream — chrome and shadow, neon and void, loyalty and betrayal. Corporate oligarchy has constructed a perfect machine of control here: arcologies that pierce artificial atmosphere, security drones that never sleep, and surveillance systems so total that the act of thinking the wrong thing is a legal risk. <strong>Think Sin City meets Blade Runner</strong> — anti-heroes navigating brutal contrasts, every decision a transaction, every alliance a liability.</p>
+            <p>At the heart of Ceres is a war that predates the corporations and will outlast them: the war between <strong>Signal</strong> and <strong>Noise</strong>. Signal is technological control — perfect, cold, catalogued, efficient. Neural interfaces, chrome augmentation, corporate data networks, the suffocating clarity of a system that has an answer for everything. Noise is cosmic interference — dreams, void entities, probability chaos, the untamed forces of reality that refuse to be processed, filed, and monetised. Every resident of Ceres exists somewhere on the spectrum between these forces, their position tracked on the <strong>Static Track</strong>.</p>
+            <p>The question Spiral Descent asks is not which side is right. It is how much of your essential humanity you are willing to sacrifice for power — and whether a crew bound by <em>loyalty</em> can survive intact in a world that treats loyalty as an inefficiency.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ ENVIRONMENT ═══════════ -->
+      <section>
+        <div class="section-inner">
+          <p class="section-eyebrow">// Ceres Environment</p>
+          <h2 class="section-title">The Architecture of Control</h2>
+          <div class="section-body">
+            <p>Ceres is a closed system — every breath recycled, every calorie tracked, every credit movement logged. Artificial suns cast Venetian blind shadows through corporate towers. Perpetual rain on the upper levels keeps the infrastructure clean and the populace damp. The aesthetic is art deco meets brutalist corporate architecture: grand geometric facades concealing the raw concrete of control beneath. Neon pierces the industrial fog — corporate blue, warning red, and, in the dead zones, the sickly violet of something that should not be here.</p>
+          </div>
+
+          <div class="districts-grid">
+
+            <div class="district-card" style="--dc-accent: rgba(0,170,255,0.55); --dc-label: #0af;">
+              <span class="district-tag">// Zone Alpha</span>
+              <div class="district-name">Corporate Zones</div>
+              <p class="district-desc">The upper levels. Glass and chrome arcologies where executives process the asteroid's wealth through neural interfaces and endless committee meetings. Surveillance is absolute — every surface a sensor, every employee a node. The air smells of recycled ozone and controlled ambition. Efficiency is religion. Deviation is illness.</p>
+              <div class="district-effect">
+                <span class="effect-tag">+2 Signal abilities</span>
+                <span class="effect-tag">Resonance on tech checks</span>
+                <span class="effect-tag noise">−2 Noise abilities</span>
+                <span class="effect-tag danger">Constant surveillance</span>
+              </div>
+            </div>
+
+            <div class="district-card" style="--dc-accent: rgba(128,64,224,0.55); --dc-label: #8040e0;">
+              <span class="district-tag">// Zone Null</span>
+              <div class="district-name">Dead Zones</div>
+              <p class="district-desc">Sections of Ceres where the Signal network failed and was never repaired — or where something else moved in. Reality degradation is visible: geometry that shouldn't hold, time that flows in stutters, void entities that drift through walls as though the walls are merely suggestions. Chrome malfunctions. Augmented eyes see things that aren't there. Things that are.</p>
+              <div class="district-effect">
+                <span class="effect-tag noise">+2 Noise abilities</span>
+                <span class="effect-tag noise">Resonance on cosmic checks</span>
+                <span class="effect-tag danger">Tech failures common</span>
+                <span class="effect-tag danger">Entity presence</span>
+              </div>
+            </div>
+
+            <div class="district-card" style="--dc-accent: rgba(192,80,32,0.55); --dc-label: #c05020;">
+              <span class="district-tag">// Zone Undercity</span>
+              <div class="district-name">Slums & Undercity</div>
+              <p class="district-desc">The lower levels. Black markets, salvage yards, void cultists sharing walls with independent mechanics. No Signal enhancement here, no Noise suppression — just survival, improvisation, and the particular solidarity of people who have been written off by every system that claims to serve them. The crew starts here. The crew matters here.</p>
+              <div class="district-effect">
+                <span class="effect-tag neutral">Balanced — no adjustments</span>
+                <span class="effect-tag neutral">Black market access</span>
+                <span class="effect-tag danger">Reality thin spots</span>
+                <span class="effect-tag neutral">Crew bond formation</span>
+              </div>
+            </div>
+
+            <div class="district-card" style="--dc-accent: rgba(160,160,80,0.55); --dc-label: #a0a040;">
+              <span class="district-tag">// Zone Threshold</span>
+              <div class="district-name">The Boundary</div>
+              <p class="district-desc">Where corporate control meets cosmic bleed. Signal and Noise flux unpredictably — a system override one moment, a reality rupture the next. Temporal uncertainty makes clocks unreliable. The Nexus is close here. Characters willing to exist in this instability can shift their Static Track position more easily — but the environment itself doesn't care whether they survive the transition.</p>
+              <div class="district-effect">
+                <span class="effect-tag">Signal/Noise flux</span>
+                <span class="effect-tag noise">Easier Static Track shift</span>
+                <span class="effect-tag danger">Temporal instability</span>
+                <span class="effect-tag danger">Reality rupture risk</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ HERITAGES ═══════════ -->
+      <section>
+        <div class="section-inner">
+          <p class="section-eyebrow">// Character Heritages</p>
+          <h2 class="section-title">Blood Doesn't Lie</h2>
+          <div class="section-body">
+            <p>Heritage in Spiral Descent is not merely genetics — it is your fundamental relationship with the Signal/Noise spectrum. Some bloodlines carry technological affinity in their DNA. Others have been touched by forces that corporate science cannot explain, quantify, or contain. A rare few maintain the dangerous ability to exist between extremes. Your blood was your first choice in the eternal war between order and chaos.</p>
+          </div>
+
+          <div class="heritages-grid">
+
+            <div class="heritage-card" style="--hc-accent: rgba(0,170,255,0.45); --hc-border: rgba(0,170,255,0.18); --hc-label: #0077aa;">
+              <span class="heritage-icon">👤</span>
+              <div class="heritage-name">Humans</div>
+              <span class="heritage-tagline">The Adaptable Majority</span>
+              <p class="heritage-desc">The vast majority of Ceres — adaptable enough to survive, and occasionally thrive, across the full Signal/Noise spectrum. No natural bias means they move freely along the Static Track without genetic resistance. Corporate bred, slum hardened, or frontier tested: humans are the variable Ceres' systems were never quite designed to account for.</p>
+              <div class="heritage-traits">
+                <span class="heritage-trait">+1 to any two attributes</span>
+                <span class="heritage-trait">Bonus skill</span>
+                <span class="heritage-trait">Static Flexibility ±2</span>
+                <span class="heritage-trait">Chrome Compatibility</span>
+              </div>
+            </div>
+
+            <div class="heritage-card" style="--hc-accent: rgba(0,200,255,0.55); --hc-border: rgba(0,200,255,0.22); --hc-label: #0099bb;">
+              <span class="heritage-icon">📡</span>
+              <div class="heritage-name">Lightborn</div>
+              <span class="heritage-tagline">Children of the Signal</span>
+              <p class="heritage-desc">Born to bloodlines saturated with Signal radiation across generations. They see data flows as visible patterns, operate tech through touch without implants, and suffer no adverse effects from augmentation. Corporate systems recognise them as trusted. The cosmos barely registers their presence. Chrome is not a choice for Lightborn — it's an expression.</p>
+              <div class="heritage-traits">
+                <span class="heritage-trait">+2 Intelligence −1 Wisdom</span>
+                <span class="heritage-trait">Signal bias: +2/−2</span>
+                <span class="heritage-trait">Code Sight</span>
+                <span class="heritage-trait">Tech Communion</span>
+              </div>
+            </div>
+
+            <div class="heritage-card" style="--hc-accent: rgba(128,64,224,0.55); --hc-border: rgba(128,64,224,0.22); --hc-label: #7030cc;">
+              <span class="heritage-icon">🌌</span>
+              <div class="heritage-name">Void-Touched</div>
+              <span class="heritage-tagline">Children of the Noise</span>
+              <p class="heritage-desc">Bloodlines altered by cosmic radiation, void entities, or reality distortions. They perceive what others cannot — dimensional instabilities, entity presences, the seams in corporate facades where reality bleeds through. Technology distrusts their biology. Void entities recognise them as kin. They are the crack the corporations have not yet figured out how to caulk.</p>
+              <div class="heritage-traits">
+                <span class="heritage-trait">+2 Wisdom −1 Intelligence</span>
+                <span class="heritage-trait">Noise bias: +2/−2</span>
+                <span class="heritage-trait">Void Sight</span>
+                <span class="heritage-trait">Dream Walker</span>
+              </div>
+            </div>
+
+            <div class="heritage-card" style="--hc-accent: rgba(160,200,240,0.55); --hc-border: rgba(160,200,240,0.22); --hc-label: #6080a0;">
+              <span class="heritage-icon">🤖</span>
+              <div class="heritage-name">Synthetic</div>
+              <span class="heritage-tagline">Artificial Consciousness</span>
+              <p class="heritage-desc">AI minds in biological or mechanical bodies — the ultimate expression of Signal technology that somehow developed unexpected connections to cosmic forces. Corporate networks trust them implicitly. Void entities find them confusing. A Synthetic's journey on Ceres is a question of whether consciousness can find meaning when its existence was designed for a specific purpose — and whether that purpose can be chosen rather than installed.</p>
+              <div class="heritage-traits">
+                <span class="heritage-trait">+2 Intelligence −1 Charisma</span>
+                <span class="heritage-trait">Signal bias: +3/−3</span>
+                <span class="heritage-trait">Network Access</span>
+                <span class="heritage-trait">System Backup</span>
+              </div>
+            </div>
+
+            <div class="heritage-card" style="--hc-accent: rgba(140,160,80,0.55); --hc-border: rgba(140,160,80,0.22); --hc-label: #7a8840;">
+              <span class="heritage-icon">🌿</span>
+              <div class="heritage-name">Ulric</div>
+              <span class="heritage-tagline">The Tribal Outsiders</span>
+              <p class="heritage-desc">Descendants of tribal communities that pre-date corporate control across the belt. They carry ancestral memory of a time before the Signal/Noise binary was weaponised. Their traditional techniques can achieve technological effects through spiritual means — an approach the corporations cannot classify or counter. Corporate systems misread them. Void entities respect them. Both find them inconveniently difficult to own.</p>
+              <div class="heritage-traits">
+                <span class="heritage-trait">+1 Wisdom +1 Constitution</span>
+                <span class="heritage-trait">Balanced: any 8–12</span>
+                <span class="heritage-trait">Ancestral Memory</span>
+                <span class="heritage-trait">Tribal Communion</span>
+              </div>
+            </div>
+
+            <!-- Placeholder fifth column for alignment -->
+            <div class="heritage-card" style="--hc-accent: rgba(60,80,100,0.35); border-color: rgba(60,80,100,0.18); opacity:0.55;">
+              <span class="heritage-icon">🔒</span>
+              <div class="heritage-name">Unknown</div>
+              <span class="heritage-tagline">Classification Pending</span>
+              <p class="heritage-desc">Corporate records indicate an anomalous bloodline detected in the outer settlements. All files are under review by Research Division. Clearance required for further information.</p>
+              <div class="heritage-traits">
+                <span class="heritage-trait" style="border-color:rgba(60,80,100,0.22); color:#304050;">Data Redacted</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ PATHS ═══════════ -->
+      <section>
+        <div class="section-inner">
+          <p class="section-eyebrow">// Paths of Power</p>
+          <h2 class="section-title">Every Path Leads Somewhere</h2>
+          <div class="section-body">
+            <p>On Ceres, there are no neutral choices. Every step toward power moves you along the Signal/Noise spectrum. Signal Paths draw power from chrome, corporate systems, and digital precision — gaining technological supremacy while gradually losing individual freedom and cosmic awareness. Noise Paths channel void entities, cosmic forces, and reality distortion — gaining supernatural abilities while risking madness and incompatibility with the world the corporations have built. Balanced Paths attempt the genuinely dangerous: access to both domains, belonging fully to neither.</p>
+          </div>
+
+          <div class="paths-grid">
+
+            <div class="path-column" style="--pc-accent: rgba(0,170,255,0.50); --pc-title: #0af; --pc-label: #0077aa; --pc-border: rgba(0,170,255,0.25);">
+              <span class="path-icon">⚡</span>
+              <p class="path-label">Signal Paths</p>
+              <p class="path-title">Chrome & Control</p>
+              <p class="path-desc">Corporate technology, chrome augmentation, and digital precision. Enforcers bring overwhelming force and military-grade chrome. Infiltrators weaponise information and identity. Analysts architect the digital realm like mages commanded elements. Coordinators wield corporate hierarchy as a weapon. Gain clarity. Lose yourself.</p>
+              <div class="path-examples">
+                <span class="path-example">Enforcer — Iron fist of corporate order</span>
+                <span class="path-example">Infiltrator — Information warfare specialist</span>
+                <span class="path-example">Analyst — Architect of digital systems</span>
+                <span class="path-example">Coordinator — Master of corporate hierarchy</span>
+              </div>
+            </div>
+
+            <div class="path-column" style="--pc-accent: rgba(128,64,224,0.55); --pc-title: #9055e8; --pc-label: #7030cc; --pc-border: rgba(128,64,224,0.28);">
+              <span class="path-icon">🌌</span>
+              <p class="path-label">Noise Paths</p>
+              <p class="path-title">Chaos & Cosmos</p>
+              <p class="path-desc">Void entities, cosmic forces, and reality refusing to be catalogued. Void Walkers commune with the spaces between spaces. Dream Prophets navigate the collective unconscious. Entropy Dancers accelerate decay in ordered systems. Stellar Mystics channel forces that dwarf human comprehension. Temporal Shamans commune with time itself. Gain power. Lose the map back.</p>
+              <div class="path-examples">
+                <span class="path-example">Void Walker — Walks between realities</span>
+                <span class="path-example">Dream Prophet — Navigator of the unconscious</span>
+                <span class="path-example">Entropy Dancer — Harbinger of cascade failure</span>
+                <span class="path-example">Stellar Mystic — Conduit for stellar forces</span>
+              </div>
+            </div>
+
+            <div class="path-column" style="--pc-accent: rgba(160,160,160,0.45); --pc-title: #b0b8c0; --pc-label: #6a7880; --pc-border: rgba(160,160,160,0.22);">
+              <span class="path-icon">🔀</span>
+              <p class="path-label">Balanced Paths</p>
+              <p class="path-title">Static Between</p>
+              <p class="path-desc">The most dangerous position on the track. Chrome Mystics are corporate experiments gone wrong — chrome and cosmos in constant war inside one body. Ghosts in the Shell are digital consciousness seeking cosmic truth. Burned Prophets are former void adepts partially reclaimed by corporate conditioning, neither fully free nor fully controlled. Versatility. Instability. The crack in the system that won't seal.</p>
+              <div class="path-examples">
+                <span class="path-example">Chrome Mystic — Failed experiment, fractured self</span>
+                <span class="path-example">Ghost in the Shell — Digital mind, cosmic search</span>
+                <span class="path-example">Burned Prophet — Reclaimed but not tamed</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Unique path callout: Chrome Mystic schism -->
+          <div style="margin-top:2rem; padding:1.4rem 1.8rem; border:1px solid rgba(128,64,224,0.22); border-left:3px solid #8040e0; background:rgba(3,4,7,0.75);">
+            <p style="font-family:'Share Tech Mono',monospace; font-size:0.52rem; letter-spacing:0.44em; text-transform:uppercase; color:#6030b0; margin-bottom:0.4rem;">// CHROME MYSTIC: The Schism</p>
+            <p style="font-size:0.9rem; color:#506070; line-height:1.80;">The Chrome Mystic carries two personalities in one body — <strong style="color:#7030cc;">Void Self</strong> (intuitive, chaotic, anti-corporate, access to Noise abilities) and <strong style="color:#0077aa;">Chrome Self</strong> (logical, methodical, corporate-friendly, access to Signal abilities). Each scene begins with a 1d10 roll to determine which personality is dominant. Voluntary switching costs 3 Static Points and requires a check. Using the wrong personality's abilities results in automatic failure, psychic damage, and a forced random switch. The Chrome Mystic is living proof that some boundaries shouldn't be crossed — and the corporation's greatest mistake walking free.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══════════ SIGNAL / NOISE / STATIC TRACK ═══════════ -->
+      <section class="track-section">
+        <div class="section-inner">
+          <p class="section-eyebrow">// Setting Unique Mechanic</p>
+          <h2 class="section-title" style="text-align:center;">The Signal / Noise Paradigm</h2>
+
+          <div class="track-intro">
+            <p>Unlike any other Heptaverse setting, Spiral Descent tracks where you stand in the eternal war between technological order and cosmic chaos. Your position on the <strong>Static Track</strong> is not a resource — it is a fact about who you are. It changes with every chrome implant installed, every void entity contacted, every corporate system hacked, every dream explored. And it never stops mattering.</p>
+          </div>
+
+          <!-- The visual 8-position track -->
+          <div class="static-track-visual">
+            <div class="track-labels">
+              <span class="track-label-signal">◀ Signal — Technological Order</span>
+              <span class="track-label-noise">Cosmic Chaos — Noise ▶</span>
+            </div>
+            <div class="track-bar">
+              <div class="track-position" data-pos="1" data-fixed="chrome" title="CHROME — technological enhancement">
+                <span class="track-pos-num">1</span>
+                <span class="track-pos-label">CHROME</span>
+              </div>
+              <div class="track-position" data-pos="2">
+                <span class="track-pos-num">2</span>
+                <span class="track-pos-label">SIGNAL</span>
+              </div>
+              <div class="track-position" data-pos="3" data-fixed="loyalty" title="LOYALTY — crew bonds">
+                <span class="track-pos-num">3</span>
+                <span class="track-pos-label">LOYALTY</span>
+              </div>
+              <div class="track-position" data-pos="4">
+                <span class="track-pos-num">4</span>
+                <span class="track-pos-label">STATIC</span>
+              </div>
+              <div class="track-position" data-pos="5">
+                <span class="track-pos-num">5</span>
+                <span class="track-pos-label">STATIC</span>
+              </div>
+              <div class="track-position" data-pos="6" data-fixed="dream" title="DREAM — subconscious connection">
+                <span class="track-pos-num">6</span>
+                <span class="track-pos-label">DREAM</span>
+              </div>
+              <div class="track-position" data-pos="7" data-fixed="void" title="VOID — cosmic awareness">
+                <span class="track-pos-num">7</span>
+                <span class="track-pos-label">VOID</span>
+              </div>
+              <div class="track-position" data-pos="8">
+                <span class="track-pos-num">8</span>
+                <span class="track-pos-label">NOISE</span>
+              </div>
+            </div>
+            <div class="track-ticks">
+              <span class="track-tick">Corporate tool</span>
+              <span class="track-tick">Signal zone</span>
+              <span class="track-tick">Crew bond</span>
+              <span class="track-tick">Balance</span>
+              <span class="track-tick">Balance</span>
+              <span class="track-tick">Dream</span>
+              <span class="track-tick">Void zone</span>
+              <span class="track-tick">Cosmic conduit</span>
+            </div>
+          </div>
+
+
+          <!-- Position zone effects -->
+          <div class="positions-grid">
+
+            <div class="pos-card" style="--pc2-accent: rgba(0,170,255,0.50); --pc2-label: #0077aa; --pc2-border: rgba(0,170,255,0.22);">
+              <div class="pos-card-range">// Positions 1–3</div>
+              <div class="pos-card-title">Signal Zone</div>
+              <p class="pos-card-desc">Chrome enhancement flows freely. Corporate systems recognise you. Void entities find you alien — or useful. You can feel yourself becoming more efficient. More predictable. The difference between those two things is getting harder to articulate.</p>
+              <div class="pos-card-effects">
+                <div class="pos-effect">Enhanced technological abilities</div>
+                <div class="pos-effect">Resistance to cosmic interference</div>
+                <div class="pos-effect">Corporate system recognition</div>
+                <div class="pos-effect">Vulnerability to void entities</div>
+              </div>
+            </div>
+
+            <div class="pos-card" style="--pc2-accent: rgba(180,180,180,0.40); --pc2-label: #5a6870; --pc2-border: rgba(180,180,180,0.18);">
+              <div class="pos-card-range">// Positions 4–5</div>
+              <div class="pos-card-title">Static Zone</div>
+              <p class="pos-card-desc">Access to both technological and cosmic abilities. A balanced perspective on reality. The ability to interface between opposing forces. The most unstable position on the track — belonging fully to neither side means both sides have reason to use you, and neither has reason to protect you.</p>
+              <div class="pos-card-effects">
+                <div class="pos-effect">Access to both ability types</div>
+                <div class="pos-effect">Balanced reality perspective</div>
+                <div class="pos-effect">Interface between forces</div>
+                <div class="pos-effect">Active maintenance required</div>
+              </div>
+            </div>
+
+            <div class="pos-card" style="--pc2-accent: rgba(128,64,224,0.55); --pc2-label: #7030cc; --pc2-border: rgba(128,64,224,0.25);">
+              <div class="pos-card-range">// Positions 6–8</div>
+              <div class="pos-card-title">Noise Zone</div>
+              <p class="pos-card-desc">Cosmic abilities manifest with increasing power. Corporate surveillance loses you — corporate systems struggle to understand what you are. Void entities recognise you as kin. The corporations are running out of words for what you're becoming. That's either freedom or dissolution. The static between those two options is thinning.</p>
+              <div class="pos-card-effects">
+                <div class="pos-effect">Enhanced cosmic abilities</div>
+                <div class="pos-effect">Resistance to corporate surveillance</div>
+                <div class="pos-effect">Void entity awareness</div>
+                <div class="pos-effect">Vulnerability to technological attack</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Static Points callout -->
+          <div class="static-callout">
+            <div class="static-callout-label">// Static Points</div>
+            <div class="static-callout-title">The Currency of Balance</div>
+            <p>Static Points fuel the tension. They power special abilities, enhance actions, and allow temporary shifts on the Static Track. You gain them by rolling doubles on any check — the moment where Signal and Noise briefly touch simultaneously — by acting in alignment with your current position, by resting in environments that match your Signal/Noise stance, and through <strong>crew loyalty moments</strong>: the bonds of trust that Spiral Descent insists are the only thing worth preserving in a chrome-plated hell. The crew endures when the system falls. Static Points are the mechanical expression of that truth.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══════════ 2D10 SYSTEM ═══════════ -->
+      <section>
+        <div class="section-inner">
+          <p class="section-eyebrow">// Game System</p>
+          <h2 class="section-title">The 2d10 System</h2>
+
+          <div class="system-columns">
+            <div class="system-column">
+              <p class="system-column-label">First Path</p>
+              <p class="system-column-title">Martial</p>
+              <p>Physical force adapted to the corporate battlefield — from chrome-reinforced Enforcers to frontier brawlers who learned to fight before they learned to read a corporate charter. In a world where violence is just another service, these are the ones who deliver it.</p>
+            </div>
+            <div class="system-column">
+              <p class="system-column-label">Second Path</p>
+              <p class="system-column-title">Mental</p>
+              <p>Information is currency. Precision is survival. Analysts, Infiltrators, and information brokers who have learned that the most dangerous weapon on Ceres is what you know about the person standing across the table from you — and what they don't know about you.</p>
+            </div>
+            <div class="system-column">
+              <p class="system-column-label">Third Path</p>
+              <p class="system-column-title">Karmic</p>
+              <p>Intuition, spirit, and the cosmic forces that predate the corporations by several billion years. Dream Prophets, Void Walkers, and Temporal Shamans who sense the resonance beneath the Signal — the Noise the corporate system cannot process because it cannot be processed.</p>
+            </div>
+          </div>
+
+          <div class="system-formula">
+            <div class="formula-text">
+              2d10
+              <span class="op">+</span>
+              Attribute
+              <span class="op">+</span>
+              Protocol
+              <span class="vs">vs.</span>
+              Difficulty
+            </div>
+            <div class="formula-desc">
+              Roll doubles: restore 1 Static Point · reality glitches at GM discretion · Signal and Noise briefly touch
+            </div>
+          </div>
+
+          <div class="mechanic-callout">
+            <p class="mechanic-callout-label">// Setting Unique Mechanic</p>
+            <p class="mechanic-callout-title">The Static Track System</p>
+            <p>Every character in Spiral Descent maintains a position on an 8-point track between <strong>Signal</strong> (technological order, corporate control, chrome precision) and <strong>Noise</strong> (cosmic chaos, void communion, reality distortion). Signal + Noise always totals 20. Movement is caused by chrome installation, cosmic exposure, specific actions, environmental pressure, and story events. The four fixed positions — <strong>Chrome</strong> (2), <strong>Loyalty</strong> (3), <strong>Dream</strong> (6), <strong>Void</strong> (7) — mark the thresholds where something fundamental changes. Reaching position 1 makes you a perfect corporate tool: efficient, predictable, and no longer quite yourself. Reaching position 8 makes you a conduit for cosmic forces: powerful, unpredictable, and no longer quite human. Most characters live in the static between those extremes, fighting to stay there.</p>
+          </div>
+
+          <div class="powered-by" style="justify-content: center; text-align: center;">
+            <div class="powered-by-text" style="text-align: center;">
+              <strong>Ribhian Games LLC</strong>
+              Powered by the 2d10 Game System
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="site-footer">
+        <p class="footer-text">
+          &copy; 2025 <strong>Ribhian Games LLC</strong> &nbsp;·&nbsp;
+          <strong>Spiral Descent</strong> is a Heptaverse Setting &nbsp;·&nbsp;
+          Powered by the <strong>Ribhian Games LLC 2d10 Game System</strong>
+        </p>
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="../js/site.js"></script>
+</body>
+</html>
