@@ -185,6 +185,7 @@ NOT linked publicly — access by direct URL only.-->
 <datalist id="dl-names"></datalist>
 <datalist id="dl-tags"></datalist>
 <datalist id="dl-meta"></datalist>
+<datalist id="dl-hosts"></datalist>
 
 <script src="event-render.js"></script>
 <script>
@@ -316,6 +317,8 @@ function fillDatalists() {
   const all = events.flatMap(e => e.event_sessions);
   document.getElementById('dl-names').innerHTML = uniq(events.map(e => e.name)).map(v => `<option value="${esc(v)}">`).join('');
   document.getElementById('dl-tags').innerHTML = uniq(all.map(s => s.tag_text)).map(v => `<option value="${esc(v)}">`).join('');
+  // Every GM / judge / host name used before, for the "Run by" box (grows as you save new names)
+  document.getElementById('dl-hosts').innerHTML = uniq(all.flatMap(s => (s.meta || []).filter(isHost).map(m => m.value))).map(v => `<option value="${esc(v)}">`).join('');
   document.getElementById('dl-meta').innerHTML = uniq([...META_LABELS, ...all.flatMap(s => s.meta.map(m => m.label))]).map(v => `<option value="${esc(v)}">`).join('');
 }
 
@@ -507,7 +510,7 @@ function renderSessions() {
         <div class="span2"><label class="f">Title</label>
           <input data-k="${s.id}:title" value="${esc(s.title)}" oninput="setSess(${i}, 'title', this.value)" placeholder="e.g. A Book, A Candle and a Kobold" /></div>
         <div class="span2"><label class="f">Run by <small style="text-transform:none;letter-spacing:0;">(GM / judge / host; shown as “Host: …”)</small></label>
-          <input data-k="${s.id}:host" value="${esc(hostOf(s))}" oninput="setHost(${i}, this.value)" placeholder="e.g. Cornovii, Jason Messier" /></div>
+          <input data-k="${s.id}:host" list="dl-hosts" autocomplete="off" value="${esc(hostOf(s))}" oninput="setHost(${i}, this.value)" placeholder="e.g. Cornovii, Jason Messier" /></div>
         <div><label class="f">Day</label>
           <select data-k="${s.id}:day" onchange="setSess(${i}, 'session_date', this.value, true)" ${multi ? '' : 'disabled'}>
             ${days.map(d => { const x = RE.parseDate(d); return `<option value="${d}" ${s.session_date === d ? 'selected' : ''}>${RE.DAYS[x.getDay()]} ${RE.MONTHS[x.getMonth()]} ${x.getDate()}</option>`; }).join('')}
