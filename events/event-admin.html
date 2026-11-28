@@ -421,9 +421,9 @@ function renderEditor() {
         <div class="span2"><label class="f" for="f-name">Event name</label>
           <input id="f-name" list="dl-names" value="${esc(cur.name)}" oninput="setField('name', this.value)" placeholder="e.g. BHS Gaming Club" /></div>
         <div><label class="f" for="f-start">Start date</label>
-          <input type="date" id="f-start" value="${esc(cur.start_date)}" onchange="changeStart(this.value)" /></div>
+          <input type="date" id="f-start" value="${esc(cur.start_date)}" onchange="changeStart(this.value)" onblur="if (!fullDate(this.value)) this.value = cur.start_date" /></div>
         <div><label class="f" for="f-end">End date</label>
-          <input type="date" id="f-end" value="${esc(cur.end_date)}" onchange="changeEnd(this.value)" /></div>
+          <input type="date" id="f-end" value="${esc(cur.end_date)}" onchange="changeEnd(this.value)" onblur="checkEnd(this)" /></div>
       </div>
       <div class="hint">Changing the start date moves the whole event, including every session's day.</div>
     </section>
@@ -454,7 +454,7 @@ function renderEditor() {
         <label class="switch"><input type="radio" name="btnmode" ${btnMode() === 'none' ? 'checked' : ''} onchange="setBtnMode('none')">
           No button</label>
       </div>
-      <div class="grid g3" ${btnMode() === 'none' ? 'style="display:none;"' : ''}>
+      <div class="grid g3" id="link-fields" ${btnMode() === 'none' ? 'style="display:none;"' : ''}>
         <div class="span2"><label class="f" for="f-url">Registration / event site link</label>
           <input id="f-url" value="${esc(cur.register_url || '')}" oninput="setField('register_url', this.value)" placeholder="https://…  (or tel:+1… / mailto:…)" />
           <div class="hint">You can fill this in early and keep the button greyed out until registration opens. After the event, the button switches to “Event Concluded” by itself.</div></div>
@@ -477,10 +477,12 @@ function renderEditor() {
     </section>
 
     <section class="sec">
-      <h2>Sessions (${cur.event_sessions.length})</h2>
+      <h2>Tables &amp; Sessions (<span id="sess-count">${cur.event_sessions.length}</span>)</h2>
+      <p class="hint" style="margin:-0.5rem 0 1rem;">One entry per game. Running several tables at the same time? Add one for each, with the same day and time.
+        At a convention, add every game you run there to the same event, each with its own day and time. They are listed in date, then time order automatically.</p>
       <div id="sessions">${renderSessions()}</div>
-      <button class="btn-ghost" onclick="addSession()">+ Add Session</button>
-      <span class="hint" style="margin-left:0.6rem;">Sessions are shown in date, then time order automatically.</span>
+      <button class="btn-ghost" onclick="addSession()">+ Add Another Table / Session</button>
+      <span class="hint" style="margin-left:0.6rem;">A new one starts with the same day and time as the last.</span>
     </section>
 
     <section class="sec">
@@ -497,43 +499,45 @@ function renderSessions() {
     const i = cur.event_sessions.indexOf(s);
     return `<div class="sess" style="border-left-color:${tagColour(s.tag_style)}">
       <div class="sess-head">
-        <span class="num">Session ${n + 1}</span>
-        <button class="btn-ghost" onclick="dupSession(${i})">Duplicate</button>
-        <button class="btn-ghost btn-danger" onclick="removeSession(${i})">Remove</button>
+        <span class="num">Table / Session ${n + 1}${parallelNote(s)}</span>
+        <button class="btn-ghost" tabindex="-1" onclick="dupSession(${i})">Duplicate</button>
+        <button class="btn-ghost btn-danger" tabindex="-1" onclick="removeSession(${i})">Remove</button>
       </div>
       <div class="grid g4">
         <div class="span2"><label class="f">Title</label>
-          <input value="${esc(s.title)}" oninput="setSess(${i}, 'title', this.value)" placeholder="e.g. A Book, A Candle and a Kobold" /></div>
+          <input data-k="${s.id}:title" value="${esc(s.title)}" oninput="setSess(${i}, 'title', this.value)" placeholder="e.g. A Book, A Candle and a Kobold" /></div>
+        <div class="span2"><label class="f">Run by <small style="text-transform:none;letter-spacing:0;">(GM / judge / host; shown as “Host: …”)</small></label>
+          <input data-k="${s.id}:host" value="${esc(hostOf(s))}" oninput="setHost(${i}, this.value)" placeholder="e.g. Cornovii, Jason Messier" /></div>
         <div><label class="f">Day</label>
-          <select onchange="setSess(${i}, 'session_date', this.value, true)" ${multi ? '' : 'disabled'}>
+          <select data-k="${s.id}:day" onchange="setSess(${i}, 'session_date', this.value, true)" ${multi ? '' : 'disabled'}>
             ${days.map(d => { const x = RE.parseDate(d); return `<option value="${d}" ${s.session_date === d ? 'selected' : ''}>${RE.DAYS[x.getDay()]} ${RE.MONTHS[x.getMonth()]} ${x.getDate()}</option>`; }).join('')}
           </select></div>
+        <div><label class="f">Start time</label>
+          <input data-k="${s.id}:start" type="time" value="${esc(s.start_time || '')}" onchange="setSess(${i}, 'start_time', this.value || null)" /></div>
+        <div><label class="f">End time</label>
+          <input data-k="${s.id}:end" type="time" value="${esc(s.end_time || '')}" onchange="setSess(${i}, 'end_time', this.value || null)" /></div>
         <div><label class="f">Part of day <small style="text-transform:none;letter-spacing:0;">(if no clock time)</small></label>
-          <select onchange="setSess(${i}, 'time_of_day', this.value || null, true)">
+          <select data-k="${s.id}:tod" onchange="setSess(${i}, 'time_of_day', this.value || null, true)">
             <option value="">—</option>${TOD.map(t => `<option ${s.time_of_day === t ? 'selected' : ''}>${t}</option>`).join('')}
           </select></div>
-        <div><label class="f">Start time</label>
-          <input type="time" value="${esc(s.start_time || '')}" onchange="setSess(${i}, 'start_time', this.value || null, true)" /></div>
-        <div><label class="f">End time</label>
-          <input type="time" value="${esc(s.end_time || '')}" onchange="setSess(${i}, 'end_time', this.value || null)" /></div>
         <div><label class="f">Tag colour</label>
-          <select onchange="setSess(${i}, 'tag_style', this.value, true)">
+          <select data-k="${s.id}:tag" onchange="setSess(${i}, 'tag_style', this.value, true)">
             ${Object.entries(RE.TAG_STYLES).map(([k, l]) => `<option value="${k}" ${s.tag_style === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}
           </select></div>
-        <div><label class="f">Tag text</label>
-          <input list="dl-tags" value="${esc(s.tag_text)}" oninput="setSess(${i}, 'tag_text', this.value)" placeholder="e.g. Chronicles of Ribhus · Heptaverse 2d10" /></div>
+        <div class="span2"><label class="f">Tag text</label>
+          <input data-k="${s.id}:tagtext" list="dl-tags" value="${esc(s.tag_text)}" oninput="setSess(${i}, 'tag_text', this.value)" placeholder="e.g. Chronicles of Ribhus · Heptaverse 2d10" /></div>
       </div>
       <label class="f" style="margin-top:0.9rem;">Details line <small style="text-transform:none;letter-spacing:0;">(leave the label blank for a plain note, e.g. "Beginners Welcome")</small></label>
-      ${(s.meta || []).map((m, k) => `<div class="meta-row">
-          <input list="dl-meta" value="${esc(m.label)}" placeholder="Label" oninput="setMeta(${i}, ${k}, 'label', this.value)" />
-          <input value="${esc(m.value)}" placeholder="Value" oninput="setMeta(${i}, ${k}, 'value', this.value)" />
-          <button class="icon-btn" title="Remove" onclick="removeMeta(${i}, ${k})">✕</button></div>`).join('')}
+      ${(s.meta || []).map((m, k) => isHost(m) ? '' : `<div class="meta-row">
+          <input data-k="${s.id}:ml${k}" list="dl-meta" value="${esc(m.label)}" placeholder="Label" oninput="setMeta(${i}, ${k}, 'label', this.value)" />
+          <input data-k="${s.id}:mv${k}" value="${esc(m.value)}" placeholder="Value" oninput="setMeta(${i}, ${k}, 'value', this.value)" />
+          <button class="icon-btn" tabindex="-1" title="Remove" onclick="removeMeta(${i}, ${k})">✕</button></div>`).join('')}
       <button class="btn-ghost" style="margin-bottom:0.9rem;" onclick="addMeta(${i})">+ Detail</button>
       <div class="grid">
         <div><label class="f">Description <small style="text-transform:none;letter-spacing:0;">(blank line between paragraphs)</small></label>
-          <textarea oninput="setSess(${i}, 'blurb', this.value)">${esc(s.blurb || '')}</textarea></div>
+          <textarea data-k="${s.id}:blurb" oninput="setSess(${i}, 'blurb', this.value)">${esc(s.blurb || '')}</textarea></div>
         <div><label class="f">Small print <small style="text-transform:none;letter-spacing:0;">(e.g. "Pre-generated characters provided.")</small></label>
-          <textarea style="min-height:3.2rem;" oninput="setSess(${i}, 'notes', this.value || null)">${esc(s.notes || '')}</textarea></div>
+          <textarea data-k="${s.id}:notes" style="min-height:3.2rem;" oninput="setSess(${i}, 'notes', this.value || null)">${esc(s.notes || '')}</textarea></div>
       </div>
     </div>`;
   }).join('');
@@ -570,7 +574,8 @@ function btnMode() { return cur.show_button === false ? 'none' : cur.link_active
 function setBtnMode(m) {
   cur.show_button = m !== 'none';
   cur.link_active = m === 'active';
-  setDirty(true); renderEditor();
+  const box = document.getElementById('link-fields'); if (box) box.style.display = m === 'none' ? 'none' : '';
+  setDirty(true); renderPreview();
 }
 
 function pickVenue(i) {
@@ -585,50 +590,97 @@ function pickVenue(i) {
 function shiftISO(iso, days) { const d = RE.parseDate(iso); d.setDate(d.getDate() + days); return RE.toISO(d); }
 function daysBetween(a, b) { return Math.round((RE.parseDate(b) - RE.parseDate(a)) / 86400000); }
 
+// A date box fires a change after every digit typed. Only act on a complete, sensible date,
+// and never redraw the date boxes themselves, so typing straight through works.
+function fullDate(v) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(v || '')) return false;
+  const y = +v.slice(0, 4); return y >= 2000 && y <= 2100;
+}
+
+// Redraw only the sessions list, its count and the preview (not the boxes being typed in)
+function refreshSessions() {
+  const focusKey = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.k : null;
+  const y = window.scrollY;
+  document.getElementById('sessions').innerHTML = renderSessions();
+  if (focusKey) { const el = document.querySelector(`[data-k="${focusKey}"]`); if (el) el.focus({ preventScroll: true }); }
+  window.scrollTo(0, y);
+  document.getElementById('sess-count').textContent = cur.event_sessions.length;
+  renderPreview();
+}
+
 function changeStart(v) {
-  if (!v) return;
-  const delta = cur.start_date ? daysBetween(cur.start_date, v) : 0;
+  if (!fullDate(v) || v === cur.start_date) return;
+  const delta = daysBetween(cur.start_date, v);
   cur.start_date = v;
-  cur.end_date = cur.end_date ? shiftISO(cur.end_date, delta) : v;
+  cur.end_date = shiftISO(cur.end_date || v, delta);
   if (cur.end_date < v) cur.end_date = v;
   cur.event_sessions.forEach(s => { s.session_date = s.session_date ? shiftISO(s.session_date, delta) : v; });
-  setDirty(true); renderEditor();
-  if (delta) toast(`Event moved ${Math.abs(delta)} day${Math.abs(delta) !== 1 ? 's' : ''} ${delta > 0 ? 'later' : 'earlier'}; sessions moved with it.`, 'ok');
+  document.getElementById('f-end').value = cur.end_date;
+  setDirty(true); refreshSessions();
+  clearTimeout(changeStart._t);
+  changeStart._t = setTimeout(() => toast('Event date set to ' + niceDate(cur.start_date) +
+    (cur.end_date !== cur.start_date ? ' – ' + niceDate(cur.end_date) : '') + '. Sessions moved with it.', 'ok'), 700);
 }
 
 function changeEnd(v) {
-  if (!v) return;
-  if (v < cur.start_date) { toast('The end date can’t be before the start date.', 'bad'); document.getElementById('f-end').value = cur.end_date; return; }
+  if (!fullDate(v) || v < cur.start_date || v === cur.end_date) return;
   cur.end_date = v;
   cur.event_sessions.forEach(s => { if (!s.session_date || s.session_date > v) s.session_date = v; });
-  setDirty(true); renderEditor();
+  setDirty(true); refreshSessions();
+}
+
+function checkEnd(el) {
+  if (fullDate(el.value) && el.value < cur.start_date) toast('The end date can’t be before the start date.', 'bad');
+  if (el.value !== cur.end_date) el.value = cur.end_date;
+}
+
+function niceDate(iso) { const d = RE.parseDate(iso); return `${RE.DAYS[d.getDay()]} ${RE.MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`; }
+
+// "Run by" is stored as the Host detail, so it shows on the card as "Host: name"
+function isHost(m) { return /^(host|gm|judge|run by)$/i.test(String(m.label || '').trim()); }
+function hostOf(s) { const m = (s.meta || []).find(isHost); return m ? m.value : ''; }
+function setHost(i, v) {
+  const s = cur.event_sessions[i]; s.meta = s.meta || [];
+  const k = s.meta.findIndex(isHost);
+  if (k >= 0) { if (v.trim()) s.meta[k] = { label: 'Host', value: v }; else s.meta.splice(k, 1); }
+  else if (v.trim()) s.meta.push({ label: 'Host', value: v });
+  setDirty(true); renderPreview();
+}
+
+// Shows "· runs alongside N other(s)" when tables share the same day and start
+function parallelNote(s) {
+  const key = x => (x.session_date || cur.start_date) + '|' + (x.start_time || x.time_of_day || '');
+  if (!s.start_time && !s.time_of_day) return '';
+  const n = cur.event_sessions.filter(x => x !== s && key(x) === key(s)).length;
+  return n ? ` <small style="color:var(--text-dim);letter-spacing:0.05em;text-transform:none;">· runs alongside ${n} other table${n > 1 ? 's' : ''}</small>` : '';
 }
 
 function addSession(silent) {
   const last = cur.event_sessions[cur.event_sessions.length - 1];
   cur.event_sessions.push({
-    id: newId(), event_id: cur.id, session_date: cur.start_date, start_time: null, end_time: null, time_of_day: null,
+    id: newId(), event_id: cur.id, session_date: last ? last.session_date : cur.start_date,
+    start_time: last ? last.start_time : null, end_time: last ? last.end_time : null, time_of_day: last ? last.time_of_day : null,
     title: '', tag_style: last ? last.tag_style : 'fantasy', tag_text: '', meta: [], blurb: '', notes: null,
     sort_order: cur.event_sessions.length
   });
-  if (!silent) { setDirty(true); renderEditor(); }
+  if (!silent) { setDirty(true); refreshSessions(); }
 }
 function dupSession(i) {
   const c = clone(cur.event_sessions[i]); c.id = newId(); c.sort_order = cur.event_sessions.length;
-  cur.event_sessions.push(c); setDirty(true); renderEditor();
+  cur.event_sessions.push(c); setDirty(true); refreshSessions();
 }
 function removeSession(i) {
   const s = cur.event_sessions[i];
   if ((s.title || s.blurb) && !confirm(`Remove the session "${s.title || 'untitled'}"?`)) return;
-  cur.event_sessions.splice(i, 1); setDirty(true); renderEditor();
+  cur.event_sessions.splice(i, 1); setDirty(true); refreshSessions();
 }
 function setSess(i, k, v, rerender) {
   cur.event_sessions[i][k] = v; setDirty(true);
-  if (rerender) renderEditor(); else renderPreview();
+  if (rerender) refreshSessions(); else renderPreview();
 }
-function addMeta(i) { cur.event_sessions[i].meta.push({ label: '', value: '' }); setDirty(true); renderEditor(); }
+function addMeta(i) { cur.event_sessions[i].meta.push({ label: '', value: '' }); setDirty(true); refreshSessions(); }
 function setMeta(i, k, f, v) { cur.event_sessions[i].meta[k][f] = v; setDirty(true); renderPreview(); }
-function removeMeta(i, k) { cur.event_sessions[i].meta.splice(k, 1); setDirty(true); renderEditor(); }
+function removeMeta(i, k) { cur.event_sessions[i].meta.splice(k, 1); setDirty(true); refreshSessions(); }
 
 // ════════════════════════════════════════════════════════════════════════
 // Save / delete
